@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<aeon xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="automation.xsd">
+    <projects>
+        <project path="/Users/norzechowicz/Workspace/PHP/aeon-php/calendar" />
+        <project path="/Users/norzechowicz/Workspace/PHP/aeon-php/business-hours" />
+        <project path="/Users/norzechowicz/Workspace/PHP/aeon-php/calendar-doctrine" />
+        <project path="/Users/norzechowicz/Workspace/PHP/aeon-php/calendar-twig" />
+        <project path="/Users/norzechowicz/Workspace/PHP/aeon-php/calendar-holidays" />
+        <project path="/Users/norzechowicz/Workspace/PHP/aeon-php/calendar-holidays-yasumi" />
+        <project path="/Users/norzechowicz/Workspace/PHP/aeon-php/calendar-twig" />
+        <project path="/Users/norzechowicz/Workspace/PHP/aeon-php/sleep" />
+        <project path="/Users/norzechowicz/Workspace/PHP/aeon-php/retry" />
+        <project path="/Users/norzechowicz/Workspace/PHP/aeon-php/rate-limiter" />
+        <project path="/Users/norzechowicz/Workspace/PHP/aeon-php/symfony-aeon-bundle" />
+    </projects>
+</aeon>

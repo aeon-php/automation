@@ -1,0 +1,12 @@
+{
+  "compactors": [
+    "KevinGH\\Box\\Compactor\\Php",
+    "KevinGH\\Box\\Compactor\\Json"
+  ],
+  "compression": "GZ",
+  "output": "build/automation.phar",
+  "files-bin": [
+    "LICENSE"
+  ],
+  "git-version": "git-version"
+}

@@ -1,0 +1,35 @@
+{
+    "name": "aeon-php/automation",
+    "authors": [
+        {
+            "name": "Norbert Orzechowicz",
+            "email": "norbert@orzechowicz.pl"
+        }
+    ],
+    "bin": ["bin/automation"],
+    "autoload": {
+        "psr-4": {
+            "Aeon\\Automation\\": [
+                "src/Aeon/Automation"
+            ]
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Aeon\\Automation\\Tests\\": "tests/Aeon/Automation/Tests/"
+        }
+    },
+    "require": {
+        "ext-json": "*",
+        "ext-dom": "*",
+        "symfony/http-client": "^5.2",
+        "http-interop/http-factory-guzzle": "^1.0",
+        "knplabs/github-api": "^3.0",
+        "symfony/console": "^5.2",
+        "composer/semver": "^3.2",
+        "symfony/dom-crawler": "^5.2",
+        "symfony/css-selector": "^5.2",
+        "aeon-php/calendar": "^0.13.2",
+        "ocramius/package-versions": "^2.1"
+    }
+}

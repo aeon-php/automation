@@ -1,0 +1,31 @@
+#!/usr/bin/env php
+<?php
+
+use Aeon\Automation\Command\ChangeLogGet;
+use Aeon\Automation\Command\MilestoneCreate;
+use Aeon\Automation\Command\MilestoneList;
+use Aeon\Automation\Command\ProjectList;
+use Aeon\Automation\Command\PullRequestsList;
+use PackageVersions\Versions;
+use Symfony\Component\Console\Application;
+
+require_once __DIR__ . '/../vendor/autoload.php';
+
+(function () {
+    error_reporting(E_ALL);
+    ini_set('display_errors', 'stderr');
+
+    require __DIR__ . '/../vendor/autoload.php';
+
+    $application = new Application('aeon-automation', Versions::getVersion('aeon-php/automation'));
+
+    $defaultConfigPaths = [__DIR__, __DIR__ . '/../', __DIR__ . '/../../'];
+
+
+    $application->add(new ProjectList($defaultConfigPaths));
+    $application->add(new MilestoneCreate($defaultConfigPaths));
+    $application->add(new MilestoneList($defaultConfigPaths));
+    $application->add(new PullRequestsList($defaultConfigPaths));
+    $application->add(new ChangeLogGet($defaultConfigPaths));
+    $application->run();
+})();

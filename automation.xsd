@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema">
+    <xs:annotation>
+        <xs:documentation source="https://phpunit.de/documentation.html">
+            This Schema file defines the rules by which the XML configuration file of Aeon Automation Configuration may be structured.
+        </xs:documentation>
+        <xs:appinfo source="https://aeon-php.org/"/>
+    </xs:annotation>
+    <xs:element name="aeon" type="aeonType">
+        <xs:annotation>
+            <xs:documentation>Root Element</xs:documentation>
+        </xs:annotation>
+    </xs:element>
+    <xs:complexType name="aeonType">
+        <xs:annotation>
+            <xs:documentation>The main type specifying the document structure</xs:documentation>
+        </xs:annotation>
+        <xs:sequence>
+            <xs:element name="projects" type="projectsType" maxOccurs="1" minOccurs="1"/>
+        </xs:sequence>
+    </xs:complexType>
+    <xs:complexType name="projectsType">
+        <xs:sequence>
+            <xs:element name="project" type="projectType" maxOccurs="unbounded"/>
+        </xs:sequence>
+    </xs:complexType>
+    <xs:complexType name="projectType">
+        <xs:attribute name="path" type="xs:string" use="required"/>
+    </xs:complexType>
+</xs:schema>
