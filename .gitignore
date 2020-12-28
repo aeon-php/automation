@@ -3,3 +3,4 @@ build
 tools
 *.cache
 var
+automation.xml

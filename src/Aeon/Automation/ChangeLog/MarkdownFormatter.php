@@ -5,13 +5,14 @@ declare(strict_types=1);
 namespace Aeon\Automation\ChangeLog;
 
 use Aeon\Automation\ChangeLog;
-use Aeon\Automation\PullRequest;
+use Aeon\Automation\ChangesSource;
+use Aeon\Automation\GitHub\Commit;
 
 final class MarkdownFormatter implements Formatter
 {
     public function format(ChangeLog $changeLog) : string
     {
-        $output = \sprintf("## [%s] - %s\n", $changeLog->release(), $changeLog->day()->toString());
+        $output = \sprintf("## %s - %s\n", $changeLog->release(), $changeLog->day()->toString());
 
         $added = '';
         $changed = '';
@@ -22,27 +23,27 @@ final class MarkdownFormatter implements Formatter
 
         foreach ($changeLog->changes() as $changes) {
             foreach ($changes->added() as $entry) {
-                $added .= $this->formatEntry($changes->pullRequest(), $entry);
+                $added .= $this->formatEntry($changes->source(), $entry);
             }
 
             foreach ($changes->changed() as $entry) {
-                $changed .= $this->formatEntry($changes->pullRequest(), $entry);
+                $changed .= $this->formatEntry($changes->source(), $entry);
             }
 
             foreach ($changes->fixed() as $entry) {
-                $fixed .= $this->formatEntry($changes->pullRequest(), $entry);
+                $fixed .= $this->formatEntry($changes->source(), $entry);
             }
 
             foreach ($changes->deprecated() as $entry) {
-                $deprecated .= $this->formatEntry($changes->pullRequest(), $entry);
+                $deprecated .= $this->formatEntry($changes->source(), $entry);
             }
 
             foreach ($changes->removed() as $entry) {
-                $removed .= $this->formatEntry($changes->pullRequest(), $entry);
+                $removed .= $this->formatEntry($changes->source(), $entry);
             }
 
             foreach ($changes->security() as $entry) {
-                $security .= $this->formatEntry($changes->pullRequest(), $entry);
+                $security .= $this->formatEntry($changes->source(), $entry);
             }
         }
 
@@ -79,15 +80,15 @@ final class MarkdownFormatter implements Formatter
         return $output;
     }
 
-    private function formatEntry(PullRequest $pullRequest, string $entry) : string
+    private function formatEntry(ChangesSource $source, string $entry) : string
     {
         return \sprintf(
-            " - [#%s](%s) - **%s** - [@%s](%s)\n",
-            $pullRequest->number(),
-            $pullRequest->url(),
+            " - [%s](%s) - **%s** - [@%s](%s)\n",
+            ($source instanceof Commit) ? \substr($source->id(), 0, 6) : ('#' . $source->id()),
+            $source->url(),
             $entry,
-            $pullRequest->user(),
-            $pullRequest->userUrl()
+            $source->user(),
+            $source->userUrl()
         );
     }
 }

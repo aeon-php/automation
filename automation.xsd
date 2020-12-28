@@ -15,6 +15,9 @@
         <xs:annotation>
             <xs:documentation>The main type specifying the document structure</xs:documentation>
         </xs:annotation>
+        <xs:restriction base="xs:string">
+            <xs:length value="50"/>
+        </xs:restriction>
         <xs:sequence>
             <xs:element name="projects" type="projectsType" maxOccurs="1" minOccurs="1"/>
         </xs:sequence>
@@ -25,6 +28,6 @@
         </xs:sequence>
     </xs:complexType>
     <xs:complexType name="projectType">
-        <xs:attribute name="path" type="xs:string" use="required"/>
+        <xs:attribute name="name" type="xs:string" use="required"/>
     </xs:complexType>
 </xs:schema>

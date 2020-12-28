@@ -3,6 +3,7 @@
     "KevinGH\\Box\\Compactor\\Php",
     "KevinGH\\Box\\Compactor\\Json"
   ],
+  "chmod": "0700",
   "compression": "GZ",
   "output": "build/automation.phar",
   "files-bin": [

@@ -6,7 +6,9 @@
             "email": "norbert@orzechowicz.pl"
         }
     ],
-    "bin": ["bin/automation"],
+    "bin": [
+        "bin/automation"
+    ],
     "autoload": {
         "psr-4": {
             "Aeon\\Automation\\": [
@@ -30,6 +32,25 @@
         "symfony/dom-crawler": "^5.2",
         "symfony/css-selector": "^5.2",
         "aeon-php/calendar": "^0.13.2",
-        "ocramius/package-versions": "^2.1"
+        "php-http/logger-plugin": "^1.2",
+        "monolog/monolog": "^2.2",
+        "symfony/monolog-bridge": "^5.2",
+        "symfony/cache": "^5.2"
+    },
+    "require-dev": {
+        "coduo/php-matcher": "^5.0"
+    },
+    "scripts": {
+        "build": [
+            "@test"
+        ],
+        "test": [
+            "@static:analyze",
+            "tools\/phpunit.phar"
+        ],
+        "static:analyze": [
+            "tools\/php-cs-fixer fix --dry-run"
+        ],
+        "cs:php:fix": "tools\/php-cs-fixer fix"
     }
 }

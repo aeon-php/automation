@@ -10,16 +10,18 @@ final class Configuration
 
     private ?string $path;
 
-    /**
-     * @var Project[]
-     */
-    private array $projects;
+    private ?\DOMDocument $config;
 
     public function __construct(array $defaultPaths, ?string $path = null)
     {
         $this->defaultPaths = $defaultPaths;
         $this->path = $path;
-        $this->projects = [];
+        $this->config = null;
+    }
+
+    public function githubAccessToken() : ?string
+    {
+        return \getenv('AEON_AUTOMATION_GH_TOKEN');
     }
 
     /**
@@ -27,8 +29,30 @@ final class Configuration
      */
     public function projects() : array
     {
-        if (\count($this->projects)) {
-            return $this->projects;
+        $projects = [];
+
+        foreach ($this->config()->getElementsByTagName('project') as $project) {
+            $projects[] = new Project($project->attributes->getNamedItem('name')->nodeValue);
+        }
+
+        return $projects;
+    }
+
+    public function project(string $name) : Project
+    {
+        foreach ($this->projects() as $project) {
+            if ($project->is($name)) {
+                return $project;
+            }
+        }
+
+        return new Project($name);
+    }
+
+    private function config() : \DOMDocument
+    {
+        if ($this->config !== null) {
+            return $this->config;
         }
 
         $configFilePath = $this->path;
@@ -45,28 +69,15 @@ final class Configuration
             }
         }
 
-        $config = new \DOMDocument();
-        $config->loadXML(\file_get_contents($configFilePath));
+        if ($configFilePath === null || !\file_exists($configFilePath)) {
+            $this->config = new \DOMDocument();
 
-        $projects = [];
-        /** @var \DOMNode $project */
-        foreach ($config->getElementsByTagName('project') as $project) {
-            $projects[] = new Project($project->attributes->getNamedItem('path')->nodeValue);
+            return $this->config;
         }
 
-        $this->projects = $projects;
+        $this->config = new \DOMDocument();
+        $this->config->loadXML(\file_get_contents($configFilePath));
 
-        return $this->projects;
-    }
-
-    public function project(string $name) : Project
-    {
-        foreach ($this->projects() as $project) {
-            if (\strtolower($project->name()) === \strtolower($name)) {
-                return $project;
-            }
-        }
-
-        throw new \RuntimeException("Project with name \"{$name}\" does not exists in the automation.xml configuration");
+        return $this->config;
     }
 }

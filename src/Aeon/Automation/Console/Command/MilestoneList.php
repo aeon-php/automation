@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Aeon\Automation\Command;
+namespace Aeon\Automation\Console\Command;
 
 use Aeon\Automation\Configuration;
 use Composer\Semver\Semver;
@@ -20,11 +20,14 @@ final class MilestoneList extends Command
 
     private array $defaultConfigPaths;
 
-    public function __construct(array $defaultConfigPaths = [])
+    private Client $client;
+
+    public function __construct(Client $github, array $defaultConfigPaths = [])
     {
         parent::__construct();
 
         $this->defaultConfigPaths = $defaultConfigPaths;
+        $this->client = $github;
     }
 
     protected function configure() : void
@@ -39,16 +42,15 @@ final class MilestoneList extends Command
     {
         $io = new SymfonyStyle($input, $output);
 
-        $client = new Client();
-        $client->authenticate(\getenv('AEON_AUTOMATION_GH_TOKEN'), null, Client::AUTH_ACCESS_TOKEN);
+        $this->client->authenticate(\getenv('AEON_AUTOMATION_GH_TOKEN'), null, Client::AUTH_ACCESS_TOKEN);
 
         $configuration = new Configuration($this->defaultConfigPaths, $input->getOption('configuration'));
         $project = $configuration->project($input->getArgument('project'));
 
-        $milestones = $client->api('issue')->milestones()->all($project->organization(), $project->name(), ['state' => 'all']);
-        $releases = $client->api('repo')->releases()->all($project->organization(), $project->name());
+        $milestones = $this->client->issues()->milestones()->all($project->organization(), $project->name(), ['state' => 'all']);
+        $releases = $this->client->repository()->releases()->all($project->organization(), $project->name());
 
-        $io->title($project->organization());
+        $io->title('Milestone - List');
 
         $io->block('Milestones:');
 
@@ -71,7 +73,7 @@ final class MilestoneList extends Command
 
                 if ($input->getOption('create-missing') === true) {
                     $io->note('Creating milestone: ' . $releaseName);
-                    $milestone = $client->api('issue')->milestones()->create($project->organization(), $project->name(), ['title' => $releaseName]);
+                    $this->client->issue()->milestones()->create($project->organization(), $project->name(), ['title' => $releaseName]);
                 }
             }
         }

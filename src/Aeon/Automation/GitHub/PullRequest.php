@@ -2,62 +2,53 @@
 
 declare(strict_types=1);
 
-namespace Aeon\Automation;
+namespace Aeon\Automation\GitHub;
 
+use Aeon\Automation\Changes;
+use Aeon\Automation\ChangesSource;
 use Symfony\Component\DomCrawler\Crawler;
 
-final class PullRequest
+final class PullRequest implements ChangesSource
 {
-    private string $number;
+    private array $data;
 
-    private string $url;
-
-    private string $title;
-
-    private string $user;
-
-    private string $userUrl;
-
-    private string $body;
-
-    public function __construct(string $number, string $url, string $title, string $user, string $userUrl, string $body)
+    public function __construct(array $data)
     {
-        $this->number = $number;
-        $this->url = $url;
-        $this->body = $body;
-        $this->title = $title;
-        $this->user = $user;
-        $this->userUrl = $userUrl;
+        $this->data = $data;
     }
 
-    public function number() : string
+    public function id() : string
     {
-        return $this->number;
+        return (string) $this->data['number'];
     }
 
     public function url() : string
     {
-        return $this->url;
+        return $this->data['html_url'];
     }
 
     public function title() : string
     {
-        return $this->title;
+        return $this->data['title'];
     }
 
     public function user() : string
     {
-        return $this->user;
+        return $this->data['user']['login'];
     }
 
     public function userUrl() : string
     {
-        return $this->userUrl;
+        return $this->data['user']['html_url'];
     }
 
     public function haveHTML() : bool
     {
-        return \strip_tags($this->body) !== $this->body;
+        if (!isset($this->data['body'])) {
+            return false;
+        }
+
+        return \strip_tags($this->data['body']) !== $this->data['body'];
     }
 
     public function haveChangesDescription() : bool
@@ -70,13 +61,13 @@ final class PullRequest
     public function changes() : Changes
     {
         if (!$this->haveHTML()) {
-            return new Changes($this, [], [$this->title], [], [], [], []);
+            return new Changes($this, [], [$this->title()], [], [], [], []);
         }
 
         $crawler = $this->crawler();
 
         if (!$crawler->filter('#change-log')->count()) {
-            return new Changes($this, [], [$this->title], [], [], [], []);
+            return new Changes($this, [], [$this->title()], [], [], [], []);
         }
 
         $added = [];
@@ -130,11 +121,30 @@ final class PullRequest
         return new Changes($this, $added, $changed, $fixed, $removed, $deprecated, $security);
     }
 
+    public function isMerged() : bool
+    {
+        return $this->data['merged_at'] !== null;
+    }
+
+    public function hasMilestone() : bool
+    {
+        return isset($this->data['milestone']);
+    }
+
+    public function equals(ChangesSource $source) : bool
+    {
+        return $source->id() === $this->id();
+    }
+
     /**
      * @return Crawler
      */
     private function crawler() : Crawler
     {
-        return new Crawler('<html><body><div id="pull-request-body">' . $this->body . '</div></body></html>');
+        if (!isset($this->data['body'])) {
+            return new Crawler('<html><body></body></html>');
+        }
+
+        return new Crawler('<html><body><div id="pull-request-body">' . $this->data['body'] . '</div></body></html>');
     }
 }

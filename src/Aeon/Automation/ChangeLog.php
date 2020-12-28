@@ -44,6 +44,12 @@ final class ChangeLog
 
     public function add(Changes $changes) : void
     {
+        foreach ($this->changes as $change) {
+            if ($change->source()->equals($changes->source())) {
+                return;
+            }
+        }
+
         $this->changes[] = $changes;
     }
 }

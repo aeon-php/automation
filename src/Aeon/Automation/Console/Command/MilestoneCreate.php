@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Aeon\Automation\Command;
+namespace Aeon\Automation\Console\Command;
 
 use Aeon\Automation\Configuration;
 use Composer\Semver\Semver;
@@ -21,11 +21,14 @@ final class MilestoneCreate extends Command
 
     private array $defaultConfigPaths;
 
-    public function __construct(array $defaultConfigPaths = [])
+    private Client $github;
+
+    public function __construct(Client $github, array $defaultConfigPaths = [])
     {
         parent::__construct();
 
         $this->defaultConfigPaths = $defaultConfigPaths;
+        $this->github = $github;
     }
 
     protected function configure() : void
@@ -40,13 +43,17 @@ final class MilestoneCreate extends Command
     {
         $io = new SymfonyStyle($input, $output);
 
-        $client = new Client();
-        $client->authenticate(\getenv('AEON_AUTOMATION_GH_TOKEN'), null, Client::AUTH_ACCESS_TOKEN);
-
         $configuration = new Configuration($this->defaultConfigPaths, $input->getOption('configuration'));
+
+        if ($configuration->githubAccessToken()) {
+            $this->github->authenticate($configuration->githubAccessToken(), null, Client::AUTH_ACCESS_TOKEN);
+        }
+
         $project = $configuration->project($input->getArgument('project'));
 
-        $milestones = $client->api('issue')->milestones()->all($project->organization(), $project->name(), ['state' => 'all']);
+        $io->title('Milestone - Create');
+
+        $milestones = $this->github->issue()->milestones()->all($project->organization(), $project->name(), ['state' => 'all']);
 
         $io->title($project->name());
 
@@ -70,7 +77,7 @@ final class MilestoneCreate extends Command
             return Command::FAILURE;
         }
 
-        $client->api('issue')->milestones()->create($project->organization(), $project->name(), ['title' => $newMilestone]);
+        $this->github->issue()->milestones()->create($project->organization(), $project->name(), ['title' => $newMilestone]);
 
         $io->success('Milestone created');
 

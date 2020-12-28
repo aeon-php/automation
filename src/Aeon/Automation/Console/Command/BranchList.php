@@ -2,11 +2,12 @@
 
 declare(strict_types=1);
 
-namespace Aeon\Automation\Command;
+namespace Aeon\Automation\Console\Command;
 
 use Aeon\Automation\Configuration;
+use Aeon\Automation\GitHub\Branches;
+use Aeon\Automation\GitHub\Repository;
 use Github\Client;
-use Github\ResultPager;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
@@ -14,17 +15,20 @@ use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
 
-final class PullRequestsList extends Command
+final class BranchList extends Command
 {
-    protected static $defaultName = 'pull-request:list';
+    protected static $defaultName = 'branch:list';
 
     private array $defaultConfigPaths;
 
-    public function __construct(array $defaultConfigPaths = [])
+    private Client $github;
+
+    public function __construct(Client $github, array $defaultConfigPaths = [])
     {
         parent::__construct();
 
         $this->defaultConfigPaths = $defaultConfigPaths;
+        $this->github = $github;
     }
 
     protected function configure() : void
@@ -38,30 +42,26 @@ final class PullRequestsList extends Command
     {
         $io = new SymfonyStyle($input, $output);
 
-        $client = new Client();
-        $client->authenticate(\getenv('AEON_AUTOMATION_GH_TOKEN'), null, Client::AUTH_ACCESS_TOKEN);
-
         $configuration = new Configuration($this->defaultConfigPaths, $input->getOption('configuration'));
-        $project = $configuration->project($input->getArgument('project'));
 
-        $paginator  = new ResultPager($client);
-        $closedPullRequests = $paginator->fetchAll($client->api('pull_request'), 'all', [$project->organization(), $project->name(), ['state' => 'closed']]);
-
-        foreach ($closedPullRequests as $pullRequest) {
-            if ($pullRequest['merged_at'] === null && $pullRequest['closed_at'] !== null) {
-                continue;
-            }
-
-            if (!isset($pullRequest['milestone'])) {
-                $io->note('Number: #' . $pullRequest['number']);
-                $io->warning('Milestone is missing');
-                $io->note('URL: ' . $pullRequest['html_url']);
-            } else {
-                $io->note('Number: #' . $pullRequest['number'] . ' - ' . $pullRequest['milestone']['title']);
-            }
+        if ($configuration->githubAccessToken()) {
+            $this->github->authenticate($configuration->githubAccessToken(), null, Client::AUTH_ACCESS_TOKEN);
         }
 
-        $io->note('Total count: ' . \count($closedPullRequests));
+        $project = $configuration->project($input->getArgument('project'));
+
+        $io->title('Branch - List');
+
+        $branches = Branches::getAll($this->github, $project);
+        $repository = Repository::create($this->github, $project);
+
+        foreach ($branches->all() as $branch) {
+            if ($branch->isDefault($repository)) {
+                $io->note('Name: ' . $branch->name() . ' - default');
+            } else {
+                $io->note('Name: ' . $branch->name());
+            }
+        }
 
         return Command::SUCCESS;
     }

@@ -6,7 +6,7 @@ namespace Aeon\Automation;
 
 final class Changes
 {
-    private PullRequest $pullRequest;
+    private ChangesSource $source;
 
     /**
      * @var string[]
@@ -46,9 +46,9 @@ final class Changes
      * @param string[] $deprecated
      * @param string[] $security
      */
-    public function __construct(PullRequest $pullRequest, array $added, array $changed, array $fixed, array $removed, array $deprecated, array $security)
+    public function __construct(ChangesSource $source, array $added, array $changed, array $fixed, array $removed, array $deprecated, array $security)
     {
-        $this->pullRequest = $pullRequest;
+        $this->source = $source;
         $this->added = $added;
         $this->changed = $changed;
         $this->fixed = $fixed;
@@ -62,9 +62,9 @@ final class Changes
         return (\count($this->added) + \count($this->changed) + \count($this->fixed) + \count($this->removed) + \count($this->deprecated) + \count($this->security)) === 0;
     }
 
-    public function pullRequest() : PullRequest
+    public function source() : ChangesSource
     {
-        return $this->pullRequest;
+        return $this->source;
     }
 
     /**
