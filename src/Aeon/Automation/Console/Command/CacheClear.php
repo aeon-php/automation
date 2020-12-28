@@ -4,27 +4,19 @@ declare(strict_types=1);
 
 namespace Aeon\Automation\Console\Command;
 
-use Psr\Cache\CacheItemPoolInterface;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
 
-final class CacheClear extends Command
+final class CacheClear extends AbstractCommand
 {
     protected static $defaultName = 'cache:clear';
 
-    private CacheItemPoolInterface $cache;
-
-    public function __construct(CacheItemPoolInterface $cache)
-    {
-        parent::__construct();
-
-        $this->cache = $cache;
-    }
-
     protected function configure() : void
     {
+        parent::configure();
+
         $this->setDescription('Clears cache used to cache HTTP responses from GitHub');
     }
 
@@ -34,7 +26,7 @@ final class CacheClear extends Command
 
         $io->title('Cache - Clear');
 
-        $this->cache->clear();
+        $this->cache()->clear();
 
         $io->success('Cache clear');
 

@@ -45,7 +45,9 @@ final class ChangeLogGetTest extends CommandTestCase
             )),
         ));
 
-        $commandTester = new CommandTester(new ChangeLogGet($client));
+        $command = new ChangeLogGet();
+        $command->setGithub($client);
+        $commandTester = new CommandTester($command);
         $commandTester->setInputs(['verbosity' => ConsoleOutput::VERBOSITY_VERY_VERBOSE]);
 
         $commandTester->execute(
@@ -103,7 +105,9 @@ final class ChangeLogGetTest extends CommandTestCase
             new HttpRequestStub('GET', '/repos/aeon-php/automation/commits/' . $commit2SHA . '/pulls', ResponseMother::jsonSuccess([])),
         ));
 
-        $commandTester = new CommandTester(new ChangeLogGet($client));
+        $command = new ChangeLogGet();
+        $command->setGithub($client);
+        $commandTester = new CommandTester($command);
         $commandTester->setInputs(['verbosity' => ConsoleOutput::VERBOSITY_VERY_VERBOSE]);
 
         $commandTester->execute(
@@ -163,7 +167,9 @@ final class ChangeLogGetTest extends CommandTestCase
             new HttpRequestStub('GET', '/repos/aeon-php/automation/commits/' . $commit2SHA . '/pulls', ResponseMother::jsonSuccess([GitHubResponseMother::pullRequest(2)])),
         ));
 
-        $commandTester = new CommandTester(new ChangeLogGet($client));
+        $command = new ChangeLogGet();
+        $command->setGithub($client);
+        $commandTester = new CommandTester($command);
         $commandTester->setInputs(['verbosity' => ConsoleOutput::VERBOSITY_VERY_VERBOSE]);
 
         $commandTester->execute(
@@ -224,7 +230,9 @@ final class ChangeLogGetTest extends CommandTestCase
             new HttpRequestStub('GET', '/repos/aeon-php/automation/commits/' . $commit2SHA . '/pulls', ResponseMother::jsonSuccess([GitHubResponseMother::pullRequest(2)])),
         ));
 
-        $commandTester = new CommandTester(new ChangeLogGet($client));
+        $command = new ChangeLogGet();
+        $command->setGithub($client);
+        $commandTester = new CommandTester($command);
         $commandTester->setInputs(['verbosity' => ConsoleOutput::VERBOSITY_VERY_VERBOSE]);
 
         $commandTester->execute(
@@ -285,7 +293,9 @@ final class ChangeLogGetTest extends CommandTestCase
             new HttpRequestStub('GET', '/repos/aeon-php/automation/commits/' . $refUntilSHA . '/pulls', ResponseMother::jsonSuccess([])),
         ));
 
-        $commandTester = new CommandTester(new ChangeLogGet($client));
+        $command = new ChangeLogGet();
+        $command->setGithub($client);
+        $commandTester = new CommandTester($command);
         $commandTester->setInputs(['verbosity' => ConsoleOutput::VERBOSITY_VERY_VERBOSE]);
 
         $commandTester->execute(

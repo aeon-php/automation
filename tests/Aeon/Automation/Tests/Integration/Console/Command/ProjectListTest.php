@@ -15,7 +15,9 @@ final class ProjectListTest extends CommandTestCase
     {
         $client = Client::createWithHttpClient($httpClient = $this->httpClient());
 
-        $commandTester = new CommandTester(new ProjectList($client));
+        $command = new ProjectList();
+        $command->setGithub($client);
+        $commandTester = new CommandTester($command);
 
         $commandTester->execute([]);
 

@@ -21,7 +21,10 @@ final class BranchListTest extends CommandTestCase
             new HttpRequestStub('GET', '/repos/aeon-php/automation/branches', ResponseMother::jsonSuccess([['name' => '1.x']])),
         ));
 
-        $commandTester = new CommandTester(new BranchList($client));
+        $command = new BranchList();
+        $command->setGithub($client);
+
+        $commandTester = new CommandTester($command);
 
         $commandTester->execute([
             'project' => 'aeon-php/automation',

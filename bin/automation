@@ -9,19 +9,9 @@ use Aeon\Automation\Console\Command\MilestoneList;
 use Aeon\Automation\Console\Command\ProjectList;
 use Aeon\Automation\Console\Command\PullRequestsList;
 use Aeon\Automation\Console\Command\TagList;
-use Github\Client;
-use Github\HttpClient\Builder;
-use Http\Client\Common\Plugin\LoggerPlugin;
-use Http\Message\Formatter\FullHttpMessageFormatter;
-use Monolog\Logger;
-use Psr\Log\LogLevel;
-use Symfony\Bridge\Monolog\Handler\ConsoleHandler;
-use Symfony\Component\Cache\Adapter\FilesystemAdapter;
 use Symfony\Component\Console\Application;
 use Symfony\Component\Console\Input\ArgvInput;
-use Symfony\Component\Console\Logger\ConsoleLogger;
 use Symfony\Component\Console\Output\ConsoleOutput;
-use Symfony\Component\Console\Output\OutputInterface;
 
 require_once __DIR__ . '/../vendor/autoload.php';
 
@@ -36,23 +26,6 @@ require_once __DIR__ . '/../vendor/autoload.php';
     $output = new ConsoleOutput();
     $input = new ArgvInput();
 
-    $verbosityLevelMap = [
-        LogLevel::INFO => OutputInterface::VERBOSITY_VERBOSE,
-    ];
-
-    $formatLevelMap = [
-        LogLevel::ERROR => ConsoleLogger::ERROR,
-        LogLevel::CRITICAL => ConsoleLogger::ERROR,
-        LogLevel::INFO    => ConsoleLogger::INFO,
-    ];
-
-    $logger = new ConsoleLogger($output, $verbosityLevelMap, $formatLevelMap);
-
-
-    $builder = new Builder();
-    $builder->addPlugin(new LoggerPlugin($logger)); // TODO: Set based on verbosity
-    $client = new Client($builder);
-    $client->addCache($cache = new FilesystemAdapter('aeon-automation'));
 
     $defaultConfigPaths = [
             __DIR__,
@@ -64,13 +37,13 @@ require_once __DIR__ . '/../vendor/autoload.php';
         getcwd()
     ];
 
-    $application->add(new ProjectList($client, $defaultConfigPaths));
-    $application->add(new MilestoneCreate($client, $defaultConfigPaths));
-    $application->add(new MilestoneList($client, $defaultConfigPaths));
-    $application->add(new PullRequestsList($client, $defaultConfigPaths));
-    $application->add(new ChangeLogGet($client, $defaultConfigPaths));
-    $application->add(new BranchList($client, $defaultConfigPaths));
-    $application->add(new TagList($client, $defaultConfigPaths));
-    $application->add(new CacheClear($cache));
+    $application->add(new ProjectList($defaultConfigPaths));
+    $application->add(new MilestoneCreate($defaultConfigPaths));
+    $application->add(new MilestoneList($defaultConfigPaths));
+    $application->add(new PullRequestsList($defaultConfigPaths));
+    $application->add(new ChangeLogGet($defaultConfigPaths));
+    $application->add(new BranchList($defaultConfigPaths));
+    $application->add(new TagList($defaultConfigPaths));
+    $application->add(new CacheClear());
     $application->run($input, $output);
 })();

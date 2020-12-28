@@ -5,14 +5,12 @@ declare(strict_types=1);
 namespace Aeon\Automation\Console\Command;
 
 use Aeon\Automation\ChangeLog;
-use Aeon\Automation\Configuration;
 use Aeon\Automation\GitHub\Commits;
 use Aeon\Automation\GitHub\PullRequest;
 use Aeon\Automation\GitHub\Reference;
 use Aeon\Automation\GitHub\Repository;
 use Aeon\Automation\GitHub\Tags;
 use Aeon\Calendar\Gregorian\DateTime;
-use Github\Client;
 use Github\Exception\RuntimeException;
 use Github\HttpClient\Message\ResponseMediator;
 use Symfony\Component\Console\Command\Command;
@@ -22,24 +20,14 @@ use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
 
-final class ChangeLogGet extends Command
+final class ChangeLogGet extends AbstractCommand
 {
     protected static $defaultName = 'change-log:get';
 
-    private array $defaultConfigPaths;
-
-    private Client $github;
-
-    public function __construct(Client $github, array $defaultConfigPaths = [])
-    {
-        parent::__construct();
-
-        $this->defaultConfigPaths = $defaultConfigPaths;
-        $this->github = $github;
-    }
-
     protected function configure() : void
     {
+        parent::configure();
+
         $this
             ->addArgument('project', InputArgument::REQUIRED, 'project name, for example aeon-php/calendar')
             ->addOption('branch', 'b', InputOption::VALUE_REQUIRED, 'Get the the branch used instead of tag-start option when it\'s not provided. If empty, default repository branch is taken.')
@@ -47,26 +35,19 @@ final class ChangeLogGet extends Command
             ->addOption('tag-end', 'te', InputOption::VALUE_REQUIRED, 'Optional tag until which changelog is generated. When not provided, latest tag is taken')
             ->addOption('only-commits', 'oc', InputOption::VALUE_NONE, 'Use only commits to generate changelog')
             ->addOption('only-pull-requests', 'opr', InputOption::VALUE_NONE, 'Use only pull requests to generate changelog')
-            ->addOption('changed-after', 'cb', InputOption::VALUE_REQUIRED, 'Ignore all changes after given date, relative date formats like "-1 day" are also supported')
-            ->addOption('configuration', 'c', InputOption::VALUE_REQUIRED, 'Custom path to the automation.xml configuration file.');
+            ->addOption('changed-after', 'cb', InputOption::VALUE_REQUIRED, 'Ignore all changes after given date, relative date formats like "-1 day" are also supported');
     }
 
     protected function execute(InputInterface $input, OutputInterface $output) : int
     {
         $io = new SymfonyStyle($input, $output);
 
-        $configuration = new Configuration($this->defaultConfigPaths, $input->getOption('configuration'));
-
-        if ($configuration->githubAccessToken()) {
-            $this->github->authenticate($configuration->githubAccessToken(), null, Client::AUTH_ACCESS_TOKEN);
-        }
-
-        $project = $configuration->project($input->getArgument('project'));
+        $project = $this->configuration()->project($input->getArgument('project'));
 
         $io->title('Change Log - Get');
 
-        $tags = Tags::getAll($this->github, $project);
-        $repository = Repository::create($this->github, $project);
+        $tags = Tags::getAll($this->github(), $project);
+        $repository = Repository::create($this->github(), $project);
 
         $branchName = 'heads/' . ($input->getOption('branch') !== null ? $input->getOption('branch') : $repository->defaultBranch());
         $fromReferenceName = $input->getOption('tag-start') !== null ? ('tags/' . $input->getOption('tag-start')) : $branchName;
@@ -82,7 +63,7 @@ final class ChangeLogGet extends Command
 
         try {
             $untilReference = $untilReferenceName !== ''
-                ? Reference::commitFromString($this->github, $project, $untilReferenceName)
+                ? Reference::commitFromString($this->github(), $project, $untilReferenceName)
                 : null;
         } catch (RuntimeException $e) {
             $io->error('Reference "tags/' . $input->getOption('tag-end') . '" does not exists: ' . $e->getMessage());
@@ -91,7 +72,7 @@ final class ChangeLogGet extends Command
         }
 
         try {
-            Reference::commitFromString($this->github, $project, $branchName);
+            Reference::commitFromString($this->github(), $project, $branchName);
         } catch (RuntimeException $e) {
             $io->error('Branch "heads/' . $input->getArgument('branch') . '" does not exists: ' . $e->getMessage());
 
@@ -99,7 +80,7 @@ final class ChangeLogGet extends Command
         }
 
         try {
-            $fromReference = Reference::commitFromString($this->github, $project, $fromReferenceName);
+            $fromReference = Reference::commitFromString($this->github(), $project, $fromReferenceName);
         } catch (RuntimeException $e) {
             $io->error("Reference \"{$fromReferenceName}\" does not exists: " . $e->getMessage());
 
@@ -107,12 +88,12 @@ final class ChangeLogGet extends Command
         }
 
         $io->note("Fetching all commits between \"{$fromReferenceName}\" and \"{$untilReferenceName}\"");
-        $commits = Commits::allFrom($this->github, $project, $fromReference, $untilReference);
+        $commits = Commits::allFrom($this->github(), $project, $fromReference, $untilReference);
         $io->note('Total commits: ' . $commits->count());
 
         $progress = $io->createProgressBar($commits->count());
 
-        $changeLog = new ChangeLog($release, $fromReference->commit($this->github, $project)->date()->day());
+        $changeLog = new ChangeLog($release, $fromReference->commit($this->github(), $project)->date()->day());
 
         $onlyCommits = $input->getOption('only-commits');
         $onlyPullRequests = $input->getOption('only-pull-requests');
@@ -137,7 +118,7 @@ final class ChangeLogGet extends Command
 
             if ($onlyPullRequests) {
                 $pullRequestsData = ResponseMediator::getContent(
-                    $this->github->getHttpClient()->get(
+                    $this->github()->getHttpClient()->get(
                         '/repos/' . \rawurlencode($project->organization()) . '/' . \rawurlencode($project->name()) . '/commits/' . \rawurlencode($commit->id()) . '/pulls',
                         ['Accept' => 'application/vnd.github.groot-preview+json']
                     )
@@ -152,7 +133,7 @@ final class ChangeLogGet extends Command
 
             if (!$onlyPullRequests && !$onlyCommits) {
                 $pullRequestsData = ResponseMediator::getContent(
-                    $this->github->getHttpClient()->get(
+                    $this->github()->getHttpClient()->get(
                         '/repos/' . \rawurlencode($project->organization()) . '/' . \rawurlencode($project->name()) . '/commits/' . \rawurlencode($commit->id()) . '/pulls',
                         ['Accept' => 'application/vnd.github.groot-preview+json']
                     )

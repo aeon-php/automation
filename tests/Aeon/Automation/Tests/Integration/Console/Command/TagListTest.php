@@ -26,7 +26,9 @@ final class TagListTest extends CommandTestCase
             )),
         ));
 
-        $commandTester = new CommandTester(new TagList($client));
+        $command = new TagList();
+        $command->setGithub($client);
+        $commandTester = new CommandTester($command);
 
         $commandTester->execute([
             'project' => 'aeon-php/automation',
