@@ -4,13 +4,13 @@ declare(strict_types=1);
 
 namespace Aeon\Automation\Console\Command;
 
+use Aeon\Automation\Console\AeonStyle;
 use Aeon\Automation\GitHub\Branches;
 use Aeon\Automation\GitHub\Repository;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
-use Symfony\Component\Console\Style\SymfonyStyle;
 
 final class BranchList extends AbstractCommand
 {
@@ -21,12 +21,13 @@ final class BranchList extends AbstractCommand
         parent::configure();
 
         $this
+            ->setDescription('List project branches')
             ->addArgument('project', InputArgument::REQUIRED, 'project name');
     }
 
     protected function execute(InputInterface $input, OutputInterface $output) : int
     {
-        $io = new SymfonyStyle($input, $output);
+        $io = new AeonStyle($input, $output);
 
         $project = $this->configuration()->project($input->getArgument('project'));
 
@@ -37,9 +38,9 @@ final class BranchList extends AbstractCommand
 
         foreach ($branches->all() as $branch) {
             if ($branch->isDefault($repository)) {
-                $io->note('Name: ' . $branch->name() . ' - default');
+                $io->writeln('* <fg=green;options=bold>' . $branch->name() . '</>');
             } else {
-                $io->note('Name: ' . $branch->name());
+                $io->writeln('  ' . $branch->name());
             }
         }
 

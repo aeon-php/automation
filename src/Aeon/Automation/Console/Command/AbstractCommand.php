@@ -15,7 +15,6 @@ use Psr\Log\LogLevel;
 use Symfony\Component\Cache\Adapter\FilesystemAdapter;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
-use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Logger\ConsoleLogger;
 use Symfony\Component\Console\Output\OutputInterface;
 
@@ -74,13 +73,6 @@ abstract class AbstractCommand extends Command
         return $this->cache;
     }
 
-    protected function configure() : void
-    {
-        $this
-            ->addOption('configuration', 'c', InputOption::VALUE_REQUIRED, 'Custom path to the automation.xml configuration file.')
-            ->addOption('github-token', 'gt', InputOption::VALUE_REQUIRED, 'Github personal access token, be default taken from AEON_AUTOMATION_GH_TOKEN env variable', \getenv('AEON_AUTOMATION_GH_TOKEN'));
-    }
-
     protected function initialize(InputInterface $input, OutputInterface $output) : void
     {
         $this->configuration = new Configuration($this->defaultConfigPaths, $input->getOption('configuration'));
@@ -112,6 +104,9 @@ abstract class AbstractCommand extends Command
 
         switch ($output->getVerbosity()) {
             case OutputInterface::VERBOSITY_VERY_VERBOSE:
+                $formatter = new SimpleFormatter();
+
+                break;
             case OutputInterface::VERBOSITY_DEBUG:
                 $formatter = new FullHttpMessageFormatter(10000);
 
@@ -122,7 +117,11 @@ abstract class AbstractCommand extends Command
         }
 
         $builder = new Builder();
-        $builder->addPlugin(new LoggerPlugin($logger, $formatter));
+
+        if ($output->getVerbosity() > OutputInterface::VERBOSITY_VERBOSE) {
+            $builder->addPlugin(new LoggerPlugin($logger, $formatter));
+        }
+
         $client = new Client($builder);
         $client->addCache($cache = new FilesystemAdapter('aeon-automation'));
 
@@ -131,6 +130,8 @@ abstract class AbstractCommand extends Command
 
         if ($input->getOption('github-token')) {
             $this->github()->authenticate($input->getOption('github-token'), null, Client::AUTH_ACCESS_TOKEN);
+        } elseif (\getenv('AEON_AUTOMATION_GH_TOKEN')) {
+            $this->github()->authenticate(\getenv('AEON_AUTOMATION_GH_TOKEN'), null, Client::AUTH_ACCESS_TOKEN);
         }
     }
 }

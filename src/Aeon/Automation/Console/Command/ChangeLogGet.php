@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Aeon\Automation\Console\Command;
 
 use Aeon\Automation\ChangeLog;
+use Aeon\Automation\Console\AeonStyle;
 use Aeon\Automation\GitHub\Commits;
 use Aeon\Automation\GitHub\PullRequest;
 use Aeon\Automation\GitHub\Reference;
@@ -18,7 +19,6 @@ use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
-use Symfony\Component\Console\Style\SymfonyStyle;
 
 final class ChangeLogGet extends AbstractCommand
 {
@@ -29,6 +29,7 @@ final class ChangeLogGet extends AbstractCommand
         parent::configure();
 
         $this
+            ->setDescription('Get project changelog from commits and pull requests')
             ->addArgument('project', InputArgument::REQUIRED, 'project name, for example aeon-php/calendar')
             ->addOption('branch', 'b', InputOption::VALUE_REQUIRED, 'Get the the branch used instead of tag-start option when it\'s not provided. If empty, default repository branch is taken.')
             ->addOption('tag-start', 'ts', InputOption::VALUE_REQUIRED, 'Optional tag from which changelog generation starts. When not provided branch is used instead.')
@@ -40,7 +41,7 @@ final class ChangeLogGet extends AbstractCommand
 
     protected function execute(InputInterface $input, OutputInterface $output) : int
     {
-        $io = new SymfonyStyle($input, $output);
+        $io = new AeonStyle($input, $output);
 
         $project = $this->configuration()->project($input->getArgument('project'));
 
@@ -91,7 +92,7 @@ final class ChangeLogGet extends AbstractCommand
         $commits = Commits::allFrom($this->github(), $project, $fromReference, $untilReference);
         $io->note('Total commits: ' . $commits->count());
 
-        $progress = $io->createProgressBar($commits->count());
+        $io->progressStart($commits->count());
 
         $changeLog = new ChangeLog($release, $fromReference->commit($this->github(), $project)->date()->day());
 
@@ -144,12 +145,11 @@ final class ChangeLogGet extends AbstractCommand
 
             $changeLog->add($source->changes());
 
-            $progress->advance();
+            $io->progressAdvance();
         }
 
-        $progress->finish();
+        $io->progressFinish();
 
-        $io->newLine(2);
         $io->note('All commits analyzed, generating changelog: ');
 
         $formatter = new ChangeLog\MarkdownFormatter();

@@ -1,6 +1,7 @@
 #!/usr/bin/env php
 <?php
 
+use Aeon\Automation\Console\AeonApplication;
 use Aeon\Automation\Console\Command\BranchList;
 use Aeon\Automation\Console\Command\CacheClear;
 use Aeon\Automation\Console\Command\ChangeLogGet;
@@ -8,8 +9,8 @@ use Aeon\Automation\Console\Command\MilestoneCreate;
 use Aeon\Automation\Console\Command\MilestoneList;
 use Aeon\Automation\Console\Command\ProjectList;
 use Aeon\Automation\Console\Command\PullRequestsList;
+use Aeon\Automation\Console\Command\ReleaseList;
 use Aeon\Automation\Console\Command\TagList;
-use Symfony\Component\Console\Application;
 use Symfony\Component\Console\Input\ArgvInput;
 use Symfony\Component\Console\Output\ConsoleOutput;
 
@@ -21,8 +22,7 @@ require_once __DIR__ . '/../vendor/autoload.php';
 
     require __DIR__ . '/../vendor/autoload.php';
 
-    $application = new Application('aeon-automation');
-
+    $application = new AeonApplication('aeon-automation');
     $output = new ConsoleOutput();
     $input = new ArgvInput();
 
@@ -40,6 +40,7 @@ require_once __DIR__ . '/../vendor/autoload.php';
     $application->add(new ProjectList($defaultConfigPaths));
     $application->add(new MilestoneCreate($defaultConfigPaths));
     $application->add(new MilestoneList($defaultConfigPaths));
+    $application->add(new ReleaseList($defaultConfigPaths));
     $application->add(new PullRequestsList($defaultConfigPaths));
     $application->add(new ChangeLogGet($defaultConfigPaths));
     $application->add(new BranchList($defaultConfigPaths));

@@ -4,13 +4,13 @@ declare(strict_types=1);
 
 namespace Aeon\Automation\Console\Command;
 
+use Aeon\Automation\Console\AeonStyle;
 use Composer\Semver\Semver;
 use Composer\Semver\VersionParser;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
-use Symfony\Component\Console\Style\SymfonyStyle;
 
 final class MilestoneCreate extends AbstractCommand
 {
@@ -21,13 +21,14 @@ final class MilestoneCreate extends AbstractCommand
         parent::configure();
 
         $this
+            ->setDescription('Create new milestone for project')
             ->addArgument('project', InputArgument::REQUIRED, 'project name')
             ->addArgument('milestone', InputArgument::REQUIRED, 'new milestone version');
     }
 
     protected function execute(InputInterface $input, OutputInterface $output) : int
     {
-        $io = new SymfonyStyle($input, $output);
+        $io = new AeonStyle($input, $output);
 
         $project = $this->configuration()->project($input->getArgument('project'));
 

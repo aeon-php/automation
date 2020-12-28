@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Aeon\Automation\Console\Command;
 
+use Aeon\Automation\Console\AeonStyle;
 use Aeon\Automation\GitHub\PullRequests;
 use Aeon\Automation\GitHub\Reference;
 use Aeon\Automation\GitHub\Repository;
@@ -13,7 +14,6 @@ use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
-use Symfony\Component\Console\Style\SymfonyStyle;
 
 final class PullRequestsList extends AbstractCommand
 {
@@ -31,7 +31,7 @@ final class PullRequestsList extends AbstractCommand
 
     protected function execute(InputInterface $input, OutputInterface $output) : int
     {
-        $io = new SymfonyStyle($input, $output);
+        $io = new AeonStyle($input, $output);
 
         $project = $this->configuration()->project($input->getArgument('project'));
 

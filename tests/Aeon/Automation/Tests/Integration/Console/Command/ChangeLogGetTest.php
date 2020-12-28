@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Aeon\Automation\Tests\Integration\Console\Command;
 
+use Aeon\Automation\Console\AeonApplication;
 use Aeon\Automation\Console\Command\ChangeLogGet;
 use Aeon\Automation\Tests\Http\HttpRequestStub;
 use Aeon\Automation\Tests\Integration\Console\CommandTestCase;
@@ -47,13 +48,16 @@ final class ChangeLogGetTest extends CommandTestCase
 
         $command = new ChangeLogGet();
         $command->setGithub($client);
-        $commandTester = new CommandTester($command);
+        $application = new AeonApplication();
+        $application->add($command);
+
+        $commandTester = new CommandTester($application->get(ChangeLogGet::getDefaultName()));
+
         $commandTester->setInputs(['verbosity' => ConsoleOutput::VERBOSITY_VERY_VERBOSE]);
 
         $commandTester->execute(
-            [
-                'project' => 'aeon-php/automation',
-            ]
+            ['project' => 'aeon-php/automation'],
+            ['verbosity' => ConsoleOutput::VERBOSITY_VERBOSE]
         );
 
         $this->assertStringContainsString('Change Log - Get', $commandTester->getDisplay());
@@ -107,7 +111,11 @@ final class ChangeLogGetTest extends CommandTestCase
 
         $command = new ChangeLogGet();
         $command->setGithub($client);
-        $commandTester = new CommandTester($command);
+        $application = new AeonApplication();
+        $application->add($command);
+
+        $commandTester = new CommandTester($application->get(ChangeLogGet::getDefaultName()));
+
         $commandTester->setInputs(['verbosity' => ConsoleOutput::VERBOSITY_VERY_VERBOSE]);
 
         $commandTester->execute(
@@ -115,7 +123,8 @@ final class ChangeLogGetTest extends CommandTestCase
                 'project' => 'aeon-php/automation',
                 '--tag-start' => '2.0.0',
                 '--tag-end' => '1.0.0',
-            ]
+            ],
+            ['verbosity' => ConsoleOutput::VERBOSITY_VERBOSE]
         );
 
         $this->assertStringContainsString('Change Log - Get', $commandTester->getDisplay());
@@ -169,7 +178,11 @@ final class ChangeLogGetTest extends CommandTestCase
 
         $command = new ChangeLogGet();
         $command->setGithub($client);
-        $commandTester = new CommandTester($command);
+        $application = new AeonApplication();
+        $application->add($command);
+
+        $commandTester = new CommandTester($application->get(ChangeLogGet::getDefaultName()));
+
         $commandTester->setInputs(['verbosity' => ConsoleOutput::VERBOSITY_VERY_VERBOSE]);
 
         $commandTester->execute(
@@ -178,7 +191,8 @@ final class ChangeLogGetTest extends CommandTestCase
                 '--tag-start' => '2.0.0',
                 '--tag-end' => '1.0.0',
                 '--only-commits' => true,
-            ]
+            ],
+            ['verbosity' => ConsoleOutput::VERBOSITY_VERBOSE]
         );
 
         $this->assertStringContainsString('Change Log - Get', $commandTester->getDisplay());
@@ -232,7 +246,11 @@ final class ChangeLogGetTest extends CommandTestCase
 
         $command = new ChangeLogGet();
         $command->setGithub($client);
-        $commandTester = new CommandTester($command);
+        $application = new AeonApplication();
+        $application->add($command);
+
+        $commandTester = new CommandTester($application->get(ChangeLogGet::getDefaultName()));
+
         $commandTester->setInputs(['verbosity' => ConsoleOutput::VERBOSITY_VERY_VERBOSE]);
 
         $commandTester->execute(
@@ -241,7 +259,8 @@ final class ChangeLogGetTest extends CommandTestCase
                 '--tag-start' => '2.0.0',
                 '--tag-end' => '1.0.0',
                 '--only-pull-requests' => true,
-            ]
+            ],
+            ['verbosity' => ConsoleOutput::VERBOSITY_VERBOSE]
         );
 
         $this->assertStringContainsString('Change Log - Get', $commandTester->getDisplay());
@@ -295,7 +314,11 @@ final class ChangeLogGetTest extends CommandTestCase
 
         $command = new ChangeLogGet();
         $command->setGithub($client);
-        $commandTester = new CommandTester($command);
+        $application = new AeonApplication();
+        $application->add($command);
+
+        $commandTester = new CommandTester($application->get(ChangeLogGet::getDefaultName()));
+
         $commandTester->setInputs(['verbosity' => ConsoleOutput::VERBOSITY_VERY_VERBOSE]);
 
         $commandTester->execute(
@@ -303,7 +326,8 @@ final class ChangeLogGetTest extends CommandTestCase
                 'project' => 'aeon-php/automation',
                 '--tag-start' => '2.0.0',
                 '--changed-after' => '2020-01-07 12:00:00',
-            ]
+            ],
+            ['verbosity' => ConsoleOutput::VERBOSITY_VERBOSE]
         );
 
         $this->assertStringContainsString('Change Log - Get', $commandTester->getDisplay());

@@ -4,12 +4,14 @@ declare(strict_types=1);
 
 namespace Aeon\Automation\Tests\Integration\Console\Command;
 
+use Aeon\Automation\Console\AeonApplication;
 use Aeon\Automation\Console\Command\BranchList;
 use Aeon\Automation\Tests\Http\HttpRequestStub;
 use Aeon\Automation\Tests\Integration\Console\CommandTestCase;
 use Aeon\Automation\Tests\Mother\GitHubResponseMother;
 use Aeon\Automation\Tests\Mother\ResponseMother;
 use Github\Client;
+use Symfony\Component\Console\Output\ConsoleOutput;
 use Symfony\Component\Console\Tester\CommandTester;
 
 final class BranchListTest extends CommandTestCase
@@ -24,14 +26,18 @@ final class BranchListTest extends CommandTestCase
         $command = new BranchList();
         $command->setGithub($client);
 
-        $commandTester = new CommandTester($command);
+        $application = new AeonApplication();
+        $application->add($command);
 
-        $commandTester->execute([
-            'project' => 'aeon-php/automation',
-        ]);
+        $commandTester = new CommandTester($application->get(BranchList::getDefaultName()));
+
+        $commandTester->execute(
+            ['project' => 'aeon-php/automation'],
+            ['verbosity' => ConsoleOutput::VERBOSITY_VERBOSE]
+        );
 
         $this->assertStringContainsString('Branch - List', $commandTester->getDisplay());
-        $this->assertStringContainsString('[NOTE] Name: 1.x - default', $commandTester->getDisplay());
+        $this->assertStringContainsString('* 1.x', $commandTester->getDisplay());
 
         $this->assertSame(0, $commandTester->getStatusCode());
     }

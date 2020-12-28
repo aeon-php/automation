@@ -4,13 +4,12 @@ declare(strict_types=1);
 
 namespace Aeon\Automation\Console\Command;
 
+use Aeon\Automation\Console\AeonStyle;
 use Composer\Semver\Semver;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
-use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
-use Symfony\Component\Console\Style\SymfonyStyle;
 
 final class MilestoneList extends AbstractCommand
 {
@@ -21,13 +20,12 @@ final class MilestoneList extends AbstractCommand
         parent::configure();
 
         $this
-            ->addArgument('project', InputArgument::REQUIRED, 'project name')
-            ->addOption('create-missing', 'cm', InputOption::VALUE_NONE, 'Create missing milestones for existing releases');
+            ->addArgument('project', InputArgument::REQUIRED, 'project name');
     }
 
     protected function execute(InputInterface $input, OutputInterface $output) : int
     {
-        $io = new SymfonyStyle($input, $output);
+        $io = new AeonStyle($input, $output);
 
         $project = $this->configuration()->project($input->getArgument('project'));
 
@@ -36,39 +34,21 @@ final class MilestoneList extends AbstractCommand
 
         $io->title('Milestone - List');
 
-        $io->block('Milestones:');
+        $io->note('Milestones:');
 
-        $milestoneTitles = Semver::sort(\array_map(fn (array $milestoneData) => $milestoneData['title'], $milestones));
-        $releaseNames = Semver::sort(\array_map(fn (array $releaseData) => $releaseData['name'], $releases));
+        $milestoneTitles = Semver::rsort(\array_map(fn (array $milestoneData) => $milestoneData['title'], $milestones));
+        $releaseNames = Semver::rsort(\array_map(fn (array $releaseData) => $releaseData['name'], $releases));
 
-        foreach ($milestoneTitles as $milestoneTitle) {
-            $io->writeln(' - ' . $milestoneTitle);
-        }
-
-        $io->newLine();
-
-        $io->block('Releases:');
-
-        foreach ($releaseNames as $releaseName) {
-            $io->writeln(' - ' . $releaseName);
-
-            if (!\in_array($releaseName, $milestoneTitles, true)) {
-                $io->warning('Missing milestone: ' . $releaseName);
-
-                if ($input->getOption('create-missing') === true) {
-                    $io->note('Creating milestone: ' . $releaseName);
-                    $this->github()->issue()->milestones()->create($project->organization(), $project->name(), ['title' => $releaseName]);
-                }
-            }
-        }
-
-        $latestMilestone = \end($milestoneTitles);
         $unreleasedMilestones = \array_diff($milestoneTitles, $releaseNames);
 
-        $io->note('Latest Milestone: ' . $latestMilestone);
+        foreach ($milestoneTitles as $milestoneTitle) {
+            $milestoneOutput = $milestoneTitle;
 
-        foreach ($unreleasedMilestones as $unreleasedMilestone) {
-            $io->note('Unreleased: ' . $unreleasedMilestone);
+            if (\in_array($milestoneTitle, $unreleasedMilestones, true)) {
+                $milestoneOutput .= ' - <fg=yellow>unreleased</>';
+            }
+
+            $io->writeln($milestoneOutput);
         }
 
         return Command::SUCCESS;
