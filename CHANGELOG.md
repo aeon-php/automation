@@ -1,0 +1,10 @@
+## Unreleased - 2020-12-28
+### Changed
+ - [61b146](https://github.com/aeon-php/automation/commit/61b146ba1360436136c7dc9e57d7658b3d6da810) - **Updated automation xsd** - [@norbert@orzechowicz.pl](#)
+ - [ea9540](https://github.com/aeon-php/automation/commit/ea9540a5f4399ee4a70e8e2f4df8ef0467fbe42e) - **Improved command descriptions** - [@norbert@orzechowicz.pl](#)
+ - [885e50](https://github.com/aeon-php/automation/commit/885e50c5c4e5e0a757c247d65cf4b4576ce168e3) - **Take format from option in change-log:get command** - [@norbert@orzechowicz.pl](#)
+ - [933675](https://github.com/aeon-php/automation/commit/93367510905d645a23dc2d86cc2ab9bf4e203e9c) - **Improved support for -v|-vv|-vvv** - [@norbert@orzechowicz.pl](#)
+ - [cf304f](https://github.com/aeon-php/automation/commit/cf304f1c0c9a4db74b017ef134d43986039953a5) - **Move initialization of github client into AbstractCommand** - [@norbert@orzechowicz.pl](#)
+ - [4e4108](https://github.com/aeon-php/automation/commit/4e41083de4d76dea2fa90abc7d72815d1ab73718) - **Use commits instead of milestones to generate changelog** - [@norbert@orzechowicz.pl](#)
+ - [72564b](https://github.com/aeon-php/automation/commit/72564ba0991f280a74428d10fc1dee9b02659b02) - **Initial commit** - [@norbert@orzechowicz.pl](#)
+
