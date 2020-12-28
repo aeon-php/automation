@@ -3,6 +3,23 @@
 Automation is an internal Aeon tool used to automate release process of all Aeon libraries. 
 It's still in the development phase, currently focused on generating change log files. 
 
+## Composer Installation 
+
+Before you start, [generate](https://github.com/settings/tokens) your own GitHub personal access token.
+
+```
+git clone git@github.com:aeon-php/automation.git
+cd automation 
+composer install
+bin/automation change-log:get aeon-php/calendar --github-token="*********"
+```
+
+## Phar Installation
+
+TODO: Coming soon 
+
+## Documentation
+
 ```bash
 aeon-automation
 
@@ -44,3 +61,6 @@ Available commands:
 ```
 
 In general the tool is harmless, however it can create things like milestones so for now use them at your own risk.
+
+* [Contributing & Development](https://github.com/aeon-php/.github/blob/master/CONTRIBUTING.md)
+* [Forum](https://forum.aeon-php.org/)
