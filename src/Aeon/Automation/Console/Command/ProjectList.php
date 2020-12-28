@@ -13,6 +13,13 @@ final class ProjectList extends AbstractCommand
 {
     protected static $defaultName = 'project:list';
 
+    protected function configure() : void
+    {
+        parent::configure();
+
+        $this->setDescription('List all projects defined in automation.xml file');
+    }
+
     protected function execute(InputInterface $input, OutputInterface $output) : int
     {
         $io = new AeonStyle($input, $output);

@@ -26,7 +26,9 @@ final class PullRequestsList extends AbstractCommand
         $this
             ->addArgument('project', InputArgument::REQUIRED, 'project name')
             ->addOption('status', 's', InputOption::VALUE_REQUIRED, 'One of the given states: open, merged', 'open')
-            ->addOption('branch', 'b', InputOption::VALUE_REQUIRED, 'Get the the branch used instead of tag-start option when it\'s not provided. If empty, default repository branch is taken.');
+            ->addOption('branch', 'b', InputOption::VALUE_REQUIRED, 'Get the the branch used instead of tag-start option when it\'s not provided. If empty, default repository branch is taken.')
+            ->addOption('check-milestone', 'cm', InputOption::VALUE_NONE, 'Check also if the pull request is missing a milestone')
+            ->addOption('limit', 'l', InputOption::VALUE_REQUIRED, 'Limit of pull requests to display', 100);
     }
 
     protected function execute(InputInterface $input, OutputInterface $output) : int
@@ -58,21 +60,25 @@ final class PullRequestsList extends AbstractCommand
             return Command::FAILURE;
         }
 
-        $closedPullRequests = $status === 'open'
-            ? PullRequests::allOpenFor($this->github(), $project, $branchName)
-            : PullRequests::allClosedFor($this->github(), $project, $branchName)->onlyMerged();
+        $pullRequests = $status === 'open'
+            ? PullRequests::allOpenFor($this->github(), $project, $branchName, (int) $input->getOption('limit'))
+            : PullRequests::allClosedFor($this->github(), $project, $branchName, (int) $input->getOption('limit'))->onlyMerged();
 
-        foreach ($closedPullRequests->all() as $pullRequest) {
-            if (!$pullRequest->hasMilestone()) {
-                $io->note('Number: #' . $pullRequest->id());
-                $io->warning('Milestone is missing');
-                $io->note('URL: ' . $pullRequest->url());
-            } else {
-                $io->note('Number: #' . $pullRequest->id() . ' - ' . $pullRequest->title());
+        foreach ($pullRequests->all() as $pullRequest) {
+            $pullRequestOutput = '#' . $pullRequest->id() . ' - ' . $pullRequest->title();
+
+            if ($input->getOption('check-milestone')) {
+                if (!$pullRequest->hasMilestone()) {
+                    $pullRequestOutput .= ' - <fg=yellow>missing milestone</>';
+                }
             }
+
+            $pullRequestOutput .= ' - ' . $pullRequest->url();
+
+            $io->writeln($pullRequestOutput);
         }
 
-        $io->note('Total count: ' . $closedPullRequests->count());
+        $io->note('Total count: ' . $pullRequests->count());
 
         return Command::SUCCESS;
     }

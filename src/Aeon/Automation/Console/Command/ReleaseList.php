@@ -21,6 +21,7 @@ final class ReleaseList extends AbstractCommand
         parent::configure();
 
         $this
+            ->setDescription('List all project releases')
             ->addArgument('project', InputArgument::REQUIRED, 'project name')
             ->addOption('create-missing', 'cm', InputOption::VALUE_NONE, 'Create missing milestones for existing releases');
     }

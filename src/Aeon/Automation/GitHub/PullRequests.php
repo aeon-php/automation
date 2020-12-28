@@ -20,14 +20,14 @@ final class PullRequests
         $this->pullRequests = $pullRequests;
     }
 
-    public static function allClosedFor(Client $client, Project $project, string $branch) : self
+    public static function allClosedFor(Client $client, Project $project, string $branch, int $limit) : self
     {
-        return self::allFor($client, $project, $branch, 'closed');
+        return self::allFor($client, $project, $branch, 'closed', $limit);
     }
 
-    public static function allOpenFor(Client $client, Project $project, string $branch) : self
+    public static function allOpenFor(Client $client, Project $project, string $branch, int $limit) : self
     {
-        return self::allFor($client, $project, $branch, 'open');
+        return self::allFor($client, $project, $branch, 'open', $limit);
     }
 
     public function onlyMerged() : self
@@ -56,7 +56,7 @@ final class PullRequests
         return $this->pullRequests;
     }
 
-    private static function allFor(Client $client, Project $project, string $branch, string $state) : self
+    private static function allFor(Client $client, Project $project, string $branch, string $state, int $limit) : self
     {
         $pullsPaginator = new ResultPager($client);
         $pullsData = $pullsPaginator->fetch(
@@ -77,6 +77,14 @@ final class PullRequests
         while (true) {
             foreach ($pullsData as $pullData) {
                 $pullRequests[] = new PullRequest($pullData);
+
+                if (\count($pullRequests) >= $limit) {
+                    break;
+                }
+            }
+
+            if (\count($pullRequests) >= $limit) {
+                break;
             }
 
             if ($pullsPaginator->hasNext()) {
