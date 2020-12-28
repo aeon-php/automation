@@ -265,6 +265,7 @@ final class ChangeLogGetTest extends CommandTestCase
 
         $this->assertStringContainsString('Change Log - Get', $commandTester->getDisplay());
 
+        $this->assertStringContainsString('[NOTE] Format: markdown', $commandTester->getDisplay());
         $this->assertStringContainsString('[NOTE] Project: aeon-php/automation', $commandTester->getDisplay());
         $this->assertStringContainsString('[NOTE] From Reference: tags/2.0.0', $commandTester->getDisplay());
         $this->assertStringContainsString('[NOTE] Until Reference: tags/1.0.0', $commandTester->getDisplay());

@@ -22,6 +22,10 @@ use Symfony\Component\Console\Output\OutputInterface;
 
 final class ChangeLogGet extends AbstractCommand
 {
+    private const FORMATTERS = [
+        'markdown' => ChangeLog\MarkdownFormatter::class,
+    ];
+
     protected static $defaultName = 'change-log:get';
 
     protected function configure() : void
@@ -36,7 +40,8 @@ final class ChangeLogGet extends AbstractCommand
             ->addOption('tag-end', 'te', InputOption::VALUE_REQUIRED, 'Optional tag until which changelog is generated. When not provided, latest tag is taken')
             ->addOption('only-commits', 'oc', InputOption::VALUE_NONE, 'Use only commits to generate changelog')
             ->addOption('only-pull-requests', 'opr', InputOption::VALUE_NONE, 'Use only pull requests to generate changelog')
-            ->addOption('changed-after', 'cb', InputOption::VALUE_REQUIRED, 'Ignore all changes after given date, relative date formats like "-1 day" are also supported');
+            ->addOption('changed-after', 'cb', InputOption::VALUE_REQUIRED, 'Ignore all changes after given date, relative date formats like "-1 day" are also supported')
+            ->addOption('format', 'f', InputOption::VALUE_REQUIRED, 'How to format generated changelog, available formatters: <fg=yellow>"' . \implode('"</>, <fg=yellow>"', \array_keys(self::FORMATTERS)) . '"</>', 'markdown');
     }
 
     protected function execute(InputInterface $input, OutputInterface $output) : int
@@ -58,6 +63,7 @@ final class ChangeLogGet extends AbstractCommand
 
         $release = $input->getOption('tag-start') ? $input->getOption('tag-start') : 'Unreleased';
 
+        $io->note('Format: ' . $input->getOption('format'));
         $io->note('Project: ' . $project->fullName());
         $io->note('From Reference: ' . $fromReferenceName);
         $io->note('Until Reference: ' . $untilReferenceName);
@@ -152,7 +158,8 @@ final class ChangeLogGet extends AbstractCommand
 
         $io->note('All commits analyzed, generating changelog: ');
 
-        $formatter = new ChangeLog\MarkdownFormatter();
+        $formatterClass = self::FORMATTERS[\trim(\strtolower($input->getOption('format')))];
+        $formatter = new $formatterClass();
 
         $io->write($formatter->format($changeLog));
 
