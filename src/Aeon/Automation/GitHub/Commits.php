@@ -20,10 +20,10 @@ final class Commits
         $this->commits = $commits;
     }
 
-    public static function allFrom(Client $client, Project $project, Reference $fromReference, ?Reference $untilReference = null) : self
+    public static function allFrom(Client $client, Project $project, Commit $fromCommit, ?Commit $untilCommit = null) : self
     {
         $commitsPaginator = new ResultPager($client);
-        $commitsData = $commitsPaginator->fetch($client->api('repo')->commits(), 'all', [$project->organization(), $project->name(), ['sha' => $fromReference->sha()]]);
+        $commitsData = $commitsPaginator->fetch($client->repo()->commits(), 'all', [$project->organization(), $project->name(), ['sha' => $fromCommit]]);
 
         $foundAll = false;
 
@@ -34,7 +34,7 @@ final class Commits
             foreach ($commitsData as $commitData) {
                 $commit = new Commit($commitData);
 
-                if ($untilReference !== null && $commit->id() === $untilReference->sha()) {
+                if ($untilCommit !== null && $commit->sha() === $untilCommit->sha()) {
                     $foundAll = true;
 
                     break;
