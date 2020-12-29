@@ -45,7 +45,6 @@
             "@test"
         ],
         "test": [
-            "@static:analyze",
             "tools\/phpunit.phar"
         ],
         "static:analyze": [
