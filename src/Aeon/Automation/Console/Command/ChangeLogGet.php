@@ -6,14 +6,13 @@ namespace Aeon\Automation\Console\Command;
 
 use Aeon\Automation\ChangeLog;
 use Aeon\Automation\Console\AeonStyle;
+use Aeon\Automation\GitHub\Commit;
 use Aeon\Automation\GitHub\Commits;
-use Aeon\Automation\GitHub\PullRequest;
 use Aeon\Automation\GitHub\Reference;
 use Aeon\Automation\GitHub\Repository;
 use Aeon\Automation\GitHub\Tags;
 use Aeon\Calendar\Gregorian\DateTime;
 use Github\Exception\RuntimeException;
-use Github\HttpClient\Message\ResponseMediator;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
@@ -38,6 +37,7 @@ final class ChangeLogGet extends AbstractCommand
             ->addOption('branch', 'b', InputOption::VALUE_REQUIRED, 'Get the the branch used instead of tag-start option when it\'s not provided. If empty, default repository branch is taken.')
             ->addOption('tag-start', 'ts', InputOption::VALUE_REQUIRED, 'Optional tag from which changelog generation starts. When not provided branch is used instead.')
             ->addOption('tag-end', 'te', InputOption::VALUE_REQUIRED, 'Optional tag until which changelog is generated. When not provided, latest tag is taken')
+            ->addOption('commit-end', 'ce', InputOption::VALUE_REQUIRED, 'Optional commit sha until which changelog is generated . When not provided, latest tag is taken')
             ->addOption('only-commits', 'oc', InputOption::VALUE_NONE, 'Use only commits to generate changelog')
             ->addOption('only-pull-requests', 'opr', InputOption::VALUE_NONE, 'Use only pull requests to generate changelog')
             ->addOption('changed-after', 'cb', InputOption::VALUE_REQUIRED, 'Ignore all changes after given date, relative date formats like "-1 day" are also supported')
@@ -67,15 +67,26 @@ final class ChangeLogGet extends AbstractCommand
         $io->note('Project: ' . $project->fullName());
         $io->note('From Reference: ' . $fromReferenceName);
         $io->note('Until Reference: ' . $untilReferenceName);
+        $io->note('Until Commit: ' . $input->getOption('commit-end'));
 
         try {
-            $untilReference = $untilReferenceName !== ''
-                ? Reference::commitFromString($this->github(), $project, $untilReferenceName)
+            $untilCommit = $untilReferenceName !== ''
+                ? Reference::commitFromString($this->github(), $project, $untilReferenceName)->commit($this->github(), $project)
                 : null;
         } catch (RuntimeException $e) {
             $io->error('Reference "tags/' . $input->getOption('tag-end') . '" does not exists: ' . $e->getMessage());
 
             return Command::FAILURE;
+        }
+
+        if ($input->getOption('commit-end')) {
+            try {
+                $untilCommit = Commit::fromSHA($this->github(), $project, $input->getOption('commit-end'));
+            } catch (RuntimeException $e) {
+                $io->error('Commit with SHA ' . $input->getOption('commit-end') . '" does not exists: ' . $e->getMessage());
+
+                return Command::FAILURE;
+            }
         }
 
         try {
@@ -87,7 +98,7 @@ final class ChangeLogGet extends AbstractCommand
         }
 
         try {
-            $fromReference = Reference::commitFromString($this->github(), $project, $fromReferenceName);
+            $fromCommit = Reference::commitFromString($this->github(), $project, $fromReferenceName)->commit($this->github(), $project);
         } catch (RuntimeException $e) {
             $io->error("Reference \"{$fromReferenceName}\" does not exists: " . $e->getMessage());
 
@@ -95,12 +106,12 @@ final class ChangeLogGet extends AbstractCommand
         }
 
         $io->note("Fetching all commits between \"{$fromReferenceName}\" and \"{$untilReferenceName}\"");
-        $commits = Commits::allFrom($this->github(), $project, $fromReference, $untilReference);
+        $commits = Commits::allFrom($this->github(), $project, $fromCommit, $untilCommit);
         $io->note('Total commits: ' . $commits->count());
 
         $io->progressStart($commits->count());
 
-        $changeLog = new ChangeLog($release, $fromReference->commit($this->github(), $project)->date()->day());
+        $changeLog = new ChangeLog($release, $fromCommit->date()->day());
 
         $onlyCommits = $input->getOption('only-commits');
         $onlyPullRequests = $input->getOption('only-pull-requests');
@@ -124,29 +135,19 @@ final class ChangeLogGet extends AbstractCommand
             }
 
             if ($onlyPullRequests) {
-                $pullRequestsData = ResponseMediator::getContent(
-                    $this->github()->getHttpClient()->get(
-                        '/repos/' . \rawurlencode($project->organization()) . '/' . \rawurlencode($project->name()) . '/commits/' . \rawurlencode($commit->id()) . '/pulls',
-                        ['Accept' => 'application/vnd.github.groot-preview+json']
-                    )
-                );
+                $pullRequests = $commit->pullRequests($this->github(), $project);
 
-                if (!\count($pullRequestsData)) {
+                if (!$pullRequests->count()) {
                     continue;
                 }
 
-                $source = new PullRequest($pullRequestsData[0]);
+                $source = $pullRequests->first();
             }
 
             if (!$onlyPullRequests && !$onlyCommits) {
-                $pullRequestsData = ResponseMediator::getContent(
-                    $this->github()->getHttpClient()->get(
-                        '/repos/' . \rawurlencode($project->organization()) . '/' . \rawurlencode($project->name()) . '/commits/' . \rawurlencode($commit->id()) . '/pulls',
-                        ['Accept' => 'application/vnd.github.groot-preview+json']
-                    )
-                );
+                $pullRequests = $commit->pullRequests($this->github(), $project);
 
-                $source = \count($pullRequestsData) ? new PullRequest($pullRequestsData[0]) : $commit;
+                $source = $pullRequests->count() ? $pullRequests->first() : $commit;
             }
 
             $changeLog->add($source->changes());

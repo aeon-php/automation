@@ -6,7 +6,10 @@ namespace Aeon\Automation\GitHub;
 
 use Aeon\Automation\Changes;
 use Aeon\Automation\ChangesSource;
+use Aeon\Automation\Project;
 use Aeon\Calendar\Gregorian\DateTime;
+use Github\Client;
+use Github\HttpClient\Message\ResponseMediator;
 
 final class Commit implements ChangesSource
 {
@@ -17,7 +20,17 @@ final class Commit implements ChangesSource
         $this->data = $data;
     }
 
+    public static function fromSHA(Client $client, Project $project, string $sha) : self
+    {
+        return new self($client->repo()->commits()->show($project->organization(), $project->name(), $sha));
+    }
+
     public function id() : string
+    {
+        return $this->sha();
+    }
+
+    public function sha() : string
     {
         return $this->data['sha'];
     }
@@ -95,5 +108,17 @@ final class Commit implements ChangesSource
     public function equals(ChangesSource $source) : bool
     {
         return $source->id() === $this->id();
+    }
+
+    public function pullRequests(Client $client, Project $project) : PullRequests
+    {
+        $pullRequestsData = ResponseMediator::getContent(
+            $client->getHttpClient()->get(
+                '/repos/' . \rawurlencode($project->organization()) . '/' . \rawurlencode($project->name()) . '/commits/' . \rawurlencode($this->sha()) . '/pulls',
+                ['Accept' => 'application/vnd.github.groot-preview+json']
+            )
+        );
+
+        return new PullRequests(...\array_map(fn (array $pullRequestData) : PullRequest => new PullRequest($pullRequestData), $pullRequestsData));
     }
 }

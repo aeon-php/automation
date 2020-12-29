@@ -48,6 +48,15 @@ final class PullRequests
         return \count($this->pullRequests);
     }
 
+    public function first() : ?PullRequest
+    {
+        if (!$this->count()) {
+            return null;
+        }
+
+        return \current($this->pullRequests);
+    }
+
     /**
      * @return PullRequest[]
      */
