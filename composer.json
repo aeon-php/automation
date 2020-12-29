@@ -38,7 +38,7 @@
         "symfony/cache": "^5.2"
     },
     "require-dev": {
-        "coduo/php-matcher": "^5.0"
+        "coduo/php-matcher": "6.x@dev"
     },
     "scripts": {
         "build": [
