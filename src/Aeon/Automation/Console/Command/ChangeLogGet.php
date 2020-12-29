@@ -8,13 +8,11 @@ use Aeon\Automation\ChangeLog;
 use Aeon\Automation\Console\AeonStyle;
 use Aeon\Automation\GitHub\Commit;
 use Aeon\Automation\GitHub\Commits;
-use Aeon\Automation\GitHub\PullRequest;
 use Aeon\Automation\GitHub\Reference;
 use Aeon\Automation\GitHub\Repository;
 use Aeon\Automation\GitHub\Tags;
 use Aeon\Calendar\Gregorian\DateTime;
 use Github\Exception\RuntimeException;
-use Github\HttpClient\Message\ResponseMediator;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
@@ -137,18 +135,13 @@ final class ChangeLogGet extends AbstractCommand
             }
 
             if ($onlyPullRequests) {
-                $pullRequestsData = ResponseMediator::getContent(
-                    $this->github()->getHttpClient()->get(
-                        '/repos/' . \rawurlencode($project->organization()) . '/' . \rawurlencode($project->name()) . '/commits/' . \rawurlencode($commit->id()) . '/pulls',
-                        ['Accept' => 'application/vnd.github.groot-preview+json']
-                    )
-                );
+                $pullRequests = $commit->pullRequests($this->github(), $project);
 
-                if (!\count($pullRequestsData)) {
+                if (!$pullRequests->count()) {
                     continue;
                 }
 
-                $source = new PullRequest($pullRequestsData[0]);
+                $source = $pullRequests->first();
             }
 
             if (!$onlyPullRequests && !$onlyCommits) {
