@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Aeon\Automation;
 
-use Aeon\Automation\Changes\Change;
 use Aeon\Calendar\Gregorian\Day;
 
 final class ChangeLog
