@@ -10,11 +10,11 @@ interface ChangesSource
 
     public function title() : string;
 
+    public function description() : string;
+
     public function user() : string;
 
     public function userUrl() : string;
-
-    public function changes() : Changes;
 
     public function equals(self $source) : bool;
 }

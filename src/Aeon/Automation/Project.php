@@ -10,6 +10,10 @@ final class Project
 
     public function __construct(string $name)
     {
+        if (\strpos($name, '/') === false) {
+            throw new \InvalidArgumentException('Project name must be provided in given format: "organization/name"');
+        }
+
         $this->name = $name;
     }
 

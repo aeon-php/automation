@@ -5,6 +5,11 @@ declare(strict_types=1);
 namespace Aeon\Automation\Console\Command;
 
 use Aeon\Automation\ChangeLog;
+use Aeon\Automation\Changes\ChangesParser\ConventionalCommitParser;
+use Aeon\Automation\Changes\ChangesParser\DefaultParser;
+use Aeon\Automation\Changes\ChangesParser\HTMLChangesParser;
+use Aeon\Automation\Changes\ChangesParser\PrioritizedParser;
+use Aeon\Automation\ChangesSource;
 use Aeon\Automation\Console\AeonStyle;
 use Aeon\Automation\GitHub\Commit;
 use Aeon\Automation\GitHub\Commits;
@@ -123,7 +128,15 @@ final class ChangeLogGet extends AbstractCommand
             return Command::FAILURE;
         }
 
+        $changesParser = new PrioritizedParser(
+            new HTMLChangesParser(),
+            new ConventionalCommitParser(),
+            new DefaultParser()
+        );
+
         foreach ($commits->all() as $commit) {
+            $source = null;
+
             if ($changeAfter !== null) {
                 if ($commit->date()->isBefore($changeAfter)) {
                     continue;
@@ -150,7 +163,9 @@ final class ChangeLogGet extends AbstractCommand
                 $source = $pullRequests->count() ? $pullRequests->first() : $commit;
             }
 
-            $changeLog->add($source->changes());
+            if ($source instanceof ChangesSource) {
+                $changeLog->add($changesParser->parse($source));
+            }
 
             $io->progressAdvance();
         }

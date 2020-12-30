@@ -48,6 +48,6 @@ final class Reference
             throw new \RuntimeException('Reference is not a commit');
         }
 
-        return new Commit($client->gitData()->commits()->show($project->organization(), $project->name(), $this->sha()));
+        return new Commit($client->repo()->commits()->show($project->organization(), $project->name(), $this->sha()));
     }
 }

@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Aeon\Automation\ChangeLog;
 
 use Aeon\Automation\ChangeLog;
+use Aeon\Automation\Changes\Change;
 use Aeon\Automation\ChangesSource;
 use Aeon\Automation\GitHub\Commit;
 
@@ -80,13 +81,13 @@ final class MarkdownFormatter implements Formatter
         return $output;
     }
 
-    private function formatEntry(ChangesSource $source, string $entry) : string
+    private function formatEntry(ChangesSource $source, Change $change) : string
     {
         return \sprintf(
             " - [%s](%s) - **%s** - [@%s](%s)\n",
             ($source instanceof Commit) ? \substr($source->id(), 0, 6) : ('#' . $source->id()),
             $source->url(),
-            $entry,
+            $change->description(),
             $source->user(),
             $source->userUrl()
         );

@@ -45,10 +45,16 @@ final class GitHubResponseMother
             'sha' => $sha ? $sha : SHAMother::random(),
             'html_url' => 'http://api.github.com',
             'message' => $message,
+            'commit' => [
+                'author' => [
+                    'email' => 'author@email.com',
+                    'date' => $date ? $date : GregorianCalendar::UTC()->now()->toISO8601(),
+                ],
+                'message' => $message,
+            ],
             'author' => [
                 'login' => 'user_login',
                 'html_url' => 'http//github.com/user_login',
-                'date' => $date ? $date : GregorianCalendar::UTC()->now()->toISO8601(),
             ],
         ];
     }
@@ -59,10 +65,16 @@ final class GitHubResponseMother
             'sha' => SHAMother::random(),
             'html_url' => 'http://api.github.com',
             'message' => $message,
+            'commit' => [
+                'author' => [
+                    'email' => 'author@email.com',
+                    'date' => $date ? $date : GregorianCalendar::UTC()->now()->toISO8601(),
+                ],
+                'message' => $message,
+            ],
             'author' => [
                 'login' => 'user_login',
                 'html_url' => 'http//github.com/user_login',
-                'date' => $date,
             ],
         ];
     }

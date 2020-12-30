@@ -21,15 +21,15 @@ final class ChangeLogGetTest extends CommandTestCase
     {
         $client = Client::createWithHttpClient($httpClient = $this->httpClient(
             new HttpRequestStub('GET', '/repos/aeon-php/automation/tags', ResponseMother::jsonSuccess([
-                GitHubResponseMother::tag('1.0.0'),
+                GitHubResponseMother::tag('1.0.0', $tag100SHA = SHAMother::random()),
             ])),
             new HttpRequestStub('GET', '/repos/aeon-php/automation', ResponseMother::jsonSuccess(
                 GitHubResponseMother::repository('1.x')
             )),
             new HttpRequestStub('GET', '/repos/aeon-php/automation/git/refs/tags/1.0.0', ResponseMother::jsonSuccess(
-                GitHubResponseMother::refCommit('tags/1.0.0', $tag100SHA = SHAMother::random())
+                GitHubResponseMother::refCommit('tags/1.0.0', $tag100SHA)
             )),
-            new HttpRequestStub('GET', '/repos/aeon-php/automation/git/commits/' . $tag100SHA, ResponseMother::jsonSuccess(
+            new HttpRequestStub('GET', '/repos/aeon-php/automation/commits/' . $tag100SHA, ResponseMother::jsonSuccess(
                 GitHubResponseMother::commit('Tag 1.0.0', $tag100SHA)
             )),
             new HttpRequestStub('GET', '/repos/aeon-php/automation/git/refs/heads/1.x', ResponseMother::jsonSuccess(
@@ -38,7 +38,7 @@ final class ChangeLogGetTest extends CommandTestCase
             new HttpRequestStub('GET', '/repos/aeon-php/automation/commits', ResponseMother::jsonSuccess(
                 [GitHubResponseMother::commit('Commit 1', $commit1SHA = SHAMother::random()), GitHubResponseMother::commit('Commit 2', $commit2SHA = SHAMother::random())]
             )),
-            new HttpRequestStub('GET', '/repos/aeon-php/automation/git/commits/' . $headRefSHA, ResponseMother::jsonSuccess(
+            new HttpRequestStub('GET', '/repos/aeon-php/automation/commits/' . $headRefSHA, ResponseMother::jsonSuccess(
                 GitHubResponseMother::commitWithDate('Commit Message', '2020-01-01 00:00:00+00:00'),
             )),
             new HttpRequestStub('GET', '/repos/aeon-php/automation/commits/' . $commit1SHA . '/pulls', ResponseMother::jsonSuccess(
@@ -91,7 +91,7 @@ final class ChangeLogGetTest extends CommandTestCase
             new HttpRequestStub('GET', '/repos/aeon-php/automation/git/refs/tags/1.0.0', ResponseMother::jsonSuccess(
                 GitHubResponseMother::refCommit('tags/1.0.0', $refUntilSHA = SHAMother::random())
             )),
-            new HttpRequestStub('GET', '/repos/aeon-php/automation/git/commits/' . $refUntilSHA, ResponseMother::jsonSuccess(
+            new HttpRequestStub('GET', '/repos/aeon-php/automation/commits/' . $refUntilSHA, ResponseMother::jsonSuccess(
                 GitHubResponseMother::commit('Tag 1.0.0', $refUntilSHA)
             )),
             new HttpRequestStub('GET', '/repos/aeon-php/automation/git/refs/heads/1.x', ResponseMother::jsonSuccess(
@@ -100,7 +100,7 @@ final class ChangeLogGetTest extends CommandTestCase
             new HttpRequestStub('GET', '/repos/aeon-php/automation/git/refs/tags/2.0.0', ResponseMother::jsonSuccess(
                 GitHubResponseMother::refCommit('tags/2.0.0', $refFromSHA = SHAMother::random())
             )),
-            new HttpRequestStub('GET', '/repos/aeon-php/automation/git/commits/' . $refFromSHA, ResponseMother::jsonSuccess(
+            new HttpRequestStub('GET', '/repos/aeon-php/automation/commits/' . $refFromSHA, ResponseMother::jsonSuccess(
                 GitHubResponseMother::commit('Tag 2.0.0', $refFromSHA, '2020-01-01')
             )),
             new HttpRequestStub('GET', '/repos/aeon-php/automation/commits', ResponseMother::jsonSuccess(
@@ -111,7 +111,7 @@ final class ChangeLogGetTest extends CommandTestCase
                     GitHubResponseMother::commit('Commit 4', $commit4SHA = SHAMother::random()),
                 ]
             )),
-            new HttpRequestStub('GET', '/repos/aeon-php/automation/git/commits/' . $refFromSHA, ResponseMother::jsonSuccess(
+            new HttpRequestStub('GET', '/repos/aeon-php/automation/commits/' . $refFromSHA, ResponseMother::jsonSuccess(
                 GitHubResponseMother::commitWithDate('Commit Message', '2020-01-01 00:00:00+00:00'),
             )),
             new HttpRequestStub('GET', '/repos/aeon-php/automation/commits/' . $refFromSHA . '/pulls', ResponseMother::jsonSuccess([])),
@@ -164,7 +164,7 @@ final class ChangeLogGetTest extends CommandTestCase
             new HttpRequestStub('GET', '/repos/aeon-php/automation/git/refs/tags/1.0.0', ResponseMother::jsonSuccess(
                 GitHubResponseMother::refCommit('tags/1.0.0', $refUntilSHA = SHAMother::random())
             )),
-            new HttpRequestStub('GET', '/repos/aeon-php/automation/git/commits/' . $refUntilSHA, ResponseMother::jsonSuccess(
+            new HttpRequestStub('GET', '/repos/aeon-php/automation/commits/' . $refUntilSHA, ResponseMother::jsonSuccess(
                 GitHubResponseMother::commit('Tag 1.0.0', $refUntilSHA)
             )),
             new HttpRequestStub('GET', '/repos/aeon-php/automation/git/refs/heads/1.x', ResponseMother::jsonSuccess(
@@ -173,7 +173,7 @@ final class ChangeLogGetTest extends CommandTestCase
             new HttpRequestStub('GET', '/repos/aeon-php/automation/git/refs/tags/2.0.0', ResponseMother::jsonSuccess(
                 GitHubResponseMother::refCommit('tags/2.0.0', $refFromSHA = SHAMother::random())
             )),
-            new HttpRequestStub('GET', '/repos/aeon-php/automation/git/commits/' . $refFromSHA, ResponseMother::jsonSuccess(
+            new HttpRequestStub('GET', '/repos/aeon-php/automation/commits/' . $refFromSHA, ResponseMother::jsonSuccess(
                 GitHubResponseMother::commit('Tag 2.0.0', $refFromSHA, '2020-01-01')
             )),
             new HttpRequestStub('GET', '/repos/aeon-php/automation/commits', ResponseMother::jsonSuccess(
@@ -184,7 +184,7 @@ final class ChangeLogGetTest extends CommandTestCase
                     GitHubResponseMother::commit('Commit 4', $commit4SHA = SHAMother::random()),
                 ]
             )),
-            new HttpRequestStub('GET', '/repos/aeon-php/automation/git/commits/' . $refFromSHA, ResponseMother::jsonSuccess(
+            new HttpRequestStub('GET', '/repos/aeon-php/automation/commits/' . $refFromSHA, ResponseMother::jsonSuccess(
                 GitHubResponseMother::commitWithDate('Commit Message', '2020-01-01 00:00:00+00:00'),
             )),
             new HttpRequestStub('GET', '/repos/aeon-php/automation/commits/' . $refFromSHA . '/pulls', ResponseMother::jsonSuccess([GitHubResponseMother::pullRequest(1)])),
@@ -238,7 +238,7 @@ final class ChangeLogGetTest extends CommandTestCase
             new HttpRequestStub('GET', '/repos/aeon-php/automation/git/refs/tags/1.0.0', ResponseMother::jsonSuccess(
                 GitHubResponseMother::refCommit('tags/1.0.0', $refUntilSHA = SHAMother::random())
             )),
-            new HttpRequestStub('GET', '/repos/aeon-php/automation/git/commits/' . $refUntilSHA, ResponseMother::jsonSuccess(
+            new HttpRequestStub('GET', '/repos/aeon-php/automation/commits/' . $refUntilSHA, ResponseMother::jsonSuccess(
                 GitHubResponseMother::commit('Tag 1.0.0', $refUntilSHA)
             )),
             new HttpRequestStub('GET', '/repos/aeon-php/automation/git/refs/heads/1.x', ResponseMother::jsonSuccess(
@@ -247,7 +247,7 @@ final class ChangeLogGetTest extends CommandTestCase
             new HttpRequestStub('GET', '/repos/aeon-php/automation/git/refs/tags/2.0.0', ResponseMother::jsonSuccess(
                 GitHubResponseMother::refCommit('tags/2.0.0', $refFromSHA = SHAMother::random())
             )),
-            new HttpRequestStub('GET', '/repos/aeon-php/automation/git/commits/' . $refFromSHA, ResponseMother::jsonSuccess(
+            new HttpRequestStub('GET', '/repos/aeon-php/automation/commits/' . $refFromSHA, ResponseMother::jsonSuccess(
                 GitHubResponseMother::commit('Tag 2.0.0', $refFromSHA, '2020-01-01')
             )),
             new HttpRequestStub('GET', '/repos/aeon-php/automation/commits', ResponseMother::jsonSuccess(
@@ -258,7 +258,7 @@ final class ChangeLogGetTest extends CommandTestCase
                     GitHubResponseMother::commit('Commit 4', $commit4SHA = SHAMother::random()),
                 ]
             )),
-            new HttpRequestStub('GET', '/repos/aeon-php/automation/git/commits/' . $refFromSHA, ResponseMother::jsonSuccess(
+            new HttpRequestStub('GET', '/repos/aeon-php/automation/commits/' . $refFromSHA, ResponseMother::jsonSuccess(
                 GitHubResponseMother::commitWithDate('Commit Message', '2020-01-01 00:00:00+00:00'),
             )),
             new HttpRequestStub('GET', '/repos/aeon-php/automation/commits/' . $refFromSHA . '/pulls', ResponseMother::jsonSuccess([])),
@@ -312,7 +312,7 @@ final class ChangeLogGetTest extends CommandTestCase
             new HttpRequestStub('GET', '/repos/aeon-php/automation/git/refs/tags/1.0.0', ResponseMother::jsonSuccess(
                 GitHubResponseMother::refCommit('tags/1.0.0', $refUntilSHA = SHAMother::random())
             )),
-            new HttpRequestStub('GET', '/repos/aeon-php/automation/git/commits/' . $refUntilSHA, ResponseMother::jsonSuccess(
+            new HttpRequestStub('GET', '/repos/aeon-php/automation/commits/' . $refUntilSHA, ResponseMother::jsonSuccess(
                 GitHubResponseMother::commit('Tag 1.0.0', $refUntilSHA)
             )),
             new HttpRequestStub('GET', '/repos/aeon-php/automation/git/refs/heads/1.x', ResponseMother::jsonSuccess(
@@ -321,7 +321,7 @@ final class ChangeLogGetTest extends CommandTestCase
             new HttpRequestStub('GET', '/repos/aeon-php/automation/git/refs/tags/2.0.0', ResponseMother::jsonSuccess(
                 GitHubResponseMother::refCommit('tags/2.0.0', $refFromSHA = SHAMother::random())
             )),
-            new HttpRequestStub('GET', '/repos/aeon-php/automation/git/commits/' . $refFromSHA, ResponseMother::jsonSuccess(
+            new HttpRequestStub('GET', '/repos/aeon-php/automation/commits/' . $refFromSHA, ResponseMother::jsonSuccess(
                 GitHubResponseMother::commit('Tag 2.0.0', $refFromSHA, '2020-01-01')
             )),
             new HttpRequestStub('GET', '/repos/aeon-php/automation/commits', ResponseMother::jsonSuccess(
@@ -332,7 +332,7 @@ final class ChangeLogGetTest extends CommandTestCase
                     GitHubResponseMother::commit('Commit 4', $commit4SHA = SHAMother::random(), '2020-01-07 00:00:00'),
                 ]
             )),
-            new HttpRequestStub('GET', '/repos/aeon-php/automation/git/commits/' . $refFromSHA, ResponseMother::jsonSuccess(
+            new HttpRequestStub('GET', '/repos/aeon-php/automation/commits/' . $refFromSHA, ResponseMother::jsonSuccess(
                 GitHubResponseMother::commitWithDate('Commit Message', '2020-01-01 00:00:00+00:00'),
             )),
             new HttpRequestStub('GET', '/repos/aeon-php/automation/commits/' . $refFromSHA . '/pulls', ResponseMother::jsonSuccess([])),
@@ -388,7 +388,7 @@ final class ChangeLogGetTest extends CommandTestCase
             new HttpRequestStub('GET', '/repos/aeon-php/automation/git/refs/tags/1.0.0', ResponseMother::jsonSuccess(
                 GitHubResponseMother::refCommit('tags/1.0.0', $refUntilSHA = SHAMother::random())
             )),
-            new HttpRequestStub('GET', '/repos/aeon-php/automation/git/commits/' . $refUntilSHA, ResponseMother::jsonSuccess(
+            new HttpRequestStub('GET', '/repos/aeon-php/automation/commits/' . $refUntilSHA, ResponseMother::jsonSuccess(
                 GitHubResponseMother::commit('Tag 1.0.0', $refUntilSHA)
             )),
             new HttpRequestStub('GET', '/repos/aeon-php/automation/git/refs/heads/1.x', ResponseMother::jsonSuccess(
@@ -397,7 +397,7 @@ final class ChangeLogGetTest extends CommandTestCase
             new HttpRequestStub('GET', '/repos/aeon-php/automation/git/refs/tags/2.0.0', ResponseMother::jsonSuccess(
                 GitHubResponseMother::refCommit('tags/2.0.0', $refFromSHA = SHAMother::random())
             )),
-            new HttpRequestStub('GET', '/repos/aeon-php/automation/git/commits/' . $refFromSHA, ResponseMother::jsonSuccess(
+            new HttpRequestStub('GET', '/repos/aeon-php/automation/commits/' . $refFromSHA, ResponseMother::jsonSuccess(
                 GitHubResponseMother::commit('Tag 2.0.0', $refFromSHA, '2020-01-01')
             )),
             new HttpRequestStub('GET', '/repos/aeon-php/automation/commits', ResponseMother::jsonSuccess(
@@ -408,7 +408,7 @@ final class ChangeLogGetTest extends CommandTestCase
                     GitHubResponseMother::commit('Commit 4', $commit4SHA = SHAMother::random(), '2020-01-07 00:00:00'),
                 ]
             )),
-            new HttpRequestStub('GET', '/repos/aeon-php/automation/git/commits/' . $refFromSHA, ResponseMother::jsonSuccess(
+            new HttpRequestStub('GET', '/repos/aeon-php/automation/commits/' . $refFromSHA, ResponseMother::jsonSuccess(
                 GitHubResponseMother::commitWithDate('Commit Message', '2020-01-01 00:00:00+00:00'),
             )),
             new HttpRequestStub('GET', '/repos/aeon-php/automation/commits/' . $refFromSHA . '/pulls', ResponseMother::jsonSuccess([])),
