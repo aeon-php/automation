@@ -2,6 +2,8 @@
 
 namespace Aeon\Automation;
 
+use Aeon\Calendar\Gregorian\DateTime;
+
 interface ChangesSource
 {
     public function id() : string;
@@ -9,6 +11,8 @@ interface ChangesSource
     public function url() : string;
 
     public function title() : string;
+
+    public function date() : DateTime;
 
     public function description() : string;
 

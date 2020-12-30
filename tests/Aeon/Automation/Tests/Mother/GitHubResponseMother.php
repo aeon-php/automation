@@ -89,8 +89,8 @@ final class GitHubResponseMother
             'user' => [
                 'login' => 'user_login',
                 'html_url' => 'http//github.com/user_login',
-                'date' => $date ? $date : GregorianCalendar::UTC()->now()->toISO8601(),
             ],
+            'merged_at' => $date ? $date : GregorianCalendar::UTC()->now()->toISO8601(),
         ];
     }
 }

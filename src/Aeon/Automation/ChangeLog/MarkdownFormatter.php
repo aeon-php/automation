@@ -87,7 +87,7 @@ final class MarkdownFormatter implements Formatter
             " - [%s](%s) - **%s** - [@%s](%s)\n",
             ($source instanceof Commit) ? \substr($source->id(), 0, 6) : ('#' . $source->id()),
             $source->url(),
-            $change->description(),
+            \ucfirst($change->description()),
             $source->user(),
             $source->userUrl()
         );
