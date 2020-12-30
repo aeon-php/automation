@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Aeon\Automation\GitHub;
 
-use Aeon\Automation\Changes;
 use Aeon\Automation\ChangesSource;
 use Aeon\Automation\Project;
 use Aeon\Calendar\Gregorian\DateTime;
@@ -17,6 +16,10 @@ final class Commit implements ChangesSource
 
     public function __construct(array $data)
     {
+        if (!isset($data['commit'])) {
+            throw new \InvalidArgumentException('Please get commit from Repository endpoint instead of GitData');
+        }
+
         $this->data = $data;
     }
 
@@ -37,11 +40,7 @@ final class Commit implements ChangesSource
 
     public function date() : DateTime
     {
-        if (isset($this->data['commit'])) {
-            return DateTime::fromString($this->data['commit']['author']['date']);
-        }
-
-        return DateTime::fromString($this->data['author']['date']);
+        return DateTime::fromString($this->data['commit']['author']['date']);
     }
 
     public function url() : string
@@ -51,58 +50,34 @@ final class Commit implements ChangesSource
 
     public function title() : string
     {
-        if (isset($this->data['commit'])) {
-            if (\strstr($this->data['commit']['message'], PHP_EOL)) {
-                return \explode(PHP_EOL, $this->data['commit']['message'])[0];
-            }
-
-            return $this->data['commit']['message'];
+        if (\strstr($this->data['commit']['message'], PHP_EOL)) {
+            return \explode(PHP_EOL, $this->data['commit']['message'])[0];
         }
 
-        if (\strstr($this->data['message'], PHP_EOL)) {
-            return \explode(PHP_EOL, $this->data['message'])[0];
-        }
+        return $this->data['commit']['message'];
+    }
 
-        return $this->data['message'];
+    public function description() : string
+    {
+        return $this->data['commit']['message'];
     }
 
     public function user() : string
     {
-        if (isset($this->data['commit'])) {
-            return $this->data['commit']['author']['email'];
+        if (isset($this->data['author']['login'])) {
+            return $this->data['author']['login'];
         }
 
-        return $this->data['author']['login'];
+        return $this->data['commit']['author']['email'];
     }
 
     public function userUrl() : string
     {
-        if (isset($this->data['commit'])) {
-            if (!isset($this->data['commit']['author']['html_url'])) {
-                return '#';
-            }
-
-            return $this->data['commit']['author']['html_url'];
-        }
-
         if (!isset($this->data['author']['html_url'])) {
             return '#';
         }
 
         return $this->data['author']['html_url'];
-    }
-
-    public function changes() : Changes
-    {
-        return new Changes(
-            $this,
-            [],
-            [$this->title()],
-            [],
-            [],
-            [],
-            []
-        );
     }
 
     public function equals(ChangesSource $source) : bool

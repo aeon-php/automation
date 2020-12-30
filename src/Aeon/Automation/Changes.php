@@ -4,37 +4,40 @@ declare(strict_types=1);
 
 namespace Aeon\Automation;
 
+use Aeon\Automation\Changes\Change;
+use Aeon\Automation\Changes\Type;
+
 final class Changes
 {
     private ChangesSource $source;
 
     /**
-     * @var string[]
+     * @var Change[]
      */
     private array $added;
 
     /**
-     * @var string[]
+     * @var Change[]
      */
     private array $changed;
 
     /**
-     * @var string[]
+     * @var Change[]
      */
     private array $fixed;
 
     /**
-     * @var string[]
+     * @var Change[]
      */
     private array $removed;
 
     /**
-     * @var string[]
+     * @var Change[]
      */
     private array $deprecated;
 
     /**
-     * @var string[]
+     * @var Change[]
      */
     private array $security;
 
@@ -49,12 +52,12 @@ final class Changes
     public function __construct(ChangesSource $source, array $added, array $changed, array $fixed, array $removed, array $deprecated, array $security)
     {
         $this->source = $source;
-        $this->added = $added;
-        $this->changed = $changed;
-        $this->fixed = $fixed;
-        $this->removed = $removed;
-        $this->deprecated = $deprecated;
-        $this->security = $security;
+        $this->added = \array_map(fn (string $message) : Change => new Change(Type::added(), $message), $added);
+        $this->changed = \array_map(fn (string $message) : Change => new Change(Type::changed(), $message), $changed);
+        $this->fixed = \array_map(fn (string $message) : Change => new Change(Type::fixed(), $message), $fixed);
+        $this->removed = \array_map(fn (string $message) : Change => new Change(Type::removed(), $message), $removed);
+        $this->deprecated = \array_map(fn (string $message) : Change => new Change(Type::deprecated(), $message), $deprecated);
+        $this->security = \array_map(fn (string $message) : Change => new Change(Type::security(), $message), $security);
     }
 
     public function empty() : bool
@@ -68,7 +71,7 @@ final class Changes
     }
 
     /**
-     * @return string[]
+     * @return Change[]
      */
     public function added() : array
     {
@@ -76,7 +79,7 @@ final class Changes
     }
 
     /**
-     * @return string[]
+     * @return Change[]
      */
     public function changed() : array
     {
@@ -84,7 +87,7 @@ final class Changes
     }
 
     /**
-     * @return string[]
+     * @return Change[]
      */
     public function fixed() : array
     {
@@ -92,7 +95,7 @@ final class Changes
     }
 
     /**
-     * @return string[]
+     * @return Change[]
      */
     public function removed() : array
     {
@@ -100,7 +103,7 @@ final class Changes
     }
 
     /**
-     * @return string[]
+     * @return Change[]
      */
     public function deprecated() : array
     {
@@ -108,22 +111,25 @@ final class Changes
     }
 
     /**
-     * @return string[]
+     * @return Change[]
      */
     public function security() : array
     {
         return $this->security;
     }
 
-    public function merge(self $changeLog) : self
+    /**
+     * @return Change[]
+     */
+    public function all() : array
     {
-        return new self(
-            \array_merge($this->added, $changeLog->added()),
-            \array_merge($this->changed, $changeLog->changed()),
-            \array_merge($this->fixed, $changeLog->fixed()),
-            \array_merge($this->removed, $changeLog->removed()),
-            \array_merge($this->deprecated, $changeLog->deprecated()),
-            \array_merge($this->security, $changeLog->security())
+        return \array_merge(
+            $this->added(),
+            $this->changed(),
+            $this->fixed(),
+            $this->removed(),
+            $this->deprecated(),
+            $this->security()
         );
     }
 }

@@ -65,7 +65,7 @@ final class PullRequestsList extends AbstractCommand
             : PullRequests::allClosedFor($this->github(), $project, $branchName, (int) $input->getOption('limit'))->onlyMerged();
 
         foreach ($pullRequests->all() as $pullRequest) {
-            $pullRequestOutput = '#' . $pullRequest->id() . ' - ' . $pullRequest->title();
+            $pullRequestOutput = '#' . $pullRequest->id() . ' - ' . $pullRequest->description();
 
             if ($input->getOption('check-milestone')) {
                 if (!$pullRequest->hasMilestone()) {

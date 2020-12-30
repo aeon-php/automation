@@ -35,7 +35,8 @@
         "php-http/logger-plugin": "^1.2",
         "monolog/monolog": "^2.2",
         "symfony/monolog-bridge": "^5.2",
-        "symfony/cache": "^5.2"
+        "symfony/cache": "^5.2",
+        "ramsey/conventional-commits": "^1.1"
     },
     "require-dev": {
         "coduo/php-matcher": "6.x@dev"
@@ -45,11 +46,11 @@
             "@test"
         ],
         "test": [
-            "tools\/phpunit.phar"
+            "tools/phpunit.phar"
         ],
         "static:analyze": [
-            "tools\/php-cs-fixer fix --dry-run"
+            "tools/php-cs-fixer fix --dry-run"
         ],
-        "cs:php:fix": "tools\/php-cs-fixer fix"
+        "cs:php:fix": "tools/php-cs-fixer fix"
     }
 }
