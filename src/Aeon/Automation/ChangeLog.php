@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Aeon\Automation;
 
+use Aeon\Automation\Changes\Change;
 use Aeon\Calendar\Gregorian\Day;
 
 final class ChangeLog
@@ -39,6 +40,10 @@ final class ChangeLog
      */
     public function changes() : array
     {
+        \uasort($this->changes, function (Changes $changeA, Changes $changeB) : int {
+            return $changeB->source()->date()->toDateTimeImmutable() <=> $changeA->source()->date()->toDateTimeImmutable();
+        });
+
         return $this->changes;
     }
 

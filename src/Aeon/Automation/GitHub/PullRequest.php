@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Aeon\Automation\GitHub;
 
 use Aeon\Automation\ChangesSource;
+use Aeon\Calendar\Gregorian\DateTime;
 
 final class PullRequest implements ChangesSource
 {
@@ -38,6 +39,11 @@ final class PullRequest implements ChangesSource
     public function description() : string
     {
         return $this->data['body'] ?? $this->data['title'];
+    }
+
+    public function date() : DateTime
+    {
+        return ($this->data['merged_at'] !== null) ? DateTime::fromString($this->data['merged_at']) : DateTime::fromString($this->data['updated_at']);
     }
 
     public function user() : string
