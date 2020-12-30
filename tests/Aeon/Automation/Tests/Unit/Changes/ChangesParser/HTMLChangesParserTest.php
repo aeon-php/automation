@@ -48,11 +48,11 @@ HTML;
 
         $changes = (new HTMLChangesParser())->parse(ChangesSourceMother::withContent($content));
 
-        $this->assertEquals([new Changes\Change(Changes\Type::added(), 'added')], $changes->added());
-        $this->assertEquals([new Changes\Change(Changes\Type::changed(), 'changed')], $changes->changed());
-        $this->assertEquals([new Changes\Change(Changes\Type::fixed(), 'fixed')], $changes->fixed());
-        $this->assertEquals([new Changes\Change(Changes\Type::removed(), 'removed')], $changes->removed());
-        $this->assertEquals([new Changes\Change(Changes\Type::deprecated(), 'deprecated')], $changes->deprecated());
-        $this->assertEquals([new Changes\Change(Changes\Type::security(), 'security')], $changes->security());
+        $this->assertEquals([new Changes\Change(Changes\Type::added(), 'added')], $changes->withType(Changes\Type::added()));
+        $this->assertEquals([new Changes\Change(Changes\Type::changed(), 'changed')], $changes->withType(Changes\Type::changed()));
+        $this->assertEquals([new Changes\Change(Changes\Type::fixed(), 'fixed')], $changes->withType(Changes\Type::fixed()));
+        $this->assertEquals([new Changes\Change(Changes\Type::removed(), 'removed')], $changes->withType(Changes\Type::removed()));
+        $this->assertEquals([new Changes\Change(Changes\Type::deprecated(), 'deprecated')], $changes->withType(Changes\Type::deprecated()));
+        $this->assertEquals([new Changes\Change(Changes\Type::security(), 'security')], $changes->withType(Changes\Type::security()));
     }
 }

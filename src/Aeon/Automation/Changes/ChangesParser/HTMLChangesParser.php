@@ -31,57 +31,19 @@ final class HTMLChangesParser implements ChangesParser
         $crawler = new Crawler('<html><body><div id="changes">' . $changesSource->description() . '</div></body></html>');
 
         if (!$crawler->filter('#change-log')->count()) {
-            return new Changes($changesSource, [], [$changesSource->title()], [], [], [], []);
+            throw new \RuntimeException("Invalid html format, can't extract changes");
         }
 
-        $added = [];
+        $changes = [];
 
-        if ($crawler->filter('ul#added')->count()) {
-            foreach ($crawler->filter('ul#added')->children('li') as $node) {
-                $added[] = $node->textContent;
+        foreach (Changes\Type::all() as $type) {
+            if ($crawler->filter('ul#' . $type->name())->count()) {
+                foreach ($crawler->filter('ul#' . $type->name())->children('li') as $node) {
+                    $changes[] = new Changes\Change($type, $node->textContent);
+                }
             }
         }
 
-        $changed = [];
-
-        if ($crawler->filter('ul#changed')->count()) {
-            foreach ($crawler->filter('ul#changed')->children('li') as $node) {
-                $changed[] = $node->textContent;
-            }
-        }
-
-        $fixed = [];
-
-        if ($crawler->filter('ul#fixed')->count()) {
-            foreach ($crawler->filter('ul#fixed')->children('li') as $node) {
-                $fixed[] = $node->textContent;
-            }
-        }
-
-        $removed = [];
-
-        if ($crawler->filter('ul#removed')->count()) {
-            foreach ($crawler->filter('ul#removed')->children('li') as $node) {
-                $removed[] = $node->textContent;
-            }
-        }
-
-        $deprecated = [];
-
-        if ($crawler->filter('ul#deprecated')->count()) {
-            foreach ($crawler->filter('ul#deprecated')->children('li') as $node) {
-                $deprecated[] = $node->textContent;
-            }
-        }
-
-        $security = [];
-
-        if ($crawler->filter('ul#security')->count()) {
-            foreach ($crawler->filter('ul#security')->children('li') as $node) {
-                $security[] = $node->textContent;
-            }
-        }
-
-        return new Changes($changesSource, $added, $changed, $fixed, $removed, $deprecated, $security);
+        return new Changes($changesSource, ...$changes);
     }
 }

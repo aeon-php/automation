@@ -6,6 +6,7 @@ namespace Aeon\Automation\ChangeLog;
 
 use Aeon\Automation\ChangeLog;
 use Aeon\Automation\Changes\Change;
+use Aeon\Automation\Changes\Type;
 use Aeon\Automation\ChangesSource;
 use Aeon\Automation\GitHub\Commit;
 
@@ -23,27 +24,27 @@ final class MarkdownFormatter implements Formatter
         $security = '';
 
         foreach ($changeLog->changes() as $changes) {
-            foreach ($changes->added() as $entry) {
+            foreach ($changes->withType(Type::added()) as $entry) {
                 $added .= $this->formatEntry($changes->source(), $entry);
             }
 
-            foreach ($changes->changed() as $entry) {
+            foreach ($changes->withType(Type::changed()) as $entry) {
                 $changed .= $this->formatEntry($changes->source(), $entry);
             }
 
-            foreach ($changes->fixed() as $entry) {
+            foreach ($changes->withType(Type::fixed()) as $entry) {
                 $fixed .= $this->formatEntry($changes->source(), $entry);
             }
 
-            foreach ($changes->deprecated() as $entry) {
+            foreach ($changes->withType(Type::deprecated()) as $entry) {
                 $deprecated .= $this->formatEntry($changes->source(), $entry);
             }
 
-            foreach ($changes->removed() as $entry) {
+            foreach ($changes->withType(Type::deprecated()) as $entry) {
                 $removed .= $this->formatEntry($changes->source(), $entry);
             }
 
-            foreach ($changes->security() as $entry) {
+            foreach ($changes->withType(Type::security()) as $entry) {
                 $security .= $this->formatEntry($changes->source(), $entry);
             }
         }
