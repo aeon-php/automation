@@ -15,9 +15,9 @@
   </coverage>
   <logging/>
   <testsuites>
-<!--    <testsuite name="unit">-->
-<!--      <directory suffix=".php">tests/Aeon/Automation/Tests/Unit</directory>-->
-<!--    </testsuite>-->
+    <testsuite name="unit">
+      <directory suffix=".php">tests/Aeon/Automation/Tests/Unit</directory>
+    </testsuite>
     <testsuite name="integration">
       <directory suffix=".php">tests/Aeon/Automation/Tests/Integration</directory>
     </testsuite>

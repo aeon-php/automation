@@ -54,4 +54,74 @@ final class Type
     {
         return new self(self::TYPE_SECURITY);
     }
+
+    /**
+     * @return Type[];
+     */
+    public static function all() : array
+    {
+        return [
+            self::added(),
+            self::changed(),
+            self::fixed(),
+            self::removed(),
+            self::deprecated(),
+            self::security(),
+        ];
+    }
+
+    public function isAdded() : bool
+    {
+        return $this->type === self::TYPE_ADDED;
+    }
+
+    public function isChanged() : bool
+    {
+        return $this->type === self::TYPE_CHANGED;
+    }
+
+    public function isFixed() : bool
+    {
+        return $this->type === self::TYPE_FIXED;
+    }
+
+    public function isRemoved() : bool
+    {
+        return $this->type === self::TYPE_REMOVED;
+    }
+
+    public function isDeprecated() : bool
+    {
+        return $this->type === self::TYPE_DEPRECATED;
+    }
+
+    public function isSecurity() : bool
+    {
+        return $this->type === self::TYPE_SECURITY;
+    }
+
+    public function name() : string
+    {
+        switch ($this->type) {
+            case self::TYPE_ADDED:
+                return 'added';
+            case self::TYPE_CHANGED:
+                return 'changed';
+            case self::TYPE_FIXED:
+                return 'fixed';
+            case self::TYPE_REMOVED:
+                return 'removed';
+            case self::TYPE_DEPRECATED:
+                return 'deprecated';
+            case self::TYPE_SECURITY:
+                return 'security';
+        }
+
+        throw new \RuntimeException('Missing type name definition');
+    }
+
+    public function isEqual(self $type) : bool
+    {
+        return $this->type === $type->type;
+    }
 }

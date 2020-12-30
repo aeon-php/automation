@@ -8,6 +8,7 @@ use Aeon\Automation\ChangeLog;
 use Aeon\Automation\Changes\ChangesParser\ConventionalCommitParser;
 use Aeon\Automation\Changes\ChangesParser\DefaultParser;
 use Aeon\Automation\Changes\ChangesParser\HTMLChangesParser;
+use Aeon\Automation\Changes\ChangesParser\PrefixParser;
 use Aeon\Automation\Changes\ChangesParser\PrioritizedParser;
 use Aeon\Automation\ChangesSource;
 use Aeon\Automation\Console\AeonStyle;
@@ -131,6 +132,7 @@ final class ChangeLogGet extends AbstractCommand
         $changesParser = new PrioritizedParser(
             new HTMLChangesParser(),
             new ConventionalCommitParser(),
+            new PrefixParser(),
             new DefaultParser()
         );
 

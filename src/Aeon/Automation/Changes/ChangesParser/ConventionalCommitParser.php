@@ -48,71 +48,41 @@ final class ConventionalCommitParser implements ChangesParser
             case 'feat':
                 return new Changes(
                     $changesSource,
-                    [$message->getDescription()->toString()],
-                    [],
-                    [],
-                    [],
-                    [],
-                    []
-                );
-            case 'cs':
-            case 'fixed':
-            case 'fix':
-                return new Changes(
-                    $changesSource,
-                    [],
-                    [],
-                    [$message->getDescription()->toString()],
-                    [],
-                    [],
-                    []
-                );
-            case 'removed':
-            case 'rm':
-            case 'remove':
-                return new Changes(
-                    $changesSource,
-                    [],
-                    [],
-                    [],
-                    [$message->getDescription()->toString()],
-                    [],
-                    []
-                );
-            case 'dep':
-            case 'deprecated':
-            case 'deprecate':
-                return new Changes(
-                    $changesSource,
-                    [],
-                    [],
-                    [],
-                    [],
-                    [$message->getDescription()->toString()],
-                    []
-                );
-            case 'sec':
-            case 'security':
-                return new Changes(
-                    $changesSource,
-                    [],
-                    [],
-                    [],
-                    [],
-                    [],
-                    [$message->getDescription()->toString()]
+                    new Changes\Change(Changes\Type::added(), $message->getDescription()->toString()),
                 );
             case 'updated':
             case 'changed':
             case 'change':
                 return new Changes(
                     $changesSource,
-                    [],
-                    [$message->getDescription()->toString()],
-                    [],
-                    [],
-                    [],
-                    []
+                    new Changes\Change(Changes\Type::changed(), $message->getDescription()->toString())
+                );
+            case 'cs':
+            case 'fixed':
+            case 'fix':
+                return new Changes(
+                    $changesSource,
+                    new Changes\Change(Changes\Type::fixed(), $message->getDescription()->toString())
+                );
+            case 'removed':
+            case 'rm':
+            case 'remove':
+                return new Changes(
+                    $changesSource,
+                    new Changes\Change(Changes\Type::removed(), $message->getDescription()->toString())
+                );
+            case 'dep':
+            case 'deprecated':
+            case 'deprecate':
+                return new Changes(
+                    $changesSource,
+                    new Changes\Change(Changes\Type::deprecated(), $message->getDescription()->toString())
+                );
+            case 'sec':
+            case 'security':
+                return new Changes(
+                    $changesSource,
+                    new Changes\Change(Changes\Type::security(), $message->getDescription()->toString())
                 );
 
             default:
