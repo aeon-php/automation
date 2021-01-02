@@ -2,9 +2,9 @@
 
 namespace Aeon\Automation\ChangeLog;
 
-use Aeon\Automation\ChangeLog;
+use Aeon\Automation\Release;
 
 interface Formatter
 {
-    public function format(ChangeLog $changeLog) : string;
+    public function format(Release $release) : string;
 }

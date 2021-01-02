@@ -23,7 +23,7 @@ final class TagListTest extends CommandTestCase
             new HttpRequestStub('GET', '/repos/aeon-php/automation/tags', ResponseMother::jsonSuccess([
                 GitHubResponseMother::tag('1.0.0', $sha = SHAMother::random()),
             ])),
-            new HttpRequestStub('GET', '/repos/aeon-php/automation/git/commits/@string@', ResponseMother::jsonSuccess(
+            new HttpRequestStub('GET', '/repos/aeon-php/automation/commits/' . $sha, ResponseMother::jsonSuccess(
                 GitHubResponseMother::commit('Commit Message', $sha, '2020-01-01 00:00:00')
             )),
         ));
@@ -36,12 +36,12 @@ final class TagListTest extends CommandTestCase
         $commandTester = new CommandTester($application->get(TagList::getDefaultName()));
 
         $commandTester->execute(
-            ['project' => 'aeon-php/automation', '--with-date' => true],
+            ['project' => 'aeon-php/automation', '--with-date' => true, '--with-commit' => true],
             ['verbosity' => ConsoleOutput::VERBOSITY_VERBOSE]
         );
 
         $this->assertStringContainsString('Tag - List', $commandTester->getDisplay());
-        $this->assertStringContainsString('1.0.0 - 2020-01-01', $commandTester->getDisplay());
+        $this->assertStringContainsString('1.0.0 - 2020-01-01 - ' . $sha, $commandTester->getDisplay());
 
         $this->assertSame(0, $commandTester->getStatusCode());
     }

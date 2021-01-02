@@ -39,7 +39,7 @@ final class HTMLChangesParser implements ChangesParser
         foreach (Changes\Type::all() as $type) {
             if ($crawler->filter('ul#' . $type->name())->count()) {
                 foreach ($crawler->filter('ul#' . $type->name())->children('li') as $node) {
-                    $changes[] = new Changes\Change($type, $node->textContent);
+                    $changes[] = new Changes\Change($changesSource, $type, $node->textContent);
                 }
             }
         }

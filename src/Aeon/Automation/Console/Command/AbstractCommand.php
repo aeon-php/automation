@@ -5,6 +5,8 @@ declare(strict_types=1);
 namespace Aeon\Automation\Console\Command;
 
 use Aeon\Automation\Configuration;
+use Aeon\Calendar\Gregorian\Calendar;
+use Aeon\Calendar\Gregorian\GregorianCalendar;
 use Github\Client;
 use Github\HttpClient\Builder;
 use Http\Client\Common\Plugin\LoggerPlugin;
@@ -23,13 +25,15 @@ abstract class AbstractCommand extends Command
     /**
      * @var string[];
      */
-    protected array $defaultConfigPaths = [];
+    protected array $defaultConfigPaths;
 
     private ?Configuration $configuration;
 
     private ?Client $github;
 
     private ?CacheItemPoolInterface $cache;
+
+    private ?Calendar $calendar;
 
     public function __construct(array $defaultConfigPaths = [])
     {
@@ -39,6 +43,7 @@ abstract class AbstractCommand extends Command
         $this->configuration = null;
         $this->github = null;
         $this->cache = null;
+        $this->calendar = null;
     }
 
     public function github() : Client
@@ -53,6 +58,20 @@ abstract class AbstractCommand extends Command
     public function setGithub(Client $client) : void
     {
         $this->github = $client;
+    }
+
+    public function calendar() : Calendar
+    {
+        if ($this->calendar === null) {
+            throw new \RuntimeException("Calendar is only accessible in Command::execute() method because it's initialized in Command::initialize()");
+        }
+
+        return $this->calendar;
+    }
+
+    public function setCalendar(Calendar $calendar) : void
+    {
+        $this->calendar = $calendar;
     }
 
     public function configuration() : Configuration
@@ -76,15 +95,13 @@ abstract class AbstractCommand extends Command
     protected function initialize(InputInterface $input, OutputInterface $output) : void
     {
         $this->configuration = new Configuration($this->defaultConfigPaths, $input->getOption('configuration'));
+        $this->cache = new FilesystemAdapter('aeon-automation');
 
-        $this->initializeGithub($output, $input);
+        $this->initializeCalendar();
+        $this->initializeGithub($this->cache, $output, $input);
     }
 
-    /**
-     * @param OutputInterface $output
-     * @param InputInterface $input
-     */
-    private function initializeGithub(OutputInterface $output, InputInterface $input) : void
+    private function initializeGithub(CacheItemPoolInterface $cache, OutputInterface $output, InputInterface $input) : void
     {
         if ($this->github !== null) {
             return;
@@ -123,9 +140,8 @@ abstract class AbstractCommand extends Command
         }
 
         $client = new Client($builder);
-        $client->addCache($cache = new FilesystemAdapter('aeon-automation'));
+        $client->addCache($cache);
 
-        $this->cache = $cache;
         $this->github = $client;
 
         if ($input->getOption('github-token')) {
@@ -133,5 +149,14 @@ abstract class AbstractCommand extends Command
         } elseif (\getenv('AEON_AUTOMATION_GH_TOKEN')) {
             $this->github()->authenticate(\getenv('AEON_AUTOMATION_GH_TOKEN'), null, Client::AUTH_ACCESS_TOKEN);
         }
+    }
+
+    private function initializeCalendar() : void
+    {
+        if ($this->calendar !== null) {
+            return;
+        }
+
+        $this->calendar = GregorianCalendar::UTC();
     }
 }

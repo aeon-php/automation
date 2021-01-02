@@ -19,7 +19,7 @@ final class DefaultParser implements ChangesParser
     {
         return new Changes(
             $changesSource,
-            new Changes\Change(Changes\Type::changed(), $changesSource->title())
+            new Changes\Change($changesSource, Changes\Type::changed(), $changesSource->title())
         );
     }
 }
