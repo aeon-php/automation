@@ -17,7 +17,7 @@ final class PullRequestsTemplateShow extends AbstractCommand
     {
         parent::configure();
 
-        $this->setDescription("Display pull request template required by this tool to properly parse keepachangelog format");
+        $this->setDescription('Display pull request template required by this tool to properly parse keepachangelog format');
     }
 
     protected function execute(InputInterface $input, OutputInterface $output) : int
