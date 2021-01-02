@@ -74,12 +74,14 @@ final class ChangelogGenerateTest extends CommandTestCase
         );
 
         $this->assertStringContainsString('Changelog - Generate', $commandTester->getDisplay());
+        $this->assertStringContainsString('! [NOTE] Release: Unreleased', $commandTester->getDisplay());
         $this->assertStringContainsString('! [NOTE] Format: markdown', $commandTester->getDisplay());
+        $this->assertStringContainsString('! [NOTE] Theme: keepachangelog', $commandTester->getDisplay());
         $this->assertStringContainsString('! [NOTE] Project: aeon-php/automation', $commandTester->getDisplay());
+        $this->assertStringContainsString('! [NOTE] Branch: 1.x', $commandTester->getDisplay());
+        $this->assertStringContainsString('! [NOTE] Tag: 1.0.0', $commandTester->getDisplay());
         $this->assertStringContainsString('! [NOTE] Commit Start: ' . $branchSHA, $commandTester->getDisplay());
         $this->assertStringContainsString('! [NOTE] Commit End: ' . $tag100SHA, $commandTester->getDisplay());
-        $this->assertStringContainsString('! [NOTE] Changes After: N/A', $commandTester->getDisplay());
-        $this->assertStringContainsString('! [NOTE] Changes Before: N/A', $commandTester->getDisplay());
         $this->assertStringContainsString('! [NOTE] Total commits: 2', $commandTester->getDisplay());
         $this->assertStringContainsString('! [NOTE] All commits analyzed, generating changelog:', $commandTester->getDisplay());
         $this->assertStringContainsString('## [Unreleased] - 2021-01-01', $commandTester->getDisplay());
@@ -141,12 +143,12 @@ final class ChangelogGenerateTest extends CommandTestCase
         );
 
         $this->assertStringContainsString('Changelog - Generate', $commandTester->getDisplay());
+        $this->assertStringContainsString('! [NOTE] Release: Unreleased', $commandTester->getDisplay());
         $this->assertStringContainsString('! [NOTE] Format: markdown', $commandTester->getDisplay());
+        $this->assertStringContainsString('! [NOTE] Theme: keepachangelog', $commandTester->getDisplay());
         $this->assertStringContainsString('! [NOTE] Project: aeon-php/automation', $commandTester->getDisplay());
+        $this->assertStringContainsString('! [NOTE] Branch: 1.x', $commandTester->getDisplay());
         $this->assertStringContainsString('! [NOTE] Commit Start: ' . $branchSHA, $commandTester->getDisplay());
-        $this->assertStringContainsString('! [NOTE] Commit End: N/A', $commandTester->getDisplay());
-        $this->assertStringContainsString('! [NOTE] Changes After: N/A', $commandTester->getDisplay());
-        $this->assertStringContainsString('! [NOTE] Changes Before: N/A', $commandTester->getDisplay());
         $this->assertStringContainsString('! [NOTE] Total commits: 3', $commandTester->getDisplay());
         $this->assertStringContainsString('! [NOTE] All commits analyzed, generating changelog:', $commandTester->getDisplay());
         $this->assertStringContainsString('## [Unreleased] - 2021-01-01', $commandTester->getDisplay());
@@ -207,12 +209,12 @@ final class ChangelogGenerateTest extends CommandTestCase
         );
 
         $this->assertStringContainsString('Changelog - Generate', $commandTester->getDisplay());
-        $this->assertStringContainsString('! [NOTE] Format: markdown', $commandTester->getDisplay());
+        $this->assertStringContainsString('! [NOTE] Release: Unreleased', $commandTester->getDisplay());
         $this->assertStringContainsString('! [NOTE] Project: aeon-php/automation', $commandTester->getDisplay());
+        $this->assertStringContainsString('! [NOTE] Format: markdown', $commandTester->getDisplay());
+        $this->assertStringContainsString('! [NOTE] Theme: keepachangelog', $commandTester->getDisplay());
+        $this->assertStringContainsString('! [NOTE] Branch: 1.x', $commandTester->getDisplay());
         $this->assertStringContainsString('! [NOTE] Commit Start: ' . $branchSHA, $commandTester->getDisplay());
-        $this->assertStringContainsString('! [NOTE] Commit End: N/A', $commandTester->getDisplay());
-        $this->assertStringContainsString('! [NOTE] Changes After: N/A', $commandTester->getDisplay());
-        $this->assertStringContainsString('! [NOTE] Changes Before: N/A', $commandTester->getDisplay());
         $this->assertStringContainsString('! [NOTE] Total commits: 3', $commandTester->getDisplay());
         $this->assertStringContainsString('! [NOTE] All commits analyzed, generating changelog:', $commandTester->getDisplay());
         $this->assertStringContainsString('## [Unreleased] - 2021-01-01', $commandTester->getDisplay());
@@ -266,12 +268,12 @@ final class ChangelogGenerateTest extends CommandTestCase
         );
 
         $this->assertStringContainsString('Changelog - Generate', $commandTester->getDisplay());
-        $this->assertStringContainsString('! [NOTE] Format: markdown', $commandTester->getDisplay());
+        $this->assertStringContainsString('! [NOTE] Release: Unreleased', $commandTester->getDisplay());
         $this->assertStringContainsString('! [NOTE] Project: aeon-php/automation', $commandTester->getDisplay());
+        $this->assertStringContainsString('! [NOTE] Format: markdown', $commandTester->getDisplay());
+        $this->assertStringContainsString('! [NOTE] Theme: keepachangelog', $commandTester->getDisplay());
+        $this->assertStringContainsString('! [NOTE] Branch: 1.x', $commandTester->getDisplay());
         $this->assertStringContainsString('! [NOTE] Commit Start: ' . $branchSHA, $commandTester->getDisplay());
-        $this->assertStringContainsString('! [NOTE] Commit End: N/A', $commandTester->getDisplay());
-        $this->assertStringContainsString('! [NOTE] Changes After: N/A', $commandTester->getDisplay());
-        $this->assertStringContainsString('! [NOTE] Changes Before: N/A', $commandTester->getDisplay());
         $this->assertStringContainsString('! [NOTE] Total commits: 3', $commandTester->getDisplay());
         $this->assertStringContainsString('! [NOTE] All commits analyzed, generating changelog:', $commandTester->getDisplay());
         $this->assertStringContainsString('## [Unreleased] - 2021-01-01', $commandTester->getDisplay());
@@ -339,12 +341,14 @@ final class ChangelogGenerateTest extends CommandTestCase
         );
 
         $this->assertStringContainsString('Changelog - Generate', $commandTester->getDisplay());
-        $this->assertStringContainsString('! [NOTE] Format: markdown', $commandTester->getDisplay());
+        $this->assertStringContainsString('! [NOTE] Release: 1.1.0', $commandTester->getDisplay());
         $this->assertStringContainsString('! [NOTE] Project: aeon-php/automation', $commandTester->getDisplay());
+        $this->assertStringContainsString('! [NOTE] Format: markdown', $commandTester->getDisplay());
+        $this->assertStringContainsString('! [NOTE] Theme: keepachangelog', $commandTester->getDisplay());
+        $this->assertStringContainsString('! [NOTE] Tag: 1.1.0', $commandTester->getDisplay());
+        $this->assertStringContainsString('! [NOTE] Tag End: 1.0.0', $commandTester->getDisplay());
         $this->assertStringContainsString('! [NOTE] Commit Start: ' . $tag110SHA, $commandTester->getDisplay());
         $this->assertStringContainsString('! [NOTE] Commit End: ' . $tag100SHA, $commandTester->getDisplay());
-        $this->assertStringContainsString('! [NOTE] Changes After: N/A', $commandTester->getDisplay());
-        $this->assertStringContainsString('! [NOTE] Changes Before: N/A', $commandTester->getDisplay());
         $this->assertStringContainsString('! [NOTE] Total commits: 3', $commandTester->getDisplay());
         $this->assertStringContainsString('! [NOTE] All commits analyzed, generating changelog:', $commandTester->getDisplay());
         $this->assertStringContainsString('## [1.1.0] - 2021-01-01', $commandTester->getDisplay());
