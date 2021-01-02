@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Aeon\Automation\Console\Command;
 
-use Aeon\Automation\ChangeLog\MarkdownFormatter;
+use Aeon\Automation\ChangeLog\TwigFormatter;
 use Aeon\Automation\Changes\ChangesParser\ConventionalCommitParser;
 use Aeon\Automation\Changes\ChangesParser\DefaultParser;
 use Aeon\Automation\Changes\ChangesParser\HTMLChangesParser;
@@ -54,7 +54,7 @@ final class ChangelogGenerate extends AbstractCommand
             ->addOption('tag', 't', InputOption::VALUE_REQUIRED, 'List only changes from given release')
             ->addOption('only-commits', 'oc', InputOption::VALUE_NONE, 'Use only commits to generate changelog')
             ->addOption('only-pull-requests', 'opr', InputOption::VALUE_NONE, 'Use only pull requests to generate changelog')
-            ->addOption('format', 'f', InputOption::VALUE_REQUIRED, 'How to format generated changelog, available formatters: <fg=yellow>"' . \implode('"</>, <fg=yellow>"', ['markdown']) . '"</>', 'markdown');
+            ->addOption('format', 'f', InputOption::VALUE_REQUIRED, 'How to format generated changelog, available formatters: <fg=yellow>"' . \implode('"</>, <fg=yellow>"', ['markdown', 'html']) . '"</>', 'markdown');
     }
 
     protected function execute(InputInterface $input, OutputInterface $output) : int
@@ -91,7 +91,8 @@ final class ChangelogGenerate extends AbstractCommand
 
         switch (\trim(\strtolower($input->getOption('format')))) {
             case 'markdown' :
-                $formatter = new MarkdownFormatter($this->rootDir);
+            case 'html' :
+                $formatter = new TwigFormatter($this->rootDir, \trim(\strtolower($input->getOption('format'))));
 
                 break;
 
