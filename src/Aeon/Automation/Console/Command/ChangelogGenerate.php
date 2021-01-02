@@ -47,7 +47,6 @@ final class ChangelogGenerate extends AbstractCommand
             ->setDescription('Generate change log for a release.')
             ->setHelp('When no parameters are provided, this command will generate UNRELEASED change log.')
             ->addArgument('project', InputArgument::REQUIRED, 'project name, for example aeon-php/calendar')
-            ->addOption('branch', 'b', InputOption::VALUE_REQUIRED, 'Get the the branch used instead of tag-start option when it\'s not provided. If empty, default repository branch is taken.')
             ->addOption('commit-start', 'cs', InputOption::VALUE_REQUIRED, 'Optional commit sha from which changelog is generated . When not provided, default branch latest commit is taken')
             ->addOption('commit-end', 'ce', InputOption::VALUE_REQUIRED, 'Optional commit sha until which changelog is generated . When not provided, latest tag is taken')
             ->addOption('changed-after', 'ca', InputOption::VALUE_REQUIRED, 'Ignore all changes after given date, relative date formats like "-1 day" are also supported')
@@ -66,9 +65,6 @@ final class ChangelogGenerate extends AbstractCommand
 
         $io->title('Changelog - Generate');
 
-        $repository = Repository::create($this->github(), $project);
-
-        $branchName = ($input->getOption('branch') !== null ? $input->getOption('branch') : $repository->defaultBranch());
         $commitStartSHA = $input->getOption('commit-start');
         $commitEndSHA = $input->getOption('commit-end');
         $tag = $input->getOption('tag');
@@ -103,14 +99,6 @@ final class ChangelogGenerate extends AbstractCommand
                 $io->error('Invalid format: ' . $input->getOption('format'));
 
                 return Command::FAILURE;
-        }
-
-        try {
-            $branch = Branch::byName($this->github(), $project, $branchName);
-        } catch (RuntimeException $e) {
-            $io->error('Branch "' . $input->getArgument('branch') . '" does not exists: ' . $e->getMessage());
-
-            return Command::FAILURE;
         }
 
         if ($tag !== null) {
@@ -160,9 +148,17 @@ final class ChangelogGenerate extends AbstractCommand
                 $tags = Tags::getAll($this->github(), $project)->semVerRsort();
             }
 
+            try {
+                $branch = Branch::byName($this->github(), $project, Repository::create($this->github(), $project)->defaultBranch());
+                $commitStart = Commit::fromSHA($this->github(), $project, $branch->sha());
+            } catch (RuntimeException $e) {
+                $io->error("Branch \"{$commitEndSHA}\" does not exists: " . $e->getMessage());
+
+                return Command::FAILURE;
+            }
+
             if ($tags->count()) {
                 try {
-                    $commitStart = Commit::fromSHA($this->github(), $project, $branch->sha());
                     $commitEnd = Reference::tag($this->github(), $project, $tags->first()->name())
                         ->commit($this->github(), $project);
                 } catch (RuntimeException $e) {
@@ -173,7 +169,6 @@ final class ChangelogGenerate extends AbstractCommand
 
         $io->note('Format: ' . $input->getOption('format'));
         $io->note('Project: ' . $project->fullName());
-        $io->note('Branch: ' . $branchName);
         $io->note('Commit Start: ' . ($commitStart ? $commitStart->sha() : 'N/A'));
         $io->note('Commit End: ' . ($commitEnd ? $commitEnd->sha() : 'N/A'));
         $io->note('Changes After: ' . ($changeAfter ? $changeAfter->toISO8601() : 'N/A'));
@@ -191,7 +186,7 @@ final class ChangelogGenerate extends AbstractCommand
         if ($commitStart !== null && $commitEnd !== null) {
             $commits = Commits::betweenCommits($this->github(), $project, $commitStart, $commitEnd, $changeAfter, $changeBefore);
         } else {
-            $commits = Commits::takeAll($this->github(), $project, $commitStart ? $commitStart->sha() : $branch->name(), $changeAfter, $changeBefore);
+            $commits = Commits::takeAll($this->github(), $project, $commitStart->sha(), $changeAfter, $changeBefore);
         }
 
         $io->note('Total commits: ' . $commits->count());

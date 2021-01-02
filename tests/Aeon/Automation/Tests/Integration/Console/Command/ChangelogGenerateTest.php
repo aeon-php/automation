@@ -99,6 +99,9 @@ final class ChangelogGenerateTest extends CommandTestCase
             new HttpRequestStub('GET', '/repos/aeon-php/automation/branches/1.x', ResponseMother::jsonSuccess(
                 GitHubResponseMother::branch('1.x', $branchSHA = SHAMother::random())
             )),
+            new HttpRequestStub('GET', '/repos/aeon-php/automation/commits/' . $branchSHA, ResponseMother::jsonSuccess(
+                GitHubResponseMother::commit('Unreleased 3', $branchSHA, '2021-01-01'),
+            )),
             new HttpRequestStub('GET', '/repos/aeon-php/automation/tags', ResponseMother::jsonSuccess([])),
             new HttpRequestStub('GET', '/repos/aeon-php/automation/commits', ResponseMother::jsonSuccess(
                 [
@@ -140,7 +143,7 @@ final class ChangelogGenerateTest extends CommandTestCase
         $this->assertStringContainsString('Changelog - Generate', $commandTester->getDisplay());
         $this->assertStringContainsString('! [NOTE] Format: markdown', $commandTester->getDisplay());
         $this->assertStringContainsString('! [NOTE] Project: aeon-php/automation', $commandTester->getDisplay());
-        $this->assertStringContainsString('! [NOTE] Commit Start: N/A', $commandTester->getDisplay());
+        $this->assertStringContainsString('! [NOTE] Commit Start: ' . $branchSHA, $commandTester->getDisplay());
         $this->assertStringContainsString('! [NOTE] Commit End: N/A', $commandTester->getDisplay());
         $this->assertStringContainsString('! [NOTE] Changes After: N/A', $commandTester->getDisplay());
         $this->assertStringContainsString('! [NOTE] Changes Before: N/A', $commandTester->getDisplay());
@@ -163,6 +166,9 @@ final class ChangelogGenerateTest extends CommandTestCase
             )),
             new HttpRequestStub('GET', '/repos/aeon-php/automation/branches/1.x', ResponseMother::jsonSuccess(
                 GitHubResponseMother::branch('1.x', $branchSHA = SHAMother::random())
+            )),
+            new HttpRequestStub('GET', '/repos/aeon-php/automation/commits/' . $branchSHA, ResponseMother::jsonSuccess(
+                GitHubResponseMother::commit('Unreleased 3', $branchSHA, '2021-01-01'),
             )),
             new HttpRequestStub('GET', '/repos/aeon-php/automation/tags', ResponseMother::jsonSuccess([])),
             new HttpRequestStub('GET', '/repos/aeon-php/automation/commits', ResponseMother::jsonSuccess(
@@ -203,7 +209,7 @@ final class ChangelogGenerateTest extends CommandTestCase
         $this->assertStringContainsString('Changelog - Generate', $commandTester->getDisplay());
         $this->assertStringContainsString('! [NOTE] Format: markdown', $commandTester->getDisplay());
         $this->assertStringContainsString('! [NOTE] Project: aeon-php/automation', $commandTester->getDisplay());
-        $this->assertStringContainsString('! [NOTE] Commit Start: N/A', $commandTester->getDisplay());
+        $this->assertStringContainsString('! [NOTE] Commit Start: ' . $branchSHA, $commandTester->getDisplay());
         $this->assertStringContainsString('! [NOTE] Commit End: N/A', $commandTester->getDisplay());
         $this->assertStringContainsString('! [NOTE] Changes After: N/A', $commandTester->getDisplay());
         $this->assertStringContainsString('! [NOTE] Changes Before: N/A', $commandTester->getDisplay());
@@ -226,6 +232,9 @@ final class ChangelogGenerateTest extends CommandTestCase
             )),
             new HttpRequestStub('GET', '/repos/aeon-php/automation/branches/1.x', ResponseMother::jsonSuccess(
                 GitHubResponseMother::branch('1.x', $branchSHA = SHAMother::random())
+            )),
+            new HttpRequestStub('GET', '/repos/aeon-php/automation/commits/' . $branchSHA, ResponseMother::jsonSuccess(
+                GitHubResponseMother::commit('Unreleased 3', $branchSHA, '2021-01-01'),
             )),
             new HttpRequestStub('GET', '/repos/aeon-php/automation/tags', ResponseMother::jsonSuccess([])),
             new HttpRequestStub('GET', '/repos/aeon-php/automation/commits', ResponseMother::jsonSuccess(
@@ -259,7 +268,7 @@ final class ChangelogGenerateTest extends CommandTestCase
         $this->assertStringContainsString('Changelog - Generate', $commandTester->getDisplay());
         $this->assertStringContainsString('! [NOTE] Format: markdown', $commandTester->getDisplay());
         $this->assertStringContainsString('! [NOTE] Project: aeon-php/automation', $commandTester->getDisplay());
-        $this->assertStringContainsString('! [NOTE] Commit Start: N/A', $commandTester->getDisplay());
+        $this->assertStringContainsString('! [NOTE] Commit Start: ' . $branchSHA, $commandTester->getDisplay());
         $this->assertStringContainsString('! [NOTE] Commit End: N/A', $commandTester->getDisplay());
         $this->assertStringContainsString('! [NOTE] Changes After: N/A', $commandTester->getDisplay());
         $this->assertStringContainsString('! [NOTE] Changes Before: N/A', $commandTester->getDisplay());
@@ -277,12 +286,6 @@ final class ChangelogGenerateTest extends CommandTestCase
     public function test_changelog_generate_for_given_tag() : void
     {
         $client = Client::createWithHttpClient($httpClient = $this->httpClient(
-            new HttpRequestStub('GET', '/repos/aeon-php/automation', ResponseMother::jsonSuccess(
-                GitHubResponseMother::repository('1.x')
-            )),
-            new HttpRequestStub('GET', '/repos/aeon-php/automation/branches/1.x', ResponseMother::jsonSuccess(
-                GitHubResponseMother::branch('1.x', $branchSHA = SHAMother::random())
-            )),
             new HttpRequestStub('GET', '/repos/aeon-php/automation/tags', ResponseMother::jsonSuccess([
                 GitHubResponseMother::tag('1.0.0', $tag100SHA = SHAMother::random()),
                 GitHubResponseMother::tag('1.1.0', $tag110SHA = SHAMother::random()),
