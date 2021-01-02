@@ -16,15 +16,9 @@ final class Reference
         $this->data = $data;
     }
 
-    public static function commitFromString(Client $client, Project $project, string $name) : self
+    public static function tag(Client $client, Project $project, string $name) : self
     {
-        $reference = new self($client->gitData()->references()->show($project->organization(), $project->name(), $name));
-
-        if ($reference->isTag()) {
-            return new self($client->gitData()->tags()->show($project->organization(), $project->name(), $reference->sha()));
-        }
-
-        return $reference;
+        return new self($client->gitData()->references()->show($project->organization(), $project->name(), 'tags/' . $name));
     }
 
     public function sha() : string
@@ -32,20 +26,12 @@ final class Reference
         return $this->data['object']['sha'];
     }
 
-    public function isCommit() : bool
-    {
-        return $this->data['object']['type'] === 'commit';
-    }
-
-    public function isTag() : bool
-    {
-        return $this->data['object']['type'] === 'tag';
-    }
-
     public function commit(Client $client, Project $project) : Commit
     {
-        if (!$this->isCommit()) {
-            throw new \RuntimeException('Reference is not a commit');
+        if ($this->data['object']['type'] === 'tag') {
+            $tagData = $client->gitData()->tags()->show($project->organization(), $project->name(), $this->sha());
+
+            return new Commit($client->repo()->commits()->show($project->organization(), $project->name(), $tagData['object']['sha']));
         }
 
         return new Commit($client->repo()->commits()->show($project->organization(), $project->name(), $this->sha()));

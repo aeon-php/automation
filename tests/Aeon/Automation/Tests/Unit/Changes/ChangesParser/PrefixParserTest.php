@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Aeon\Automation\Tests\Unit\Changes\ChangesParser;
 
-use Aeon\Automation\Changes\Change;
 use Aeon\Automation\Changes\ChangesParser\PrefixParser;
 use Aeon\Automation\Changes\Type;
 use Aeon\Automation\Tests\Mother\ChangesSourceMother;
@@ -29,18 +28,19 @@ final class PrefixParserTest extends TestCase
     /**
      * @dataProvider messages_with_prefix
      */
-    public function test_getting_changes_by_prefix(string $message, array $expectedChanges) : void
+    public function test_getting_changes_by_prefix(string $message, Type $expectedType, string $expectedDescription) : void
     {
         $this->assertTrue((new PrefixParser())->support(ChangesSourceMother::withTitle($message)));
-        $this->assertEquals($expectedChanges, (new PrefixParser())->parse(ChangesSourceMother::withTitle($message))->all());
+        $this->assertEquals($expectedType, (new PrefixParser())->parse(ChangesSourceMother::withTitle($message))->all()[0]->type());
+        $this->assertEquals($expectedDescription, (new PrefixParser())->parse(ChangesSourceMother::withTitle($message))->all()[0]->description());
     }
 
     public function messages_with_prefix() : \Generator
     {
-        yield ['added something cool', [new Change(Type::added(), 'something cool')]];
-        yield ['AddEd something cool', [new Change(Type::added(), 'something cool')]];
-        yield ['adding something cool', [new Change(Type::added(), 'something cool')]];
-        yield ['changed so many different things', [new Change(Type::changed(), 'so many different things')]];
-        yield ['SecuRity so many different things', [new Change(Type::security(), 'so many different things')]];
+        yield ['added something cool', Type::added(), 'something cool'];
+        yield ['AddEd something cool', Type::added(), 'something cool'];
+        yield ['adding something cool', Type::added(), 'something cool'];
+        yield ['changed so many different things', Type::changed(), 'so many different things'];
+        yield ['SecuRity so many different things', Type::security(), 'so many different things'];
     }
 }

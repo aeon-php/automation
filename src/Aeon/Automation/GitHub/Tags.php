@@ -8,6 +8,7 @@ use Aeon\Automation\Project;
 use Composer\Semver\Semver;
 use Composer\Semver\VersionParser;
 use Github\Client;
+use Github\ResultPager;
 
 final class Tags
 {
@@ -23,9 +24,12 @@ final class Tags
 
     public static function getAll(Client $client, Project $project) : self
     {
+        $tagsPaginator = new ResultPager($client);
+        $tagsData = $tagsPaginator->fetchAll($client->repo(), 'tags', [$project->organization(), $project->name()]);
+
         return new self(...\array_map(
             fn (array $tagData) : Tag => new Tag($tagData),
-            $client->repository()->tags($project->organization(), $project->name())
+            $tagsData
         ));
     }
 
@@ -95,8 +99,39 @@ final class Tags
         return \current($this->tags);
     }
 
+    public function last() : ?Tag
+    {
+        if (!$this->count()) {
+            return null;
+        }
+
+        return \end($this->tags);
+    }
+
+    public function next(string $tag) : ?Tag
+    {
+        $found = false;
+
+        foreach ($this->tags as $nextTag) {
+            if ($found) {
+                return $nextTag;
+            }
+
+            if ($nextTag->name() === $tag) {
+                $found = true;
+            }
+        }
+
+        return null;
+    }
+
     public function count() : int
     {
         return \count($this->tags);
+    }
+
+    public function limit(int $limit) : self
+    {
+        return new self(...\array_slice($this->tags, 0, $limit));
     }
 }

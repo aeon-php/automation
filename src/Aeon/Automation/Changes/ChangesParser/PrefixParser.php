@@ -40,6 +40,7 @@ final class PrefixParser implements ChangesParser
                     return new Changes(
                         $changesSource,
                         new Changes\Change(
+                            $changesSource,
                             Changes\Type::$type(),
                             \substr($changesSource->title(), \strlen($prefix) + 1)
                         )

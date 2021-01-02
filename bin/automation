@@ -4,7 +4,7 @@
 use Aeon\Automation\Console\AeonApplication;
 use Aeon\Automation\Console\Command\BranchList;
 use Aeon\Automation\Console\Command\CacheClear;
-use Aeon\Automation\Console\Command\ChangeLogGet;
+use Aeon\Automation\Console\Command\ChangelogGenerate;
 use Aeon\Automation\Console\Command\MilestoneCreate;
 use Aeon\Automation\Console\Command\MilestoneList;
 use Aeon\Automation\Console\Command\ProjectList;
@@ -27,6 +27,8 @@ require_once __DIR__ . '/../vendor/autoload.php';
     $input = new ArgvInput();
 
 
+    $rootDir = (\strlen(Phar::running(false)) === 0) ? \realpath(__DIR__ . '/../') : Phar::running();
+
     $defaultConfigPaths = [
             __DIR__,
         __DIR__ . '/../',
@@ -42,7 +44,7 @@ require_once __DIR__ . '/../vendor/autoload.php';
     $application->add(new MilestoneList($defaultConfigPaths));
     $application->add(new ReleaseList($defaultConfigPaths));
     $application->add(new PullRequestsList($defaultConfigPaths));
-    $application->add(new ChangeLogGet($defaultConfigPaths));
+    $application->add(new ChangelogGenerate($rootDir, $defaultConfigPaths));
     $application->add(new BranchList($defaultConfigPaths));
     $application->add(new TagList($defaultConfigPaths));
     $application->add(new CacheClear());

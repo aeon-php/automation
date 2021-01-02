@@ -18,6 +18,16 @@ final class GitHubResponseMother
         ];
     }
 
+    public static function branch(string $name, ?string $sha = null) : array
+    {
+        return [
+            'name' => $name,
+            'commit' => [
+                'sha' => $sha ? $sha : SHAMother::random(),
+            ],
+        ];
+    }
+
     public static function repository(string $defaultBranch) : array
     {
         return [

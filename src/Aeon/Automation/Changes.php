@@ -40,6 +40,36 @@ final class Changes
         return \array_values(\array_filter($this->changes, fn (Change $change) : bool => $change->type()->isEqual($type)));
     }
 
+    public function added() : array
+    {
+        return $this->withType(Type::added());
+    }
+
+    public function changed() : array
+    {
+        return $this->withType(Type::changed());
+    }
+
+    public function fixed() : array
+    {
+        return $this->withType(Type::fixed());
+    }
+
+    public function removed() : array
+    {
+        return $this->withType(Type::removed());
+    }
+
+    public function deprecated() : array
+    {
+        return $this->withType(Type::deprecated());
+    }
+
+    public function security() : array
+    {
+        return $this->withType(Type::security());
+    }
+
     /**
      * @return Change[]
      */

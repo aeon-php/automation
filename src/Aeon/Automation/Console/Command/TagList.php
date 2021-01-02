@@ -23,7 +23,9 @@ final class TagList extends AbstractCommand
         $this
             ->setDescription('Display all tags following SemVer convention sorted from the latest to oldest')
             ->addArgument('project', InputArgument::REQUIRED, 'project name')
-            ->addOption('with-date', 'wd', InputOption::VALUE_NONE, 'display date when tag was committed');
+            ->addOption('with-date', 'wd', InputOption::VALUE_NONE, 'display date when tag was committed')
+            ->addOption('with-commit', 'wc', InputOption::VALUE_NONE, 'display commit SHA of tag')
+            ->addOption('limit', 'l', InputOption::VALUE_REQUIRED, 'Maximum number of tags to get');
     }
 
     protected function execute(InputInterface $input, OutputInterface $output) : int
@@ -36,12 +38,28 @@ final class TagList extends AbstractCommand
 
         $tags = Tags::getAll($this->github(), $project)->semVerRsort();
 
+        if ($input->getOption('limit')) {
+            $tags = $tags->limit((int) $input->getOption('limit'));
+        }
+
         foreach ($tags->all() as $tag) {
+            $tagOutput = $tag->name();
+            $commit = null;
+
             if ($input->getOption('with-date')) {
-                $io->writeln($tag->name() . ' - ' . $tag->commit($this->github(), $project)->date()->day()->toString());
-            } else {
-                $io->writeln($tag->name());
+                $commit = $tag->commit($this->github(), $project);
+                $tagOutput .= ' - ' . $commit->date()->day()->toString();
             }
+
+            if ($input->getOption('with-commit')) {
+                if ($commit === null) {
+                    $commit = $tag->commit($this->github(), $project);
+                }
+
+                $tagOutput .= ' - <fg=yellow>' . $commit->sha() . '</>';
+            }
+
+            $io->writeln($tagOutput);
         }
 
         return Command::SUCCESS;

@@ -9,5 +9,11 @@
   "files-bin": [
     "LICENSE"
   ],
-  "git-version": "git-version"
+  "git-version": "git-version",
+  "directories": [
+    "src",
+    "bin",
+    "resources",
+    "vendor"
+  ]
 }

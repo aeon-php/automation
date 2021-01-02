@@ -46,13 +46,13 @@ final class HTMLChangesParserTest extends TestCase
 </div>
 HTML;
 
-        $changes = (new HTMLChangesParser())->parse(ChangesSourceMother::withContent($content));
+        $changes = (new HTMLChangesParser())->parse($source = ChangesSourceMother::withContent($content));
 
-        $this->assertEquals([new Changes\Change(Changes\Type::added(), 'added')], $changes->withType(Changes\Type::added()));
-        $this->assertEquals([new Changes\Change(Changes\Type::changed(), 'changed')], $changes->withType(Changes\Type::changed()));
-        $this->assertEquals([new Changes\Change(Changes\Type::fixed(), 'fixed')], $changes->withType(Changes\Type::fixed()));
-        $this->assertEquals([new Changes\Change(Changes\Type::removed(), 'removed')], $changes->withType(Changes\Type::removed()));
-        $this->assertEquals([new Changes\Change(Changes\Type::deprecated(), 'deprecated')], $changes->withType(Changes\Type::deprecated()));
-        $this->assertEquals([new Changes\Change(Changes\Type::security(), 'security')], $changes->withType(Changes\Type::security()));
+        $this->assertEquals([new Changes\Change($source, Changes\Type::added(), 'added')], $changes->withType(Changes\Type::added()));
+        $this->assertEquals([new Changes\Change($source, Changes\Type::changed(), 'changed')], $changes->withType(Changes\Type::changed()));
+        $this->assertEquals([new Changes\Change($source, Changes\Type::fixed(), 'fixed')], $changes->withType(Changes\Type::fixed()));
+        $this->assertEquals([new Changes\Change($source, Changes\Type::removed(), 'removed')], $changes->withType(Changes\Type::removed()));
+        $this->assertEquals([new Changes\Change($source, Changes\Type::deprecated(), 'deprecated')], $changes->withType(Changes\Type::deprecated()));
+        $this->assertEquals([new Changes\Change($source, Changes\Type::security(), 'security')], $changes->withType(Changes\Type::security()));
     }
 }

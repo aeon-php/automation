@@ -23,6 +23,6 @@ final class Tag
 
     public function commit(Client $client, Project $project) : Commit
     {
-        return new Commit($client->gitData()->commits()->show($project->organization(), $project->name(), $this->data['commit']['sha']));
+        return new Commit($client->repo()->commits()->show($project->organization(), $project->name(), $this->data['commit']['sha']));
     }
 }
