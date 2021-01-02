@@ -48,7 +48,6 @@ final class AeonStyle extends SymfonyStyle
     {
         if ($this->getVerbosity() > ConsoleOutput::VERBOSITY_NORMAL) {
             parent::progressFinish();
-            $this->newLine(2);
         }
     }
 }

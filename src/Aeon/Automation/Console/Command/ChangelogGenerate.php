@@ -90,6 +90,9 @@ final class ChangelogGenerate extends AbstractCommand
 
         $releaseName = $input->getOption('tag') ? $input->getOption('tag') : 'Unreleased';
 
+        $io->note('Release: ' . $releaseName);
+        $io->note('Project: ' . $project->fullName());
+
         switch (\trim(\strtolower($input->getOption('format')))) {
             case 'markdown' :
             case 'html' :
@@ -107,10 +110,14 @@ final class ChangelogGenerate extends AbstractCommand
                 return Command::FAILURE;
         }
 
+        $io->note('Format: ' . $input->getOption('format'));
+        $io->note('Theme: ' . $input->getOption('theme'));
+
         if ($tag !== null) {
             try {
                 $commitStart = Reference::tag($this->github(), $project, $tag)
                     ->commit($this->github(), $project);
+                $io->note('Tag: ' . $tag);
             } catch (RuntimeException $e) {
                 $io->error("Tag \"{$tag}\" does not exists: " . $e->getMessage());
 
@@ -125,6 +132,8 @@ final class ChangelogGenerate extends AbstractCommand
                 if ($nextTag !== null) {
                     $commitEnd = Reference::tag($this->github(), $project, $nextTag->name())
                         ->commit($this->github(), $project);
+
+                    $io->note('Tag End: ' . $nextTag->name());
                 }
             }
         }
@@ -155,8 +164,10 @@ final class ChangelogGenerate extends AbstractCommand
             }
 
             try {
-                $branch = Branch::byName($this->github(), $project, Repository::create($this->github(), $project)->defaultBranch());
+                $branch = Branch::byName($this->github(), $project, $defaultBranch = Repository::create($this->github(), $project)->defaultBranch());
                 $commitStart = Commit::fromSHA($this->github(), $project, $branch->sha());
+
+                $io->note('Branch: ' . $defaultBranch);
             } catch (RuntimeException $e) {
                 $io->error("Branch \"{$commitEndSHA}\" does not exists: " . $e->getMessage());
 
@@ -164,6 +175,8 @@ final class ChangelogGenerate extends AbstractCommand
             }
 
             if ($tags->count()) {
+                $io->note('Tag: ' . $tags->first()->name());
+
                 try {
                     $commitEnd = Reference::tag($this->github(), $project, $tags->first()->name())
                         ->commit($this->github(), $project);
@@ -173,12 +186,21 @@ final class ChangelogGenerate extends AbstractCommand
             }
         }
 
-        $io->note('Format: ' . $input->getOption('format'));
-        $io->note('Project: ' . $project->fullName());
-        $io->note('Commit Start: ' . ($commitStart ? $commitStart->sha() : 'N/A'));
-        $io->note('Commit End: ' . ($commitEnd ? $commitEnd->sha() : 'N/A'));
-        $io->note('Changes After: ' . ($changeAfter ? $changeAfter->toISO8601() : 'N/A'));
-        $io->note('Changes Before: ' . ($changeBefore ? $changeBefore->toISO8601() : 'N/A'));
+        if ($commitStart !== null) {
+            $io->note('Commit Start: ' . $commitStart->sha());
+        }
+
+        if ($commitEnd !== null) {
+            $io->note('Commit End: ' . $commitEnd->sha());
+        }
+
+        if ($changeAfter) {
+            $io->note('Changes After: ' . $changeAfter->toISO8601());
+        }
+
+        if ($changeBefore) {
+            $io->note('Changes Before: ' . $changeBefore->toISO8601());
+        }
 
         $changesParser = new PrioritizedParser(
             new HTMLChangesParser(),
