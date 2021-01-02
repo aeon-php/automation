@@ -15,8 +15,6 @@ use Aeon\Automation\Console\Command\TagList;
 use Symfony\Component\Console\Input\ArgvInput;
 use Symfony\Component\Console\Output\ConsoleOutput;
 
-require_once __DIR__ . '/../vendor/autoload.php';
-
 (function () {
     error_reporting(E_ALL);
     ini_set('display_errors', 'stderr');
