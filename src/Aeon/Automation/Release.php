@@ -62,6 +62,16 @@ final class Release
     /**
      * @return Change[]
      */
+    public function all() : array
+    {
+        return \array_merge(
+            ...\array_map(fn (Changes $changes) => $changes->all(), $this->changes())
+        );
+    }
+
+    /**
+     * @return Change[]
+     */
     public function added() : array
     {
         return \array_merge(

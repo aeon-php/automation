@@ -15,9 +15,10 @@ final class TwigFormatter implements Formatter
 
     private string $format;
 
-    public function __construct(string $rootDir, string $format)
+    public function __construct(string $rootDir, string $format, string $theme)
     {
         $format = \strtolower($format);
+        $theme = \strtolower($theme);
 
         if (!\file_exists($rootDir . '/resources/templates/' . $format)) {
             throw new \InvalidArgumentException('Templates directory does not exists: ' . $rootDir . '/resources/templates/' . $format);
@@ -27,7 +28,11 @@ final class TwigFormatter implements Formatter
             throw new \InvalidArgumentException('Invalid form: ' . $format);
         }
 
-        $this->twig = new Environment(new FilesystemLoader($rootDir . '/resources/templates/' . $format), []);
+        if (!\in_array($theme, ['keepachangelog', 'classic'], true)) {
+            throw new \InvalidArgumentException('Invalid form: ' . $theme);
+        }
+
+        $this->twig = new Environment(new FilesystemLoader($rootDir . '/resources/templates/' . $format . '/' . $theme), []);
         $this->twig->addExtension(new ChangeLogExtension());
         $this->format = $format;
     }
