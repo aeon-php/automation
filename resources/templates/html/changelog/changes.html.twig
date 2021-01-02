@@ -1,0 +1,13 @@
+{% if changes|length %}
+
+<h3>{{ type | capitalize }}</h3>
+<ul>
+{% for change in changes %}
+{% if change.source | is_commit %}
+  <li><a href="{{ change.source.url }}">{{ change.source.id | slice(0, 6) }}</a> - {{ change.description }} - <a href="{{ change.source.userUrl }}">@{{ change.source.user }}</a></li>
+{% elseif change.source | is_pr %}
+  <li><a href="{{ change.source.url }}">#{{ change.source.id }}</a> - {{ change.description }} - <a href="{{ change.source.userUrl }}">@{{ change.source.user }}</a></li>
+{% endif %}
+{% endfor %}
+</ul>
+{% endif %}
