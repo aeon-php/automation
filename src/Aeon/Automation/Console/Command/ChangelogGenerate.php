@@ -54,7 +54,8 @@ final class ChangelogGenerate extends AbstractCommand
             ->addOption('tag', 't', InputOption::VALUE_REQUIRED, 'List only changes from given release')
             ->addOption('only-commits', 'oc', InputOption::VALUE_NONE, 'Use only commits to generate changelog')
             ->addOption('only-pull-requests', 'opr', InputOption::VALUE_NONE, 'Use only pull requests to generate changelog')
-            ->addOption('format', 'f', InputOption::VALUE_REQUIRED, 'How to format generated changelog, available formatters: <fg=yellow>"' . \implode('"</>, <fg=yellow>"', ['markdown', 'html']) . '"</>', 'markdown');
+            ->addOption('format', 'f', InputOption::VALUE_REQUIRED, 'How to format generated changelog, available formatters: <fg=yellow>"' . \implode('"</>, <fg=yellow>"', ['markdown', 'html']) . '"</>', 'markdown')
+            ->addOption('theme', 'th', InputOption::VALUE_REQUIRED, 'Theme of generated changelog: <fg=yellow>"' . \implode('"</>, <fg=yellow>"', ['keepachangelog', 'classic']) . '"</>', 'keepachangelog');
     }
 
     protected function execute(InputInterface $input, OutputInterface $output) : int
@@ -92,7 +93,11 @@ final class ChangelogGenerate extends AbstractCommand
         switch (\trim(\strtolower($input->getOption('format')))) {
             case 'markdown' :
             case 'html' :
-                $formatter = new TwigFormatter($this->rootDir, \trim(\strtolower($input->getOption('format'))));
+                $formatter = new TwigFormatter(
+                    $this->rootDir,
+                    \trim(\strtolower($input->getOption('format'))),
+                    \trim(\strtolower($input->getOption('theme')))
+                );
 
                 break;
 
