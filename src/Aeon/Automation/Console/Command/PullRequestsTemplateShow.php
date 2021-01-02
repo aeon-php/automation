@@ -13,6 +13,13 @@ final class PullRequestsTemplateShow extends AbstractCommand
 {
     protected static $defaultName = 'pull-request:template:show';
 
+    protected function configure() : void
+    {
+        parent::configure();
+
+        $this->setDescription("Display pull request template required by this tool to properly parse keepachangelog format");
+    }
+
     protected function execute(InputInterface $input, OutputInterface $output) : int
     {
         $io = new AeonStyle($input, $output);
