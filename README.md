@@ -1,22 +1,75 @@
 # Automation 
 
-Automation is an internal Aeon tool used to automate release process of all Aeon libraries. 
-It's still in the development phase, currently focused on generating change log files. 
+Command Line Application to automatically generate changelog from any github project pull requests/commits history.
 
-## Composer Installation 
+## Why? 
+
+Because we all need changelogs.
+
+There are similar, more popular projects around, why this? Automation is designed to give project owner a bit more
+flexibility and control on the changelog generation process. If pull requests are properly described Automation
+will take that description, parse it and extract following types of changes from it: 
+
+* added
+* changed
+* fixed
+* removed
+* deprecated
+* security 
+
+Those types are part of [keep a changelog](https://keepachangelog.com/en/1.0.0/) notation. 
+
+Pull Request Description by definition is easy to update/change, also once commits are merged which makes it really easy
+to get back to a specific PR when generating a changelog, fix it and get a better changelog output. 
+
+### Turn This
+
+![Pull Request](img/pull_request.png)
+
+### Into This 
+
+![Pull Request](img/output.gif)
+
+## Installation & Usage
 
 Before you start, [generate](https://github.com/settings/tokens) your own GitHub personal access token.
+It can be provided as environment variable `AUTOMATION_GH_TOKEN` or through CLI option `--github-token` 
+
+If Automation is not working as you expected, increase verbosity to see how it works under the hood.
+It can be done by providing one of following options: 
+
+* `-v` - normal
+* `-vv` - verbose
+* `-vvv` - debug
+
+### Docker
+
+```
+docker pull aeonphp/automation
+docker run -t --rm aeonphp/automation --help
+```
+
+### Composer 
 
 ```
 git clone git@github.com:aeon-php/automation.git
 cd automation 
 composer install
-bin/automation change-log:get aeon-php/calendar --github-token="*********"
+bin/automation --help
 ```
 
-## Phar Installation
+### Phar 
 
 TODO: Coming soon 
+
+## Contributing 
+
+Looking for a way to contribute? Awesome ❤️ Below you can find few places to start with:
+
+* [Contributing & Development](https://github.com/aeon-php/.github/blob/master/CONTRIBUTING.md)
+* [Forum](https://forum.aeon-php.org/)
+
+You are also more than welcome to open an [issue](https://github.com/aeon-php/automation/issues) if anything about this project bothers you.
 
 ## Documentation
 
@@ -40,26 +93,26 @@ Options:
   -gt, --github-token=GITHUB-TOKEN   Github personal access token, generated here: https://github.com/settings/tokens By default taken from AEON_AUTOMATION_GH_TOKEN env variable
 
 Available commands:
-  help                Displays help for a command
-  list                Lists commands
+  help                        Displays help for a command
+  list                        Lists commands
  branch
-  branch:list         List project branches
+  branch:list                 List project branches
  cache
-  cache:clear         Clears cache used to cache HTTP responses from GitHub
+  cache:clear                 Clears cache used to cache HTTP responses from GitHub
  changelog
-  changelog:generate  Generate change log for a release.
+  changelog:generate          Generate change log for a release.
  milestone
-  milestone:create    Create new milestone for project
-  milestone:list      
+  milestone:create            Create new milestone for project
+  milestone:list              
  project
-  project:list        List all projects defined in automation.xml file
+  project:list                List all projects defined in automation.xml file
  pull-request
-  pull-request:list   
+  pull-request:list           
+  pull-request:template:show  Display pull request template required by this tool to properly parse keepachangelog format
  release
-  release:list        List all project releases
+  release:list                List all project releases
  tag
-  tag:list            Display all tags following SemVer convention sorted from the latest to oldest
-
+  tag:list                    Display all tags following SemVer convention sorted from the latest to oldest
 ```
 
 ### changelog:generate
@@ -124,8 +177,3 @@ Options:
   -v|vv|vvv, --verbose               Increase the verbosity of messages: 1 for normal output, 2 for more verbose output and 3 for debug
   -gt, --github-token=GITHUB-TOKEN   Github personal access token, generated here: https://github.com/settings/tokens By default taken from AEON_AUTOMATION_GH_TOKEN env variable
 ```
-
-In general the tool is harmless, however it can create things like milestones so for now use them at your own risk.
-
-* [Contributing & Development](https://github.com/aeon-php/.github/blob/master/CONTRIBUTING.md)
-* [Forum](https://forum.aeon-php.org/)
