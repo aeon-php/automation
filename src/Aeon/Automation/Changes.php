@@ -77,4 +77,9 @@ final class Changes
     {
         return $this->changes;
     }
+
+    public function count() : int
+    {
+        return \count($this->all());
+    }
 }
