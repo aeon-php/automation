@@ -2,6 +2,15 @@
 
 Command Line Application to automatically generate changelog from any github project pull requests/commits history.
 
+Table of contents: 
+
+* [Why?](#why)
+* [When?](#when)
+* [How?](#how)
+* [Installation](#installation)
+* [Contributing](#contributing)
+* [Documentation](#documentation)
+
 ## Why? 
 
 There are similar, more popular projects around, why this? Automation is designed to give project owner a bit more
