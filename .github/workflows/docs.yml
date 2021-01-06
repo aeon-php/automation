@@ -7,7 +7,7 @@ on:
       - "1.x"
 
 jobs:
-  static-analyze:
+  documentation-linter:
     name: "Documentation Linter"
 
     runs-on: "ubuntu-latest"
