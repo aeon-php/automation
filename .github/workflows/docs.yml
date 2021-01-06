@@ -1,0 +1,28 @@
+name: "Documentation Linter"
+
+on:
+  pull_request:
+  push:
+    branches:
+      - "1.x"
+
+jobs:
+  static-analyze:
+    name: "Documentation Linter"
+
+    runs-on: "ubuntu-latest"
+
+    container:
+      image: "norberttech/md-link-linter:latest"
+      volumes:
+        - $PWD:/app
+
+    steps:
+      - name: "Checkout"
+        uses: "actions/checkout@v2"
+      - name: "MD Link Linter"
+        uses: "norberttech/md-link-linter:latest"
+        with:
+          args: "--exclude=vendor ."
+
+
