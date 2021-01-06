@@ -50,7 +50,72 @@ Releasing open source project you will probably look into `--tag` option that wi
 
 When working on a project that is released multiple times every day and does not really have a predictable release cycle you might want to store last deployed commit SHA hash and pass it later through `--commit-end` option. Automation will be able then to generate changelog since last release for you. 
 
-## Installation & Usage
+## How? 
+
+In order to generate a changelog Automation takes 4 steps. 
+
+> Currently, Automation takes the whole project history directly from GitHub but more sources are coming. 
+
+### 1) Detect Changes Scope 
+
+When generating a changelog, Automation is first trying to understand what is the scope of changes. By default, it takes head of the default branch and it looks for the latest tag (from a semantic versioning point of view). Of course, this can be overwritten by telling automation to start from a specific tag using `--tag` option or even more precisely by providing start and end commit SHA, `--commit-start`, `--commit-end`. 
+
+There are 2 more options that could help to setup the right scope, `--changed-after` and `--changed-before` which also supports relative formats like `--changed-after=noon` or `--changed-after="-1 day"` 
+
+### 2) Fetch Project History 
+
+When the scope is detected, Automation will fetch the history of changes from source. It all starts from commits and it works pretty much as `git log origin..HEAD` command. When commits are fetched, Automation pulls all Pull Requests since they also have valuable data about changes (this can be skipped using `--only-commits` option). 
+
+### 3) Analyze Project History 
+
+Automation follows the [Keep a Changelog](https://keepachangelog.com/en/1.0.0/) philosophy and it can recognize following types of changes:  
+
+* Added 
+* Changed 
+* Deprecated 
+* Removed 
+* Fixed 
+* Security 
+
+There are several strategies making this recognizion possible: 
+
+* [HTML Changes Parser](src/Aeon/Automation/Changes/ChangesParser/HTMLChangesParser.php) 
+* [Conventional Commit Parser](src/Aeon/Automation/Changes/ChangesParser/ConventionalCommitParser.php) 
+* [Prefix Parser](src/Aeon/Automation/Changes/ChangesParser/PrefixParser.php) 
+* [Default Parser](src/Aeon/Automation/Changes/ChangesParser/DefaultParser.php) 
+
+They are applied in given order until first one parse changes source and properly detect all changes. 
+
+### 4) Format Changelog 
+
+When all changes are detected and grouped by types Automation moves to the last step, changelog generation. 
+
+### Formats 
+
+Automation supports following changelog formats: 
+
+* `markdown` 
+* `html` 
+
+### Themes 
+
+Automation supports following themes: 
+
+* `keepachangelog`
+* `classic` 
+
+All themes are supported by all formats. 
+
+#### keepachangelog 
+
+This theme follows [Keep a Changelog](https://keepachangelog.com/en/1.0.0/) convention, changes are organized by type. 
+
+#### classic 
+
+This theme does not organize changes in any particular way, each change is displayed as a separated line item ordered by change date. 
+Combined with `--only-pull-requests` option will provide clean and organized classical list of changes taken from pull request titles. 
+
+## Installation
 
 Before you start, [generate](https://github.com/settings/tokens) your own GitHub personal access token.
 It can be provided as environment variable `AUTOMATION_GH_TOKEN` or through CLI option `--github-token` 
