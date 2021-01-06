@@ -71,6 +71,17 @@ final class Commit implements ChangesSource
         return $this->data['commit']['author']['email'];
     }
 
+    public function isFrom(string ...$users) : bool
+    {
+        foreach ($users as $user) {
+            if (\strtolower(\trim($this->user())) === \strtolower(\trim($user))) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
     public function userUrl() : string
     {
         if (!isset($this->data['author']['html_url'])) {
