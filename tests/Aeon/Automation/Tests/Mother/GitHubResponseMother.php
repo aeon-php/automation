@@ -89,7 +89,7 @@ final class GitHubResponseMother
         ];
     }
 
-    public static function pullRequest(int $number, ?string $title = null, ?string $body = null, ?string $date = null) : array
+    public static function pullRequest(int $number, ?string $title = null, ?string $body = null, ?string $date = null, ?string $user = null) : array
     {
         return [
             'number' => $number,
@@ -97,8 +97,8 @@ final class GitHubResponseMother
             'title' => $title ? $title : 'Pull Request Title',
             'body' => $body ? $body : '## Random Markdown Body',
             'user' => [
-                'login' => 'user_login',
-                'html_url' => 'http//github.com/user_login',
+                'login' => $user ? $user : 'user_login',
+                'html_url' => $user ? 'http//github.com/' . $user : 'http//github.com/user_login',
             ],
             'merged_at' => $date ? $date : GregorianCalendar::UTC()->now()->toISO8601(),
         ];
