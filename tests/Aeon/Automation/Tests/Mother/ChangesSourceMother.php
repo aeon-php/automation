@@ -49,6 +49,11 @@ final class ChangesSourceMother
                 throw new \RuntimeException('not implemented');
             }
 
+            public function isFrom(string ...$users) : bool
+            {
+                throw new \RuntimeException('not implemented');
+            }
+
             public function userUrl() : string
             {
                 throw new \RuntimeException('not implemented');
@@ -97,6 +102,11 @@ final class ChangesSourceMother
             }
 
             public function user() : string
+            {
+                throw new \RuntimeException('not implemented');
+            }
+
+            public function isFrom(string ...$users) : bool
             {
                 throw new \RuntimeException('not implemented');
             }

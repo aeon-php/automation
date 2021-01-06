@@ -18,6 +18,8 @@ interface ChangesSource
 
     public function user() : string;
 
+    public function isFrom(string ...$users) : bool;
+
     public function userUrl() : string;
 
     public function equals(self $source) : bool;

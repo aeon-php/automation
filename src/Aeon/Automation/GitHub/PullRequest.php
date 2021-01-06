@@ -58,6 +58,17 @@ final class PullRequest implements ChangesSource
         return $this->data['user']['login'];
     }
 
+    public function isFrom(string ...$users) : bool
+    {
+        foreach ($users as $user) {
+            if (\strtolower(\trim($this->user())) === \strtolower(\trim($user))) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
     public function userUrl() : string
     {
         return $this->data['user']['html_url'];

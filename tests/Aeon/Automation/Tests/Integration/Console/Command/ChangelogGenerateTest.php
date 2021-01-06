@@ -359,4 +359,80 @@ final class ChangelogGenerateTest extends CommandTestCase
 
         $this->assertSame(0, $commandTester->getStatusCode());
     }
+
+    public function test_changelog_generate_but_skip_specific_authors() : void
+    {
+        $client = Client::createWithHttpClient($httpClient = $this->httpClient(
+            new HttpRequestStub('GET', '/repos/aeon-php/automation/tags', ResponseMother::jsonSuccess([
+                GitHubResponseMother::tag('1.0.0', $tag100SHA = SHAMother::random()),
+                GitHubResponseMother::tag('1.1.0', $tag110SHA = SHAMother::random()),
+            ])),
+            new HttpRequestStub('GET', '/repos/aeon-php/automation/git/refs/tags/1.1.0', ResponseMother::jsonSuccess(
+                GitHubResponseMother::refCommit('tags/1.1.0', $tag110SHA)
+            )),
+            new HttpRequestStub('GET', '/repos/aeon-php/automation/git/refs/tags/1.0.0', ResponseMother::jsonSuccess(
+                GitHubResponseMother::refCommit('tags/1.0.0', $tag100SHA)
+            )),
+            new HttpRequestStub('GET', '/repos/aeon-php/automation/commits/' . $tag110SHA, ResponseMother::jsonSuccess(
+                GitHubResponseMother::commit('Tag 1.1.0', $tag110SHA, '2021-01-01'),
+            )),
+            new HttpRequestStub('GET', '/repos/aeon-php/automation/commits/' . $tag100SHA, ResponseMother::jsonSuccess(
+                GitHubResponseMother::commit('Tag 1.0.0', $tag100SHA),
+            )),
+            new HttpRequestStub('GET', '/repos/aeon-php/automation/compare/' . $tag100SHA . '...' . $tag110SHA, ResponseMother::jsonSuccess(
+                [
+                    'total_commits' => 3,
+                    'commits' => [
+                        GitHubResponseMother::commit('Release 1.1.0 - 1', $unreleased1 = SHAMother::random()),
+                        GitHubResponseMother::commit('Release 1.1.0 - 2', $unreleased2 = SHAMother::random()),
+                        GitHubResponseMother::commit('Release 1.1.0 - 3 ', $tag110SHA),
+                    ],
+                ]
+            )),
+            new HttpRequestStub('GET', '/repos/aeon-php/automation/commits/' . $tag110SHA . '/pulls', ResponseMother::jsonSuccess(
+                [GitHubResponseMother::pullRequest(3, 'Release 1.1.0 Title - 3', null, null, 'dependabot')]
+            )),
+            new HttpRequestStub('GET', '/repos/aeon-php/automation/commits/' . $unreleased2 . '/pulls', ResponseMother::jsonSuccess(
+                [GitHubResponseMother::pullRequest(2, 'Release 1.1.0 Title - 2', null, null, 'norberttech')]
+            )),
+            new HttpRequestStub('GET', '/repos/aeon-php/automation/commits/' . $unreleased1 . '/pulls', ResponseMother::jsonSuccess(
+                [GitHubResponseMother::pullRequest(1, 'Release 1.1.0 Title - 1')]
+            )),
+        ));
+
+        $command = new ChangelogGenerate(\getenv('AUTOMATION_ROOT_DIR'));
+        $command->setGithub($client);
+
+        $application = new AeonApplication();
+        $application->add($command);
+
+        $commandTester = new CommandTester($application->get(ChangelogGenerate::getDefaultName()));
+
+        $commandTester->setInputs(['verbosity' => ConsoleOutput::VERBOSITY_VERY_VERBOSE]);
+
+        $commandTester->execute(
+            ['project' => 'aeon-php/automation', '--tag' => '1.1.0', '--skip-from' => ['dependabot', 'norberttech']],
+            ['verbosity' => ConsoleOutput::VERBOSITY_VERBOSE]
+        );
+
+        $this->assertStringContainsString('Changelog - Generate', $commandTester->getDisplay());
+        $this->assertStringContainsString('! [NOTE] Release: 1.1.0', $commandTester->getDisplay());
+        $this->assertStringContainsString('! [NOTE] Project: aeon-php/automation', $commandTester->getDisplay());
+        $this->assertStringContainsString('! [NOTE] Format: markdown', $commandTester->getDisplay());
+        $this->assertStringContainsString('! [NOTE] Theme: keepachangelog', $commandTester->getDisplay());
+        $this->assertStringContainsString('! [NOTE] Tag: 1.1.0', $commandTester->getDisplay());
+        $this->assertStringContainsString('! [NOTE] Tag End: 1.0.0', $commandTester->getDisplay());
+        $this->assertStringContainsString('! [NOTE] Commit Start: ' . $tag110SHA, $commandTester->getDisplay());
+        $this->assertStringContainsString('! [NOTE] Commit End: ' . $tag100SHA, $commandTester->getDisplay());
+        $this->assertStringContainsString('! [NOTE] Skip from: @dependabot, @norberttech', $commandTester->getDisplay());
+        $this->assertStringContainsString('! [NOTE] Total commits: 3', $commandTester->getDisplay());
+        $this->assertStringContainsString('! [NOTE] All commits analyzed, generating changelog:', $commandTester->getDisplay());
+        $this->assertStringContainsString('## [1.1.0] - 2021-01-01', $commandTester->getDisplay());
+        $this->assertStringContainsString('### Changed', $commandTester->getDisplay());
+        $this->assertStringNotContainsString(' - [#3](http://api.github.com) - **Release 1.1.0 Title - 3**', $commandTester->getDisplay());
+        $this->assertStringNotContainsString(' - [#2](http://api.github.com) - **Release 1.1.0 Title - 2**', $commandTester->getDisplay());
+        $this->assertStringContainsString(' - [#1](http://api.github.com) - **Release 1.1.0 Title - 1**', $commandTester->getDisplay());
+
+        $this->assertSame(0, $commandTester->getStatusCode());
+    }
 }

@@ -55,7 +55,8 @@ final class ChangelogGenerate extends AbstractCommand
             ->addOption('only-commits', 'oc', InputOption::VALUE_NONE, 'Use only commits to generate changelog')
             ->addOption('only-pull-requests', 'opr', InputOption::VALUE_NONE, 'Use only pull requests to generate changelog')
             ->addOption('format', 'f', InputOption::VALUE_REQUIRED, 'How to format generated changelog, available formatters: <fg=yellow>"' . \implode('"</>, <fg=yellow>"', ['markdown', 'html']) . '"</>', 'markdown')
-            ->addOption('theme', 'th', InputOption::VALUE_REQUIRED, 'Theme of generated changelog: <fg=yellow>"' . \implode('"</>, <fg=yellow>"', ['keepachangelog', 'classic']) . '"</>', 'keepachangelog');
+            ->addOption('theme', 'th', InputOption::VALUE_REQUIRED, 'Theme of generated changelog: <fg=yellow>"' . \implode('"</>, <fg=yellow>"', ['keepachangelog', 'classic']) . '"</>', 'keepachangelog')
+            ->addOption('skip-from', 'sf', InputOption::VALUE_REQUIRED | InputOption::VALUE_IS_ARRAY, 'Skip changes from given author|authors');
     }
 
     protected function execute(InputInterface $input, OutputInterface $output) : int
@@ -73,6 +74,7 @@ final class ChangelogGenerate extends AbstractCommand
         $onlyPullRequests = $input->getOption('only-pull-requests');
         $changeAfter = $input->getOption('changed-after') ? DateTime::fromString($input->getOption('changed-after')) : null;
         $changeBefore = $input->getOption('changed-before') ? DateTime::fromString($input->getOption('changed-before')) : null;
+        $skipAuthors = (array) $input->getOption('skip-from');
 
         if ($onlyCommits === true && $onlyPullRequests === true) {
             $io->error('--only-commits can\'t be used together with --only-pull-requests');
@@ -202,6 +204,10 @@ final class ChangelogGenerate extends AbstractCommand
             $io->note('Changes Before: ' . $changeBefore->toISO8601());
         }
 
+        if (\count($skipAuthors)) {
+            $io->note('Skip from: @' . \implode(', @', $skipAuthors));
+        }
+
         $changesParser = new PrioritizedParser(
             new HTMLChangesParser(),
             new ConventionalCommitParser(),
@@ -251,7 +257,9 @@ final class ChangelogGenerate extends AbstractCommand
             }
 
             if ($source instanceof ChangesSource) {
-                $release->add($changesParser->parse($source));
+                if (!$source->isFrom(...$skipAuthors)) {
+                    $release->add($changesParser->parse($source));
+                }
             }
 
             $io->progressAdvance();
