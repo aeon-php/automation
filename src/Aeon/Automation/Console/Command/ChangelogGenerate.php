@@ -4,23 +4,18 @@ declare(strict_types=1);
 
 namespace Aeon\Automation\Console\Command;
 
-use Aeon\Automation\ChangeLog\TwigFormatter;
+use Aeon\Automation\ChangeLog\FormatterFactory;
+use Aeon\Automation\ChangeLog\History;
+use Aeon\Automation\ChangeLog\HistoryAnalyzer;
+use Aeon\Automation\ChangeLog\ScopeDetector;
 use Aeon\Automation\Changes\ChangesParser\ConventionalCommitParser;
 use Aeon\Automation\Changes\ChangesParser\DefaultParser;
 use Aeon\Automation\Changes\ChangesParser\HTMLChangesParser;
 use Aeon\Automation\Changes\ChangesParser\PrefixParser;
 use Aeon\Automation\Changes\ChangesParser\PrioritizedParser;
-use Aeon\Automation\ChangesSource;
 use Aeon\Automation\Console\AeonStyle;
-use Aeon\Automation\GitHub\Branch;
-use Aeon\Automation\GitHub\Commit;
-use Aeon\Automation\GitHub\Commits;
-use Aeon\Automation\GitHub\Reference;
-use Aeon\Automation\GitHub\Repository;
-use Aeon\Automation\GitHub\Tags;
 use Aeon\Automation\Release;
 use Aeon\Calendar\Gregorian\DateTime;
-use Github\Exception\RuntimeException;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
@@ -74,10 +69,10 @@ final class ChangelogGenerate extends AbstractCommand
         $tag = $input->getOption('tag');
         $tagNext = $input->getOption('tag-next');
         $onlyCommits = $input->getOption('only-commits');
-        $copmareReverse = $input->getOption('compare-reverse');
+        $compareReverse = $input->getOption('compare-reverse');
         $onlyPullRequests = $input->getOption('only-pull-requests');
-        $changeAfter = $input->getOption('changed-after') ? DateTime::fromString($input->getOption('changed-after')) : null;
-        $changeBefore = $input->getOption('changed-before') ? DateTime::fromString($input->getOption('changed-before')) : null;
+        $changedAfter = $input->getOption('changed-after') ? DateTime::fromString($input->getOption('changed-after')) : null;
+        $changedBefore = $input->getOption('changed-before') ? DateTime::fromString($input->getOption('changed-before')) : null;
         $skipAuthors = (array) $input->getOption('skip-from');
 
         if ($onlyCommits === true && $onlyPullRequests === true) {
@@ -86,155 +81,66 @@ final class ChangelogGenerate extends AbstractCommand
             return Command::FAILURE;
         }
 
-        /** @var null|Commit $commitStart */
-        $commitStart = null;
-        /** @var null|Commit $commitEnd */
-        $commitEnd = null;
-
-        /** @var null|Tags $tags */
-        $tags = null;
-
         $releaseName = $input->getOption('tag') ? $input->getOption('tag') : 'Unreleased';
 
         $io->note('Release: ' . $releaseName);
         $io->note('Project: ' . $project->fullName());
 
-        switch (\trim(\strtolower($input->getOption('format')))) {
-            case 'markdown' :
-            case 'html' :
-                $formatter = new TwigFormatter(
-                    $this->rootDir,
-                    \trim(\strtolower($input->getOption('format'))),
-                    \trim(\strtolower($input->getOption('theme')))
-                );
-
-                break;
-
-            default:
-                $io->error('Invalid format: ' . $input->getOption('format'));
-
-                return Command::FAILURE;
-        }
+        $formatter = (new FormatterFactory($this->rootDir))->create($input->getOption('format'), $input->getOption('theme'));
 
         $io->note('Format: ' . $input->getOption('format'));
         $io->note('Theme: ' . $input->getOption('theme'));
 
-        if ($tag !== null) {
-            try {
-                $commitStart = Reference::tag($this->github(), $project, $tag)
-                    ->commit($this->github(), $project);
-                $io->note('Tag: ' . $tag);
-            } catch (RuntimeException $e) {
-                $io->error("Tag \"{$tag}\" does not exists: " . $e->getMessage());
+        try {
+            $scope = (new ScopeDetector($this->github(), $project, $io))->detect($commitStartSHA, $commitEndSHA, $tag, $tagNext);
 
-                return Command::FAILURE;
+            if ($compareReverse && $scope->isFull()) {
+                $io->note('Reversed Start with End commit');
+                $scope = $scope->reverse();
             }
+        } catch (\Exception $e) {
+            $io->error($e->getMessage());
 
-            $tags = Tags::getAll($this->github(), $project)->semVerRsort();
-
-            if ($tags->count()) {
-                $nextTag = $tags->next($tag);
-
-                if ($nextTag !== null) {
-                    $commitEnd = Reference::tag($this->github(), $project, $nextTag->name())
-                        ->commit($this->github(), $project);
-
-                    $io->note('Tag End: ' . $nextTag->name());
-                }
-            }
+            return Command::FAILURE;
         }
 
-        if ($commitStartSHA !== null) {
-            try {
-                $commitEnd = Commit::fromSHA($this->github(), $project, $commitStartSHA);
-            } catch (RuntimeException $e) {
-                $io->error("Commit \"{$commitStartSHA}\" does not exists: " . $e->getMessage());
-
-                return Command::FAILURE;
-            }
+        if ($scope->commitStart() !== null) {
+            $io->note('Commit Start: ' . $scope->commitStart()->sha() . ($compareReverse ? ' - reversed' : ''));
         }
 
-        if ($commitEndSHA !== null) {
-            try {
-                $commitEnd = Commit::fromSHA($this->github(), $project, $commitEndSHA);
-            } catch (RuntimeException $e) {
-                $io->error("Commit \"{$commitEndSHA}\" does not exists: " . $e->getMessage());
-
-                return Command::FAILURE;
-            }
+        if ($scope->commitEnd() !== null) {
+            $io->note('Commit End: ' . $scope->commitEnd()->sha() . ($compareReverse ? ' - reversed' : ''));
         }
 
-        if ($commitStart === null && $commitEnd === null) {
-            try {
-                $branch = Branch::byName($this->github(), $project, $defaultBranch = Repository::create($this->github(), $project)->defaultBranch());
-                $commitStart = Commit::fromSHA($this->github(), $project, $branch->sha());
-
-                $io->note('Branch: ' . $defaultBranch);
-            } catch (RuntimeException $e) {
-                $io->error("Branch \"{$commitEndSHA}\" does not exists: " . $e->getMessage());
-
-                return Command::FAILURE;
-            }
-
-            if ($tagNext === null) {
-                if ($tags === null) {
-                    $tags = Tags::getAll($this->github(), $project)->semVerRsort();
-                }
-
-                if ($tags->count()) {
-                    $io->note('Tag: ' . $tags->first()->name());
-
-                    try {
-                        $commitEnd = Reference::tag($this->github(), $project, $tags->first()->name())
-                            ->commit($this->github(), $project);
-                    } catch (RuntimeException $e) {
-                        // there are no previous tags, it should be safe to iterate through all commits
-                    }
-                }
-            }
+        if ($changedAfter) {
+            $io->note('Changes After: ' . $changedAfter->toISO8601());
         }
 
-        if ($tagNext !== null) {
-            try {
-                $commitEnd = Reference::tag($this->github(), $project, $tagNext)
-                    ->commit($this->github(), $project);
-                $io->note('Tag End: ' . $tagNext);
-            } catch (RuntimeException $e) {
-                $io->error("Tag \"{$tag}\" does not exists: " . $e->getMessage());
-
-                return Command::FAILURE;
-            }
-        }
-
-        if ($copmareReverse === true && $commitStart !== null && $commitEnd !== null) {
-            $commitStartTmp = $commitStart;
-            $commitStart = $commitEnd;
-            $commitEnd = $commitStartTmp;
-
-            unset($commitStartTmp);
-
-            $io->note('Reversed Start with End commit');
-        }
-
-        if ($commitStart !== null) {
-            $io->note('Commit Start: ' . $commitStart->sha() . ($copmareReverse ? ' - reversed' : ''));
-        }
-
-        if ($commitEnd !== null) {
-            $io->note('Commit End: ' . $commitEnd->sha() . ($copmareReverse ? ' - reversed' : ''));
-        }
-
-        if ($changeAfter) {
-            $io->note('Changes After: ' . $changeAfter->toISO8601());
-        }
-
-        if ($changeBefore) {
-            $io->note('Changes Before: ' . $changeBefore->toISO8601());
+        if ($changedBefore) {
+            $io->note('Changes Before: ' . $changedBefore->toISO8601());
         }
 
         if (\count($skipAuthors)) {
             $io->note('Skip from: @' . \implode(', @', $skipAuthors));
         }
+
+        $commits = (new History($this->github(), $project))->fetch($scope, $changedAfter, $changedBefore);
+
+        $io->note('Total commits: ' . $commits->count());
+
+        $io->progressStart($commits->count());
+
+        $changeSources = (new HistoryAnalyzer($this->github(), $project))->analyze(
+            new HistoryAnalyzer\HistoryOptions($onlyCommits, $onlyPullRequests, $skipAuthors),
+            $commits,
+            function () use ($io) : void {
+                $io->progressAdvance();
+            }
+        );
+
+        $io->progressFinish();
+
+        $release = new Release($releaseName, $scope->commitStart() ? $scope->commitStart()->date()->day() : $this->calendar()->currentDay());
 
         $changesParser = new PrioritizedParser(
             new HTMLChangesParser(),
@@ -243,57 +149,9 @@ final class ChangelogGenerate extends AbstractCommand
             new DefaultParser()
         );
 
-        $release = new Release($releaseName, $commitStart ? $commitStart->date()->day() : $this->calendar()->currentDay());
-
-        if ($commitStart !== null && $commitEnd !== null) {
-            $commits = Commits::betweenCommits($this->github(), $project, $commitStart, $commitEnd, $changeAfter, $changeBefore);
-        } else {
-            $commits = Commits::takeAll($this->github(), $project, $commitStart->sha(), $changeAfter, $changeBefore);
+        foreach ($changeSources as $source) {
+            $release->add($changesParser->parse($source));
         }
-
-        $io->note('Total commits: ' . $commits->count());
-
-        $io->progressStart($commits->count());
-
-        foreach ($commits->all() as $commit) {
-            $source = null;
-
-            if ($changeAfter !== null) {
-                if ($commit->date()->isBefore($changeAfter)) {
-                    continue;
-                }
-            }
-
-            if ($onlyCommits) {
-                $source = $commit;
-            }
-
-            if ($onlyPullRequests) {
-                $pullRequests = $commit->pullRequests($this->github(), $project);
-
-                if (!$pullRequests->count()) {
-                    continue;
-                }
-
-                $source = $pullRequests->first();
-            }
-
-            if (!$onlyPullRequests && !$onlyCommits) {
-                $pullRequests = $commit->pullRequests($this->github(), $project);
-
-                $source = $pullRequests->count() ? $pullRequests->first() : $commit;
-            }
-
-            if ($source instanceof ChangesSource) {
-                if (!$source->isFrom(...$skipAuthors)) {
-                    $release->add($changesParser->parse($source));
-                }
-            }
-
-            $io->progressAdvance();
-        }
-
-        $io->progressFinish();
 
         $io->note('All commits analyzed, generating changelog: ');
 
