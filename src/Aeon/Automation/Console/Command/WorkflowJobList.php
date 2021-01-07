@@ -34,7 +34,7 @@ final class WorkflowJobList extends AbstractCommand
 
         $workflows = Workflows::getAll($this->github(), $project);
 
-        $tableHeaders = ['Workflow', 'Job', 'Status'];
+        $tableHeaders = ['Workflow', 'Job', 'Status', 'Completed At'];
 
         $tableBody = [];
 
@@ -61,6 +61,7 @@ final class WorkflowJobList extends AbstractCommand
                         $workflow->name(),
                         $job->name(),
                         $status,
+                        $job->isCompleted() ? $job->completedAt()->format('Y-m-d H:i:s P') : 'N/A',
                     ];
                 }
             } else {

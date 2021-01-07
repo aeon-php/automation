@@ -32,10 +32,10 @@ final class WorkflowJobListTest extends CommandTestCase
                 'workflow_runs' => [GitHubResponseMother::workflowRun($staticRunId = 2000001)],
             ])),
             new HttpRequestStub('GET', '/repos/aeon-php/automation/actions/runs/' . $testsRunId . '/jobs', ResponseMother::jsonSuccess([
-                'jobs' => [GitHubResponseMother::workflowRunJob('tests', 'completed', 'success')],
+                'jobs' => [GitHubResponseMother::workflowRunJob('tests', 'completed', 'success', '2020-01-01 00:00:00')],
             ])),
             new HttpRequestStub('GET', '/repos/aeon-php/automation/actions/runs/' . $staticRunId . '/jobs', ResponseMother::jsonSuccess([
-                'jobs' => [GitHubResponseMother::workflowRunJob('static analyze', 'completed', 'success')],
+                'jobs' => [GitHubResponseMother::workflowRunJob('static analyze', 'completed', 'success', '2020-01-01 00:00:00')],
             ])),
         ));
 
@@ -52,12 +52,12 @@ final class WorkflowJobListTest extends CommandTestCase
         );
 
         $this->assertStringContainsString('Workflow - Job - List', $commandTester->getDisplay());
-        $this->assertStringContainsString('---------------- ---------------- ---------', $commandTester->getDisplay());
-        $this->assertStringContainsString(' Workflow         Job              Status  ', $commandTester->getDisplay());
-        $this->assertStringContainsString('---------------- ---------------- ---------', $commandTester->getDisplay());
-        $this->assertStringContainsString(' Tests            tests            success ', $commandTester->getDisplay());
-        $this->assertStringContainsString(' Static Analyze   static analyze   success ', $commandTester->getDisplay());
-        $this->assertStringContainsString('---------------- ---------------- ---------', $commandTester->getDisplay());
+        $this->assertStringContainsString('---------------- ---------------- --------- ----------------------------', $commandTester->getDisplay());
+        $this->assertStringContainsString(' Workflow         Job              Status    Completed At               ', $commandTester->getDisplay());
+        $this->assertStringContainsString('---------------- ---------------- --------- ----------------------------', $commandTester->getDisplay());
+        $this->assertStringContainsString(' Tests            tests            success   2020-01-01 00:00:00 +00:00 ', $commandTester->getDisplay());
+        $this->assertStringContainsString(' Static Analyze   static analyze   success   2020-01-01 00:00:00 +00:00 ', $commandTester->getDisplay());
+        $this->assertStringContainsString('---------------- ---------------- --------- ----------------------------', $commandTester->getDisplay());
 
         $this->assertSame(0, $commandTester->getStatusCode());
     }

@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Aeon\Automation\Tests\Mother;
 
+use Aeon\Calendar\Gregorian\DateTime;
 use Aeon\Calendar\Gregorian\GregorianCalendar;
 use PHPUnit\Webmozart\Assert\Assert;
 
@@ -120,7 +121,7 @@ final class GitHubResponseMother
         ];
     }
 
-    public static function workflowRunJob(string $name, string $status, string $conclusion, ?int $id = null)
+    public static function workflowRunJob(string $name, string $status, string $conclusion, ?string $completedAt, ?int $id = null)
     {
         Assert::inArray($status, ['completed', 'queued', 'in_progress']);
         Assert::inArray($conclusion, ['success', 'failure', 'neutral', 'cancelled', 'skipped', 'timed_out', 'action_required', 'stale']);
@@ -130,6 +131,7 @@ final class GitHubResponseMother
             'id' => $id ? $id : \random_int(100000, 1000000),
             'status' => $status, // completed | queued | in_progress
             'conclusion' => $conclusion,
+            'completed_at' => $status === 'completed' ? DateTime::fromString($completedAt)->toISO8601() : null,
         ];
     }
 }

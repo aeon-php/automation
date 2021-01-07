@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace Aeon\Automation\GitHub;
 
+use Aeon\Calendar\Gregorian\DateTime;
+
 final class WorkflowRunJob
 {
     private array $data;
@@ -26,5 +28,10 @@ final class WorkflowRunJob
     public function isSuccessful() : bool
     {
         return $this->isCompleted() && $this->data['conclusion'] === 'success';
+    }
+
+    public function completedAt() : ?DateTime
+    {
+        return $this->isCompleted() ? DateTime::fromString($this->data['completed_at']) : null;
     }
 }
