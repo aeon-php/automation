@@ -52,8 +52,10 @@ final class ChangelogGenerate extends AbstractCommand
             ->addOption('changed-after', 'ca', InputOption::VALUE_REQUIRED, 'Ignore all changes after given date, relative date formats like "-1 day" are also supported')
             ->addOption('changed-before', 'cb', InputOption::VALUE_REQUIRED, 'Ignore all changes before given date, relative date formats like "-1 day" are also supported')
             ->addOption('tag', 't', InputOption::VALUE_REQUIRED, 'List only changes from given release')
+            ->addOption('tag-next', 'tn', InputOption::VALUE_REQUIRED, 'List only changes until given release')
             ->addOption('only-commits', 'oc', InputOption::VALUE_NONE, 'Use only commits to generate changelog')
             ->addOption('only-pull-requests', 'opr', InputOption::VALUE_NONE, 'Use only pull requests to generate changelog')
+            ->addOption('compare-reverse', 'cpr', InputOption::VALUE_NONE, 'When comparing commits, revers the order and compare start to end, instead end to start.')
             ->addOption('format', 'f', InputOption::VALUE_REQUIRED, 'How to format generated changelog, available formatters: <fg=yellow>"' . \implode('"</>, <fg=yellow>"', ['markdown', 'html']) . '"</>', 'markdown')
             ->addOption('theme', 'th', InputOption::VALUE_REQUIRED, 'Theme of generated changelog: <fg=yellow>"' . \implode('"</>, <fg=yellow>"', ['keepachangelog', 'classic']) . '"</>', 'keepachangelog')
             ->addOption('skip-from', 'sf', InputOption::VALUE_REQUIRED | InputOption::VALUE_IS_ARRAY, 'Skip changes from given author|authors');
@@ -70,7 +72,9 @@ final class ChangelogGenerate extends AbstractCommand
         $commitStartSHA = $input->getOption('commit-start');
         $commitEndSHA = $input->getOption('commit-end');
         $tag = $input->getOption('tag');
+        $tagNext = $input->getOption('tag-next');
         $onlyCommits = $input->getOption('only-commits');
+        $copmareReverse = $input->getOption('compare-reverse');
         $onlyPullRequests = $input->getOption('only-pull-requests');
         $changeAfter = $input->getOption('changed-after') ? DateTime::fromString($input->getOption('changed-after')) : null;
         $changeBefore = $input->getOption('changed-before') ? DateTime::fromString($input->getOption('changed-before')) : null;
@@ -161,10 +165,6 @@ final class ChangelogGenerate extends AbstractCommand
         }
 
         if ($commitStart === null && $commitEnd === null) {
-            if ($tags === null) {
-                $tags = Tags::getAll($this->github(), $project)->semVerRsort();
-            }
-
             try {
                 $branch = Branch::byName($this->github(), $project, $defaultBranch = Repository::create($this->github(), $project)->defaultBranch());
                 $commitStart = Commit::fromSHA($this->github(), $project, $branch->sha());
@@ -176,24 +176,52 @@ final class ChangelogGenerate extends AbstractCommand
                 return Command::FAILURE;
             }
 
-            if ($tags->count()) {
-                $io->note('Tag: ' . $tags->first()->name());
+            if ($tagNext === null) {
+                if ($tags === null) {
+                    $tags = Tags::getAll($this->github(), $project)->semVerRsort();
+                }
 
-                try {
-                    $commitEnd = Reference::tag($this->github(), $project, $tags->first()->name())
-                        ->commit($this->github(), $project);
-                } catch (RuntimeException $e) {
-                    // there are no previous tags, it should be safe to iterate through all commits
+                if ($tags->count()) {
+                    $io->note('Tag: ' . $tags->first()->name());
+
+                    try {
+                        $commitEnd = Reference::tag($this->github(), $project, $tags->first()->name())
+                            ->commit($this->github(), $project);
+                    } catch (RuntimeException $e) {
+                        // there are no previous tags, it should be safe to iterate through all commits
+                    }
                 }
             }
         }
 
+        if ($tagNext !== null) {
+            try {
+                $commitEnd = Reference::tag($this->github(), $project, $tagNext)
+                    ->commit($this->github(), $project);
+                $io->note('Tag End: ' . $tagNext);
+            } catch (RuntimeException $e) {
+                $io->error("Tag \"{$tag}\" does not exists: " . $e->getMessage());
+
+                return Command::FAILURE;
+            }
+        }
+
+        if ($copmareReverse === true && $commitStart !== null && $commitEnd !== null) {
+            $commitStartTmp = $commitStart;
+            $commitStart = $commitEnd;
+            $commitEnd = $commitStartTmp;
+
+            unset($commitStartTmp);
+
+            $io->note('Reversed Start with End commit');
+        }
+
         if ($commitStart !== null) {
-            $io->note('Commit Start: ' . $commitStart->sha());
+            $io->note('Commit Start: ' . $commitStart->sha() . ($copmareReverse ? ' - reversed' : ''));
         }
 
         if ($commitEnd !== null) {
-            $io->note('Commit End: ' . $commitEnd->sha());
+            $io->note('Commit End: ' . $commitEnd->sha() . ($copmareReverse ? ' - reversed' : ''));
         }
 
         if ($changeAfter) {
