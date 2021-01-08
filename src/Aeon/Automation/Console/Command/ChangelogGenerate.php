@@ -75,12 +75,6 @@ final class ChangelogGenerate extends AbstractCommand
         $changedBefore = $input->getOption('changed-before') ? DateTime::fromString($input->getOption('changed-before')) : null;
         $skipAuthors = (array) $input->getOption('skip-from');
 
-        if ($onlyCommits === true && $onlyPullRequests === true) {
-            $io->error('--only-commits can\'t be used together with --only-pull-requests');
-
-            return Command::FAILURE;
-        }
-
         $releaseName = $input->getOption('tag') ? $input->getOption('tag') : 'Unreleased';
 
         $io->note('Release: ' . $releaseName);
@@ -135,13 +129,19 @@ final class ChangelogGenerate extends AbstractCommand
 
         $io->progressStart($commits->count());
 
-        $changeSources = (new HistoryAnalyzer($this->github(), $project))->analyze(
-            new HistoryAnalyzer\HistoryOptions($onlyCommits, $onlyPullRequests, $skipAuthors),
-            $commits,
-            function () use ($io) : void {
-                $io->progressAdvance();
-            }
-        );
+        try {
+            $changeSources = (new HistoryAnalyzer($this->github(), $project))->analyze(
+                new HistoryAnalyzer\HistoryOptions($onlyCommits, $onlyPullRequests, $skipAuthors),
+                $commits,
+                function () use ($io): void {
+                    $io->progressAdvance();
+                }
+            );
+        } catch (\Exception $e) {
+            $io->error($e->getMessage());
+
+            return Command::FAILURE;
+        }
 
         $io->progressFinish();
 
