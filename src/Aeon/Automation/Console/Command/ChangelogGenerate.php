@@ -80,7 +80,13 @@ final class ChangelogGenerate extends AbstractCommand
         $io->note('Release: ' . $releaseName);
         $io->note('Project: ' . $project->fullName());
 
-        $formatter = (new FormatterFactory($this->rootDir))->create($input->getOption('format'), $input->getOption('theme'));
+        try {
+            $formatter = (new FormatterFactory($this->rootDir))->create($input->getOption('format'), $input->getOption('theme'));
+        } catch (\Exception $e) {
+            $io->error($e->getMessage());
+
+            return Command::FAILURE;
+        }
 
         $io->note('Format: ' . $input->getOption('format'));
         $io->note('Theme: ' . $input->getOption('theme'));
@@ -123,7 +129,13 @@ final class ChangelogGenerate extends AbstractCommand
             $io->note('Skip from: @' . \implode(', @', $skipAuthors));
         }
 
-        $commits = (new History($this->github(), $project))->fetch($scope, $changedAfter, $changedBefore);
+        try {
+            $commits = (new History($this->github(), $project))->fetch($scope, $changedAfter, $changedBefore);
+        } catch (\Exception $e) {
+            $io->error($e->getMessage());
+
+            return Command::FAILURE;
+        }
 
         $io->note('Total commits: ' . $commits->count());
 
@@ -133,7 +145,7 @@ final class ChangelogGenerate extends AbstractCommand
             $changeSources = (new HistoryAnalyzer($this->github(), $project))->analyze(
                 new HistoryAnalyzer\HistoryOptions($onlyCommits, $onlyPullRequests, $skipAuthors),
                 $commits,
-                function () use ($io): void {
+                function () use ($io) : void {
                     $io->progressAdvance();
                 }
             );

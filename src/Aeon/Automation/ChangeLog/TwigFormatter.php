@@ -25,11 +25,11 @@ final class TwigFormatter implements Formatter
         }
 
         if (!\in_array($format, ['markdown', 'html'], true)) {
-            throw new \InvalidArgumentException('Invalid form: ' . $format);
+            throw new \InvalidArgumentException('Invalid format: ' . $format);
         }
 
         if (!\in_array($theme, ['keepachangelog', 'classic'], true)) {
-            throw new \InvalidArgumentException('Invalid form: ' . $theme);
+            throw new \InvalidArgumentException('Invalid theme: ' . $theme);
         }
 
         $this->twig = new Environment(new FilesystemLoader($rootDir . '/resources/templates/' . $format . '/' . $theme), []);
