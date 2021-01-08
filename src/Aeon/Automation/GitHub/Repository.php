@@ -16,7 +16,7 @@ final class Repository
         $this->data = $data;
     }
 
-    public static function create(Client $client, Project $project) : self
+    public static function fromProject(Client $client, Project $project) : self
     {
         return new self($client->repositories()->show($project->organization(), $project->name()));
     }

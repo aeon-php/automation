@@ -39,7 +39,7 @@ final class PullRequestsList extends AbstractCommand
 
         $io->title('Pull Request - List');
 
-        $repository = Repository::create($this->github(), $project);
+        $repository = Repository::fromProject($this->github(), $project);
         $branchName = $input->getOption('branch') !== null ? $input->getOption('branch') : $repository->defaultBranch();
         $status = $input->getOption('status');
 

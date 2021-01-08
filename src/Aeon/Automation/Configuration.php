@@ -19,11 +19,6 @@ final class Configuration
         $this->config = null;
     }
 
-    public function githubAccessToken() : ?string
-    {
-        return \getenv('AEON_AUTOMATION_GH_TOKEN');
-    }
-
     /**
      * @var Project[]
      */
