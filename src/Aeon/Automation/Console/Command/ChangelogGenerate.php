@@ -92,7 +92,12 @@ final class ChangelogGenerate extends AbstractCommand
         $io->note('Theme: ' . $input->getOption('theme'));
 
         try {
-            $scope = (new ScopeDetector($this->github(), $project, $io))->detect($commitStartSHA, $commitEndSHA, $tag, $tagNext);
+            $scopeDetector = (new ScopeDetector($this->github(), $project, $io));
+
+            $scope = $scopeDetector->default(
+                $scopeDetector->fromTags($tag, $tagNext)
+                    ->override($scopeDetector->fromCommitSHA($commitStartSHA, $commitEndSHA))
+            );
 
             if ($compareReverse && $scope->isFull()) {
                 $io->note('Reversed Start with End commit');

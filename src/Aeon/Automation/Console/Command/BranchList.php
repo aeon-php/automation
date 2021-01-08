@@ -34,7 +34,7 @@ final class BranchList extends AbstractCommand
         $io->title('Branch - List');
 
         $branches = Branches::getAll($this->github(), $project);
-        $repository = Repository::create($this->github(), $project);
+        $repository = Repository::fromProject($this->github(), $project);
 
         foreach ($branches->all() as $branch) {
             if ($branch->isDefault($repository)) {

@@ -18,6 +18,14 @@ final class Scope
         $this->commitEnd = $commitEnd;
     }
 
+    public function override(self $scope) : self
+    {
+        return new self(
+            $scope->commitStart() ? $scope->commitStart() : $this->commitStart,
+            $scope->commitEnd() ? $scope->commitEnd() : $this->commitEnd,
+        );
+    }
+
     public function commitStart() : ?Commit
     {
         return $this->commitStart;
@@ -36,5 +44,10 @@ final class Scope
     public function isFull() : bool
     {
         return $this->commitStart !== null && $this->commitEnd !== null;
+    }
+
+    public function isEmpty() : bool
+    {
+        return $this->commitStart === null && $this->commitEnd === null;
     }
 }
