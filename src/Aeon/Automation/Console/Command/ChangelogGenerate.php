@@ -48,6 +48,7 @@ final class ChangelogGenerate extends AbstractCommand
             ->addOption('changed-before', 'cb', InputOption::VALUE_REQUIRED, 'Ignore all changes before given date, relative date formats like "-1 day" are also supported')
             ->addOption('tag', 't', InputOption::VALUE_REQUIRED, 'List only changes from given release')
             ->addOption('tag-next', 'tn', InputOption::VALUE_REQUIRED, 'List only changes until given release')
+            ->addOption('release-name', 'rn', InputOption::VALUE_REQUIRED, 'Name of the release when --tag option is not provided', 'Unreleased')
             ->addOption('only-commits', 'oc', InputOption::VALUE_NONE, 'Use only commits to generate changelog')
             ->addOption('only-pull-requests', 'opr', InputOption::VALUE_NONE, 'Use only pull requests to generate changelog')
             ->addOption('compare-reverse', 'cpr', InputOption::VALUE_NONE, 'When comparing commits, revers the order and compare start to end, instead end to start.')
@@ -75,7 +76,7 @@ final class ChangelogGenerate extends AbstractCommand
         $changedBefore = $input->getOption('changed-before') ? DateTime::fromString($input->getOption('changed-before')) : null;
         $skipAuthors = (array) $input->getOption('skip-from');
 
-        $releaseName = $input->getOption('tag') ? $input->getOption('tag') : 'Unreleased';
+        $releaseName = $input->getOption('tag') ? $input->getOption('tag') : $input->getOption('release-name');
 
         $io->note('Release: ' . $releaseName);
         $io->note('Project: ' . $project->fullName());
