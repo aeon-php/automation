@@ -245,8 +245,11 @@ Options:
   -ce, --commit-end=COMMIT-END          Optional commit sha until which changelog is generated . When not provided, latest tag is taken
   -ca, --changed-after=CHANGED-AFTER    Ignore all changes after given date, relative date formats like "-1 day" are also supported
   -cb, --changed-before=CHANGED-BEFORE  Ignore all changes before given date, relative date formats like "-1 day" are also supported
+  -tn, --tag-next=TAG-NEXT              List only changes until given release
+  -rn, --release-name=RELEASE-NAME      Name of the release when --tag option is not provided [default: "Unreleased"]
   -oc, --only-commits                   Use only commits to generate changelog
   -opr, --only-pull-requests            Use only pull requests to generate changelog
+  -cpr, --compare-reverse               When comparing commits, revers the order and compare start to end, instead end to start.
   -th, --theme=THEME                    Theme of generated changelog: "keepachangelog", "classic" [default: "keepachangelog"]
   -sf, --skip-from=SKIP-FROM            Skip changes from given author|authors (multiple values allowed)
   -v|vv|vvv, --verbose                  Increase the verbosity of messages: 1 for normal output, 2 for more verbose output and 3 for debug
