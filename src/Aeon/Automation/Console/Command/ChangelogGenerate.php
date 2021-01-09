@@ -173,7 +173,11 @@ final class ChangelogGenerate extends AbstractCommand
 
         $io->note('All commits analyzed, generating changelog: ');
 
-        $io->write($formatter->format($release));
+        if (!$release->empty()) {
+            $io->write($formatter->format($release));
+        } else {
+            $io->note('No changes');
+        }
 
         return Command::SUCCESS;
     }

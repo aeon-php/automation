@@ -586,4 +586,56 @@ final class ChangelogGenerateTest extends CommandTestCase
 
         $this->assertSame(0, $commandTester->getStatusCode());
     }
+
+    public function test_changelog_generate_when_there_are_no_changes() : void
+    {
+        $client = Client::createWithHttpClient($httpClient = $this->httpClient(
+            new HttpRequestStub('GET', '/repos/aeon-php/automation', ResponseMother::jsonSuccess(
+                GitHubResponseMother::repository('1.x')
+            )),
+            new HttpRequestStub('GET', '/repos/aeon-php/automation/branches/1.x', ResponseMother::jsonSuccess(
+                GitHubResponseMother::branch('1.x', $commitEndSHA = SHAMother::random())
+            )),
+            new HttpRequestStub('GET', '/repos/aeon-php/automation/commits/' . $commitEndSHA, ResponseMother::jsonSuccess(
+                $commitEnd = GitHubResponseMother::commit('Commit', $commitEndSHA, '2021-01-01'),
+            )),
+            new HttpRequestStub('GET', '/repos/aeon-php/automation/commits/' . $commitEndSHA, ResponseMother::jsonSuccess(
+                $commitEnd
+            )),
+            new HttpRequestStub('GET', '/repos/aeon-php/automation/compare/' . $commitEndSHA . '...' . $commitEndSHA, ResponseMother::jsonSuccess(
+                [
+                    'total_commits' => 0,
+                    'commits' => [],
+                ]
+            )),
+        ));
+
+        $command = new ChangelogGenerate(\getenv('AUTOMATION_ROOT_DIR'));
+        $command->setGithub($client);
+
+        $application = new AeonApplication();
+        $application->add($command);
+
+        $commandTester = new CommandTester($application->get(ChangelogGenerate::getDefaultName()));
+
+        $commandTester->setInputs(['verbosity' => ConsoleOutput::VERBOSITY_VERY_VERBOSE]);
+
+        $commandTester->execute(
+            ['project' => 'aeon-php/automation', '--commit-end' => $commitEndSHA, '--release-name' => 'Empty'],
+            ['verbosity' => ConsoleOutput::VERBOSITY_VERBOSE]
+        );
+
+        $this->assertStringContainsString('Changelog - Generate', $commandTester->getDisplay());
+        $this->assertStringContainsString('! [NOTE] Release: Empty', $commandTester->getDisplay());
+        $this->assertStringContainsString('! [NOTE] Project: aeon-php/automation', $commandTester->getDisplay());
+        $this->assertStringContainsString('! [NOTE] Format: markdown', $commandTester->getDisplay());
+        $this->assertStringContainsString('! [NOTE] Theme: keepachangelog', $commandTester->getDisplay());
+        $this->assertStringContainsString('! [NOTE] Commit Start: ' . $commitEndSHA, $commandTester->getDisplay());
+        $this->assertStringContainsString('! [NOTE] Commit End: ' . $commitEndSHA, $commandTester->getDisplay());
+        $this->assertStringContainsString('! [NOTE] Total commits: 0', $commandTester->getDisplay());
+        $this->assertStringContainsString('! [NOTE] All commits analyzed, generating changelog:', $commandTester->getDisplay());
+        $this->assertStringContainsString('! [NOTE] No changes', $commandTester->getDisplay());
+
+        $this->assertSame(0, $commandTester->getStatusCode());
+    }
 }

@@ -128,4 +128,9 @@ final class Release
             ...\array_map(fn (Changes $changes) => $changes->withType(Type::security()), $this->changes())
         );
     }
+
+    public function empty() : bool
+    {
+        return \count($this->all()) === 0;
+    }
 }
