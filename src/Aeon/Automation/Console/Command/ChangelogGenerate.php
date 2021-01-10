@@ -4,17 +4,11 @@ declare(strict_types=1);
 
 namespace Aeon\Automation\Console\Command;
 
-use Aeon\Automation\ChangeLog\FormatterFactory;
-use Aeon\Automation\ChangeLog\History;
-use Aeon\Automation\ChangeLog\HistoryAnalyzer;
-use Aeon\Automation\ChangeLog\ScopeDetector;
-use Aeon\Automation\Changes\ChangesParser\ConventionalCommitParser;
-use Aeon\Automation\Changes\ChangesParser\DefaultParser;
-use Aeon\Automation\Changes\ChangesParser\HTMLChangesParser;
-use Aeon\Automation\Changes\ChangesParser\PrefixParser;
-use Aeon\Automation\Changes\ChangesParser\PrioritizedParser;
 use Aeon\Automation\Console\AeonStyle;
-use Aeon\Automation\Release;
+use Aeon\Automation\Project;
+use Aeon\Automation\Release\FormatterFactory;
+use Aeon\Automation\Release\Options;
+use Aeon\Automation\Release\ReleaseService;
 use Aeon\Calendar\Gregorian\DateTime;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
@@ -25,14 +19,6 @@ use Symfony\Component\Console\Output\OutputInterface;
 final class ChangelogGenerate extends AbstractCommand
 {
     protected static $defaultName = 'changelog:generate';
-
-    private string $rootDir;
-
-    public function __construct(string $rootDir, array $defaultConfigPaths = [])
-    {
-        parent::__construct($defaultConfigPaths);
-        $this->rootDir = $rootDir;
-    }
 
     protected function configure() : void
     {
@@ -61,120 +47,96 @@ final class ChangelogGenerate extends AbstractCommand
     {
         $io = new AeonStyle($input, $output);
 
-        $project = $this->configuration()->project($input->getArgument('project'));
+        $project = new Project($input->getArgument('project'));
 
         $io->title('Changelog - Generate');
 
-        $commitStartSHA = $input->getOption('commit-start');
-        $commitEndSHA = $input->getOption('commit-end');
-        $tag = $input->getOption('tag');
-        $tagNext = $input->getOption('tag-next');
-        $onlyCommits = $input->getOption('only-commits');
-        $compareReverse = $input->getOption('compare-reverse');
-        $onlyPullRequests = $input->getOption('only-pull-requests');
-        $changedAfter = $input->getOption('changed-after') ? DateTime::fromString($input->getOption('changed-after')) : null;
-        $changedBefore = $input->getOption('changed-before') ? DateTime::fromString($input->getOption('changed-before')) : null;
-        $skipAuthors = (array) $input->getOption('skip-from');
-
-        $releaseName = $input->getOption('tag') ? $input->getOption('tag') : $input->getOption('release-name');
-
-        $io->note('Release: ' . $releaseName);
-        $io->note('Project: ' . $project->fullName());
-
         try {
-            $formatter = (new FormatterFactory($this->rootDir))->create($input->getOption('format'), $input->getOption('theme'));
+            $options = new Options(
+                $input->getOption('tag') ? $input->getOption('tag') : $input->getOption('release-name'),
+                $input->getOption('commit-start'),
+                $input->getOption('commit-end'),
+                $input->getOption('tag'),
+                $input->getOption('tag-next'),
+                $input->getOption('only-commits'),
+                $input->getOption('only-pull-requests'),
+                $input->getOption('compare-reverse'),
+                $input->getOption('changed-after') ? DateTime::fromString($input->getOption('changed-after')) : null,
+                $input->getOption('changed-before') ? DateTime::fromString($input->getOption('changed-before')) : null,
+                (array) $input->getOption('skip-from'),
+            );
+
+            $releaseService = new ReleaseService($this->configuration(), $options, $this->calendar(), $this->github(), $project);
+
+            $history = $releaseService->fetch();
         } catch (\Exception $e) {
             $io->error($e->getMessage());
 
             return Command::FAILURE;
         }
 
+        $io->note('Release: ' . $options->releaseName());
+        $io->note('Project: ' . $project->fullName());
         $io->note('Format: ' . $input->getOption('format'));
         $io->note('Theme: ' . $input->getOption('theme'));
 
+        if ($history->scope()->branch()) {
+            $io->note('Branch: ' . $history->scope()->branch()->name());
+        }
+
+        if ($history->scope()->tagStart()) {
+            $io->note('Tag Start: ' . $history->scope()->tagStart()->tagName());
+        }
+
+        if ($history->scope()->tagEnd()) {
+            $io->note('Tag End: ' . $history->scope()->tagEnd()->tagName());
+        }
+
+        if ($options->compareReverse() && $history->scope()->isFull()) {
+            $io->note('Reversed Start with End commit');
+        }
+
+        if ($history->scope() !== null) {
+            $io->note('Commit Start: ' . $history->scope()->commitStart()->sha() . ($options->compareReverse() ? ' - reversed' : ''));
+        }
+
+        if ($history->scope()->commitEnd() !== null) {
+            $io->note('Commit End: ' . $history->scope()->commitEnd()->sha() . ($options->compareReverse() ? ' - reversed' : ''));
+        }
+
+        if ($options->changedAfter()) {
+            $io->note('Changes After: ' . $options->changedAfter()->toISO8601());
+        }
+
+        if ($options->changedBefore()) {
+            $io->note('Changes Before: ' . $options->changedBefore()->toISO8601());
+        }
+
+        if (\count($options->skipAuthors())) {
+            $io->note('Skip from: @' . \implode(', @', $options->skipAuthors()));
+        }
+
         try {
-            $scopeDetector = (new ScopeDetector($this->github(), $project, $io));
+            $io->note('Total commits: ' . $history->commits()->count());
+            $io->progressStart($history->commits()->count());
 
-            $scope = $scopeDetector->default(
-                $scopeDetector->fromTags($tag, $tagNext)
-                    ->override($scopeDetector->fromCommitSHA($commitStartSHA, $commitEndSHA))
-            );
+            $release = $releaseService->analyze($history, function () use ($io) : void {
+                $io->progressAdvance();
+            });
 
-            if ($compareReverse && $scope->isFull()) {
-                $io->note('Reversed Start with End commit');
-                $scope = $scope->reverse();
-            }
+            $io->progressFinish();
+
+            $io->note('All commits analyzed, generating changelog: ');
         } catch (\Exception $e) {
             $io->error($e->getMessage());
 
             return Command::FAILURE;
         }
-
-        if ($scope->commitStart() !== null) {
-            $io->note('Commit Start: ' . $scope->commitStart()->sha() . ($compareReverse ? ' - reversed' : ''));
-        }
-
-        if ($scope->commitEnd() !== null) {
-            $io->note('Commit End: ' . $scope->commitEnd()->sha() . ($compareReverse ? ' - reversed' : ''));
-        }
-
-        if ($changedAfter) {
-            $io->note('Changes After: ' . $changedAfter->toISO8601());
-        }
-
-        if ($changedBefore) {
-            $io->note('Changes Before: ' . $changedBefore->toISO8601());
-        }
-
-        if (\count($skipAuthors)) {
-            $io->note('Skip from: @' . \implode(', @', $skipAuthors));
-        }
-
-        try {
-            $commits = (new History($this->github(), $project))->fetch($scope, $changedAfter, $changedBefore);
-        } catch (\Exception $e) {
-            $io->error($e->getMessage());
-
-            return Command::FAILURE;
-        }
-
-        $io->note('Total commits: ' . $commits->count());
-
-        $io->progressStart($commits->count());
-
-        try {
-            $changeSources = (new HistoryAnalyzer($this->github(), $project))->analyze(
-                new HistoryAnalyzer\HistoryOptions($onlyCommits, $onlyPullRequests, $skipAuthors),
-                $commits,
-                function () use ($io) : void {
-                    $io->progressAdvance();
-                }
-            );
-        } catch (\Exception $e) {
-            $io->error($e->getMessage());
-
-            return Command::FAILURE;
-        }
-
-        $io->progressFinish();
-
-        $release = new Release($releaseName, $scope->commitStart() ? $scope->commitStart()->date()->day() : $this->calendar()->currentDay());
-
-        $changesParser = new PrioritizedParser(
-            new HTMLChangesParser(),
-            new ConventionalCommitParser(),
-            new PrefixParser(),
-            new DefaultParser()
-        );
-
-        foreach ($changeSources as $source) {
-            $release->add($changesParser->parse($source));
-        }
-
-        $io->note('All commits analyzed, generating changelog: ');
 
         if (!$release->empty()) {
-            $io->write($formatter->format($release));
+            $io->write(
+                (new FormatterFactory($this->configuration()))->create($input->getOption('format'), $input->getOption('theme'))->formatRelease($release)
+            );
         } else {
             $io->note('No changes');
         }

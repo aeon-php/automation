@@ -26,6 +26,16 @@ final class Reference
         return $this->data['object']['sha'];
     }
 
+    public function ref() : string
+    {
+        return $this->data['ref'];
+    }
+
+    public function tagName() : ?string
+    {
+        return \strpos($this->data['ref'], 'refs/tags/') === 0 ? \str_replace('refs/tags/', '', $this->data['ref']) : null;
+    }
+
     public function commit(Client $client, Project $project) : Commit
     {
         if ($this->data['object']['type'] === 'tag') {

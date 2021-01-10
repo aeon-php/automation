@@ -4,9 +4,10 @@ declare(strict_types=1);
 
 namespace Aeon\Automation\Console\Command;
 
-use Aeon\Automation\Changes\ChangesParser\HTMLChangesParser;
+use Aeon\Automation\Changes\Detector\HTMLChangesDetector;
 use Aeon\Automation\Console\AeonStyle;
 use Aeon\Automation\GitHub\PullRequest;
+use Aeon\Automation\Project;
 use Github\Exception\RuntimeException;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
@@ -35,7 +36,7 @@ final class PullRequestDescriptionCheck extends AbstractCommand
     {
         $io = new AeonStyle($input, $output);
 
-        $project = $this->configuration()->project($input->getArgument('project'));
+        $project = new Project($input->getArgument('project'));
 
         $number = (int) $input->getArgument('number');
         $skipAuthors = \array_map(fn (string $author) : string => \strtolower($author), (array) $input->getOption('skip-from'));
@@ -69,7 +70,7 @@ final class PullRequestDescriptionCheck extends AbstractCommand
             }
         }
 
-        $htmlChangeParser = new HTMLChangesParser();
+        $htmlChangeParser = new HTMLChangesDetector();
 
         if (!$htmlChangeParser->support($pullRequest)) {
             $io->error('Invalid Pull Request syntax.');
@@ -77,7 +78,7 @@ final class PullRequestDescriptionCheck extends AbstractCommand
             return Command::FAILURE;
         }
 
-        $changes = $htmlChangeParser->parse($pullRequest);
+        $changes = $htmlChangeParser->detect($pullRequest);
 
         if ($skipChangesCount == false && !$changes->count()) {
             $io->error('Pull Request syntax is valid but it\'s empty.');

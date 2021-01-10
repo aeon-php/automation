@@ -8,6 +8,7 @@ use Aeon\Automation\Console\AeonStyle;
 use Aeon\Automation\GitHub\PullRequests;
 use Aeon\Automation\GitHub\Reference;
 use Aeon\Automation\GitHub\Repository;
+use Aeon\Automation\Project;
 use Github\Exception\RuntimeException;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
@@ -35,7 +36,7 @@ final class PullRequestsList extends AbstractCommand
     {
         $io = new AeonStyle($input, $output);
 
-        $project = $this->configuration()->project($input->getArgument('project'));
+        $project = new Project($input->getArgument('project'));
 
         $io->title('Pull Request - List');
 

@@ -6,11 +6,11 @@ namespace Aeon\Automation\Tests\Integration\Console\Command;
 
 use Aeon\Automation\Console\AeonApplication;
 use Aeon\Automation\Console\Command\TagList;
-use Aeon\Automation\Tests\Http\HttpRequestStub;
+use Aeon\Automation\Tests\Double\HttpRequestStub;
 use Aeon\Automation\Tests\Integration\Console\CommandTestCase;
-use Aeon\Automation\Tests\Mother\GitHubResponseMother;
+use Aeon\Automation\Tests\Mother\GitHub\GitHubResponseMother;
+use Aeon\Automation\Tests\Mother\GitHub\SHAMother;
 use Aeon\Automation\Tests\Mother\ResponseMother;
-use Aeon\Automation\Tests\Mother\SHAMother;
 use Github\Client;
 use Symfony\Component\Console\Output\ConsoleOutput;
 use Symfony\Component\Console\Tester\CommandTester;
@@ -28,7 +28,7 @@ final class TagListTest extends CommandTestCase
             )),
         ));
 
-        $command = new TagList();
+        $command = new TagList(\getenv('AUTOMATION_ROOT_DIR'));
         $command->setGithub($client);
         $application = new AeonApplication();
         $application->add($command);

@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Aeon\Automation\GitHub;
 
-use Aeon\Automation\ChangesSource;
+use Aeon\Automation\Changes\ChangesSource;
 use Aeon\Automation\Project;
 use Aeon\Calendar\Gregorian\DateTime;
 use Github\Client;

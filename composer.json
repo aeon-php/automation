@@ -44,7 +44,8 @@
     },
     "scripts": {
         "build": [
-            "@test"
+            "@test",
+            "@static:analyze"
         ],
         "test": [
             "tools/phpunit.phar"

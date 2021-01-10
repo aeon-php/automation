@@ -8,7 +8,6 @@ use Aeon\Automation\Console\Command\ChangelogGenerate;
 use Aeon\Automation\Console\Command\WorkflowJobList;
 use Aeon\Automation\Console\Command\MilestoneCreate;
 use Aeon\Automation\Console\Command\MilestoneList;
-use Aeon\Automation\Console\Command\ProjectList;
 use Aeon\Automation\Console\Command\PullRequestDescriptionCheck;
 use Aeon\Automation\Console\Command\PullRequestsList;
 use Aeon\Automation\Console\Command\PullRequestsTemplateShow;
@@ -25,9 +24,7 @@ use Symfony\Component\Console\Output\ConsoleOutput;
         require $autoload;
     } elseif (is_file($autoload = getcwd() . '/../../autoload.php')) {
         require $autoload;
-    }
-
-    if (is_file($autoload = __DIR__ . '/../vendor/autoload.php')) {
+    } elseif (is_file($autoload = __DIR__ . '/../vendor/autoload.php')) {
         require($autoload);
     } elseif (is_file($autoload = __DIR__ . '/../../../autoload.php')) {
         require($autoload);
@@ -44,7 +41,6 @@ use Symfony\Component\Console\Output\ConsoleOutput;
     $output = new ConsoleOutput();
     $input = new ArgvInput();
 
-
     $rootDir = (\strlen(Phar::running(false)) === 0) ? \realpath(__DIR__ . '/../') : Phar::running();
 
     $defaultConfigPaths = [
@@ -57,17 +53,16 @@ use Symfony\Component\Console\Output\ConsoleOutput;
         getcwd()
     ];
 
-    $application->add(new ProjectList($defaultConfigPaths));
-    $application->add(new MilestoneCreate($defaultConfigPaths));
-    $application->add(new MilestoneList($defaultConfigPaths));
-    $application->add(new ReleaseList($defaultConfigPaths));
-    $application->add(new PullRequestsList($defaultConfigPaths));
-    $application->add(new PullRequestsTemplateShow($defaultConfigPaths));
-    $application->add(new PullRequestDescriptionCheck($defaultConfigPaths));
+    $application->add(new MilestoneCreate($rootDir, $defaultConfigPaths));
+    $application->add(new MilestoneList($rootDir, $defaultConfigPaths));
+    $application->add(new ReleaseList($rootDir, $defaultConfigPaths));
+    $application->add(new PullRequestsList($rootDir, $defaultConfigPaths));
+    $application->add(new PullRequestsTemplateShow($rootDir, $defaultConfigPaths));
+    $application->add(new PullRequestDescriptionCheck($rootDir, $defaultConfigPaths));
     $application->add(new ChangelogGenerate($rootDir, $defaultConfigPaths));
-    $application->add(new BranchList($defaultConfigPaths));
-    $application->add(new TagList($defaultConfigPaths));
-    $application->add(new WorkflowJobList($defaultConfigPaths));
-    $application->add(new CacheClear());
+    $application->add(new BranchList($rootDir, $defaultConfigPaths));
+    $application->add(new TagList($rootDir, $defaultConfigPaths));
+    $application->add(new WorkflowJobList($rootDir, $defaultConfigPaths));
+    $application->add(new CacheClear($rootDir, $defaultConfigPaths));
     $application->run($input, $output);
 })();

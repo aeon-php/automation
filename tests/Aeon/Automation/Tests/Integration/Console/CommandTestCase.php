@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Aeon\Automation\Tests\Integration\Console;
 
-use Aeon\Automation\Tests\Http\HttpRequestStub;
+use Aeon\Automation\Tests\Double\HttpRequestStub;
 use Aeon\Automation\Tests\Mother\ResponseMother;
 use Coduo\PHPMatcher\PHPMatcher;
 use GuzzleHttp\Psr7\Request;

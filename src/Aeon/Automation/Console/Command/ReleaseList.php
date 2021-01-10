@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Aeon\Automation\Console\Command;
 
 use Aeon\Automation\Console\AeonStyle;
+use Aeon\Automation\Project;
 use Composer\Semver\Semver;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
@@ -30,7 +31,7 @@ final class ReleaseList extends AbstractCommand
     {
         $io = new AeonStyle($input, $output);
 
-        $project = $this->configuration()->project($input->getArgument('project'));
+        $project = new Project($input->getArgument('project'));
 
         $milestones = $this->github()->issues()->milestones()->all($project->organization(), $project->name(), ['state' => 'all']);
         $releases = $this->github()->repository()->releases()->all($project->organization(), $project->name());

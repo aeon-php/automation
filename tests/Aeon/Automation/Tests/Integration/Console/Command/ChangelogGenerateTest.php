@@ -6,11 +6,11 @@ namespace Aeon\Automation\Tests\Integration\Console\Command;
 
 use Aeon\Automation\Console\AeonApplication;
 use Aeon\Automation\Console\Command\ChangelogGenerate;
-use Aeon\Automation\Tests\Http\HttpRequestStub;
+use Aeon\Automation\Tests\Double\HttpRequestStub;
 use Aeon\Automation\Tests\Integration\Console\CommandTestCase;
-use Aeon\Automation\Tests\Mother\GitHubResponseMother;
+use Aeon\Automation\Tests\Mother\GitHub\GitHubResponseMother;
+use Aeon\Automation\Tests\Mother\GitHub\SHAMother;
 use Aeon\Automation\Tests\Mother\ResponseMother;
-use Aeon\Automation\Tests\Mother\SHAMother;
 use Aeon\Calendar\Gregorian\DateTime;
 use Aeon\Calendar\Gregorian\GregorianCalendarStub;
 use Aeon\Calendar\Gregorian\TimeZone;
@@ -79,7 +79,7 @@ final class ChangelogGenerateTest extends CommandTestCase
         $this->assertStringContainsString('! [NOTE] Theme: keepachangelog', $commandTester->getDisplay());
         $this->assertStringContainsString('! [NOTE] Project: aeon-php/automation', $commandTester->getDisplay());
         $this->assertStringContainsString('! [NOTE] Branch: 1.x', $commandTester->getDisplay());
-        $this->assertStringContainsString('! [NOTE] Tag: 1.0.0', $commandTester->getDisplay());
+        $this->assertStringContainsString('! [NOTE] Tag End: 1.0.0', $commandTester->getDisplay());
         $this->assertStringContainsString('! [NOTE] Commit Start: ' . $branchSHA, $commandTester->getDisplay());
         $this->assertStringContainsString('! [NOTE] Commit End: ' . $tag100SHA, $commandTester->getDisplay());
         $this->assertStringContainsString('! [NOTE] Total commits: 2', $commandTester->getDisplay());
@@ -345,7 +345,7 @@ final class ChangelogGenerateTest extends CommandTestCase
         $this->assertStringContainsString('! [NOTE] Project: aeon-php/automation', $commandTester->getDisplay());
         $this->assertStringContainsString('! [NOTE] Format: markdown', $commandTester->getDisplay());
         $this->assertStringContainsString('! [NOTE] Theme: keepachangelog', $commandTester->getDisplay());
-        $this->assertStringContainsString('! [NOTE] Tag: 1.1.0', $commandTester->getDisplay());
+        $this->assertStringContainsString('! [NOTE] Tag Start: 1.1.0', $commandTester->getDisplay());
         $this->assertStringContainsString('! [NOTE] Tag End: 1.0.0', $commandTester->getDisplay());
         $this->assertStringContainsString('! [NOTE] Commit Start: ' . $tag110SHA, $commandTester->getDisplay());
         $this->assertStringContainsString('! [NOTE] Commit End: ' . $tag100SHA, $commandTester->getDisplay());
@@ -420,7 +420,7 @@ final class ChangelogGenerateTest extends CommandTestCase
         $this->assertStringContainsString('! [NOTE] Project: aeon-php/automation', $commandTester->getDisplay());
         $this->assertStringContainsString('! [NOTE] Format: markdown', $commandTester->getDisplay());
         $this->assertStringContainsString('! [NOTE] Theme: keepachangelog', $commandTester->getDisplay());
-        $this->assertStringContainsString('! [NOTE] Tag: 1.1.0', $commandTester->getDisplay());
+        $this->assertStringContainsString('! [NOTE] Tag Start: 1.1.0', $commandTester->getDisplay());
         $this->assertStringContainsString('! [NOTE] Tag End: 1.0.0', $commandTester->getDisplay());
         $this->assertStringContainsString('! [NOTE] Commit Start: ' . $tag110SHA, $commandTester->getDisplay());
         $this->assertStringContainsString('! [NOTE] Commit End: ' . $tag100SHA, $commandTester->getDisplay());
@@ -496,7 +496,7 @@ final class ChangelogGenerateTest extends CommandTestCase
         $this->assertStringContainsString('! [NOTE] Project: aeon-php/automation', $commandTester->getDisplay());
         $this->assertStringContainsString('! [NOTE] Format: markdown', $commandTester->getDisplay());
         $this->assertStringContainsString('! [NOTE] Theme: keepachangelog', $commandTester->getDisplay());
-        $this->assertStringContainsString('! [NOTE] Tag: tag-1.1.0', $commandTester->getDisplay());
+        $this->assertStringContainsString('! [NOTE] Tag Start: tag-1.1.0', $commandTester->getDisplay());
         $this->assertStringContainsString('! [NOTE] Tag End: tag-1.0.0', $commandTester->getDisplay());
         $this->assertStringContainsString('! [NOTE] Commit Start: ' . $tag110SHA, $commandTester->getDisplay());
         $this->assertStringContainsString('! [NOTE] Commit End: ' . $tag100SHA, $commandTester->getDisplay());
@@ -571,7 +571,7 @@ final class ChangelogGenerateTest extends CommandTestCase
         $this->assertStringContainsString('! [NOTE] Project: aeon-php/automation', $commandTester->getDisplay());
         $this->assertStringContainsString('! [NOTE] Format: markdown', $commandTester->getDisplay());
         $this->assertStringContainsString('! [NOTE] Theme: keepachangelog', $commandTester->getDisplay());
-        $this->assertStringContainsString('! [NOTE] Tag: tag-1.1.0', $commandTester->getDisplay());
+        $this->assertStringContainsString('! [NOTE] Tag Start: tag-1.1.0', $commandTester->getDisplay());
         $this->assertStringContainsString('! [NOTE] Tag End: tag-1.0.0', $commandTester->getDisplay());
         $this->assertStringContainsString('! [NOTE] Reversed Start with End commit', $commandTester->getDisplay());
         $this->assertStringContainsString('! [NOTE] Commit Start: ' . $tag100SHA . ' - reversed', $commandTester->getDisplay());

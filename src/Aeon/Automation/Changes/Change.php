@@ -4,8 +4,6 @@ declare(strict_types=1);
 
 namespace Aeon\Automation\Changes;
 
-use Aeon\Automation\ChangesSource;
-
 final class Change
 {
     private ChangesSource $source;

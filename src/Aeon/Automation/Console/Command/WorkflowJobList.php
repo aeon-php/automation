@@ -6,6 +6,7 @@ namespace Aeon\Automation\Console\Command;
 
 use Aeon\Automation\Console\AeonStyle;
 use Aeon\Automation\GitHub\Workflows;
+use Aeon\Automation\Project;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
@@ -28,7 +29,7 @@ final class WorkflowJobList extends AbstractCommand
     {
         $io = new AeonStyle($input, $output);
 
-        $project = $this->configuration()->project($input->getArgument('project'));
+        $project = new Project($input->getArgument('project'));
 
         $io->title('Workflow - Job - List');
 
