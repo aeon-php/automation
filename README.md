@@ -87,12 +87,12 @@ Automation follows the [Keep a Changelog](https://keepachangelog.com/en/1.0.0/) 
 * Fixed 
 * Security 
 
-There are several strategies making this recognizion possible: 
+There are several strategies making this recognition possible: 
 
-* [HTML Changes Parser](src/Aeon/Automation/Changes/ChangesParser/HTMLChangesParser.php) 
-* [Conventional Commit Parser](src/Aeon/Automation/Changes/ChangesParser/ConventionalCommitParser.php) 
-* [Prefix Parser](src/Aeon/Automation/Changes/ChangesParser/PrefixParser.php) 
-* [Default Parser](src/Aeon/Automation/Changes/ChangesParser/DefaultParser.php) 
+* [HTML Changes Detector](src/Aeon/Automation/Changes/Detector/HTMLChangesDetector.php) 
+* [Conventional Commit Detector](src/Aeon/Automation/Changes/Detector/ConventionalCommitDetector.php) 
+* [Prefix Detector](src/Aeon/Automation/Changes/Detector/PrefixDetector.php) 
+* [Default Detector](src/Aeon/Automation/Changes/Detector/DefaultDetector.php) 
 
 They are applied in given order until first one parse changes source and properly detect all changes. 
 
