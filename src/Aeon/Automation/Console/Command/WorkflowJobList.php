@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace Aeon\Automation\Console\Command;
 
+use Aeon\Automation\Console\AbstractCommand;
 use Aeon\Automation\Console\AeonStyle;
-use Aeon\Automation\GitHub\Workflows;
 use Aeon\Automation\Project;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
@@ -33,17 +33,17 @@ final class WorkflowJobList extends AbstractCommand
 
         $io->title('Workflow - Job - List');
 
-        $workflows = Workflows::getAll($this->github(), $project);
+        $workflows = $this->githubClient()->workflows($project);
 
         $tableHeaders = ['Workflow', 'Job', 'Status', 'Completed At'];
 
         $tableBody = [];
 
         foreach ($workflows->all() as $workflow) {
-            $run = $workflow->latestRun($this->github(), $project);
+            $run = $this->githubClient()->workflowLatestRun($project, $workflow);
 
             if ($run) {
-                foreach ($run->jobs($this->github(), $project)->all() as $job) {
+                foreach ($this->githubClient()->workflowRunJobs($project, $run)->all() as $job) {
                     $status = null;
 
                     if ($job->isSuccessful()) {

@@ -4,11 +4,8 @@ declare(strict_types=1);
 
 namespace Aeon\Automation\GitHub;
 
-use Aeon\Automation\Project;
 use Composer\Semver\Semver;
 use Composer\Semver\VersionParser;
-use Github\Client;
-use Github\ResultPager;
 
 final class Tags
 {
@@ -22,21 +19,10 @@ final class Tags
         $this->tags = $tags;
     }
 
-    public static function getAll(Client $client, Project $project) : self
-    {
-        $tagsPaginator = new ResultPager($client);
-        $tagsData = $tagsPaginator->fetchAll($client->repo(), 'tags', [$project->organization(), $project->name()]);
-
-        return new self(...\array_map(
-            fn (array $tagData) : Tag => new Tag($tagData),
-            $tagsData
-        ));
-    }
-
     /**
      * @return Tag[]
      */
-    public function all()
+    public function all() : array
     {
         return $this->tags;
     }

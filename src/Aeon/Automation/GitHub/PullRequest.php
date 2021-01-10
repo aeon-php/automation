@@ -5,9 +5,7 @@ declare(strict_types=1);
 namespace Aeon\Automation\GitHub;
 
 use Aeon\Automation\Changes\ChangesSource;
-use Aeon\Automation\Project;
 use Aeon\Calendar\Gregorian\DateTime;
-use Github\Client;
 
 final class PullRequest implements ChangesSource
 {
@@ -16,11 +14,6 @@ final class PullRequest implements ChangesSource
     public function __construct(array $data)
     {
         $this->data = $data;
-    }
-
-    public static function fromNumber(Client $client, Project $project, int $number) : self
-    {
-        return new self($client->pullRequests()->show($project->organization(), $project->name(), $number));
     }
 
     public function id() : string

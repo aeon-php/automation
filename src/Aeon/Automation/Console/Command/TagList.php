@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace Aeon\Automation\Console\Command;
 
+use Aeon\Automation\Console\AbstractCommand;
 use Aeon\Automation\Console\AeonStyle;
-use Aeon\Automation\GitHub\Tags;
 use Aeon\Automation\Project;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
@@ -37,7 +37,7 @@ final class TagList extends AbstractCommand
 
         $io->title('Tag - List');
 
-        $tags = Tags::getAll($this->github(), $project)->semVerRsort();
+        $tags = $this->githubClient()->tags($project)->semVerRsort();
 
         if ($input->getOption('limit')) {
             $tags = $tags->limit((int) $input->getOption('limit'));
@@ -48,13 +48,13 @@ final class TagList extends AbstractCommand
             $commit = null;
 
             if ($input->getOption('with-date')) {
-                $commit = $tag->commit($this->github(), $project);
+                $commit = $this->githubClient()->tagCommit($project, $tag);
                 $tagOutput .= ' - ' . $commit->date()->day()->toString();
             }
 
             if ($input->getOption('with-commit')) {
                 if ($commit === null) {
-                    $commit = $tag->commit($this->github(), $project);
+                    $commit = $this->githubClient()->tagCommit($project, $tag);
                 }
 
                 $tagOutput .= ' - <fg=yellow>' . $commit->sha() . '</>';

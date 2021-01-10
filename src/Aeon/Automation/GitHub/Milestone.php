@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Aeon\Automation\GitHub;
 
-final class Tag
+final class Milestone
 {
     private array $data;
 
@@ -13,13 +13,8 @@ final class Tag
         $this->data = $data;
     }
 
-    public function name() : string
+    public function title() : string
     {
-        return $this->data['name'];
-    }
-
-    public function sha() : string
-    {
-        return $this->data['commit']['sha'];
+        return $this->data['title'];
     }
 }

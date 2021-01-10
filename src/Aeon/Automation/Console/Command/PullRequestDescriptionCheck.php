@@ -5,8 +5,8 @@ declare(strict_types=1);
 namespace Aeon\Automation\Console\Command;
 
 use Aeon\Automation\Changes\Detector\HTMLChangesDetector;
+use Aeon\Automation\Console\AbstractCommand;
 use Aeon\Automation\Console\AeonStyle;
-use Aeon\Automation\GitHub\PullRequest;
 use Aeon\Automation\Project;
 use Github\Exception\RuntimeException;
 use Symfony\Component\Console\Command\Command;
@@ -51,7 +51,7 @@ final class PullRequestDescriptionCheck extends AbstractCommand
         }
 
         try {
-            $pullRequest = PullRequest::fromNumber($this->github(), $project, $number);
+            $pullRequest = $this->githubClient()->pullRequest($project, $number);
         } catch (RuntimeException $exception) {
             $io->error("Pull request #{$number} not found.");
 

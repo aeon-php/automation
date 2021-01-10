@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Aeon\Automation\Console\Command;
 
+use Aeon\Automation\Console\AbstractCommand;
 use Aeon\Automation\Console\AeonStyle;
 use Aeon\Automation\Project;
 use Aeon\Automation\Release\FormatterFactory;
@@ -66,7 +67,7 @@ final class ChangelogGenerate extends AbstractCommand
                 (array) $input->getOption('skip-from'),
             );
 
-            $releaseService = new ReleaseService($this->configuration(), $options, $this->calendar(), $this->github(), $project);
+            $releaseService = new ReleaseService($this->configuration(), $options, $this->calendar(), $this->githubClient(), $project);
 
             $history = $releaseService->fetch();
         } catch (\Exception $e) {

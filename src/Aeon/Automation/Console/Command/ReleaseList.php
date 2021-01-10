@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace Aeon\Automation\Console\Command;
 
+use Aeon\Automation\Console\AbstractCommand;
 use Aeon\Automation\Console\AeonStyle;
 use Aeon\Automation\Project;
-use Composer\Semver\Semver;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
@@ -33,28 +33,25 @@ final class ReleaseList extends AbstractCommand
 
         $project = new Project($input->getArgument('project'));
 
-        $milestones = $this->github()->issues()->milestones()->all($project->organization(), $project->name(), ['state' => 'all']);
-        $releases = $this->github()->repository()->releases()->all($project->organization(), $project->name());
+        $milestones = $this->githubClient()->milestones($project)->semVerRsort();
+        $releases = $this->githubClient()->releases($project)->semVerRsort();
 
         $io->title('Release - List');
-
-        $milestoneTitles = Semver::sort(\array_map(fn (array $milestoneData) => $milestoneData['title'], $milestones));
-        $releaseNames = Semver::sort(\array_map(fn (array $releaseData) => $releaseData['name'], $releases));
 
         $io->note('Releases:');
 
         $missingMilestones = [];
 
-        foreach ($releaseNames as $releaseName) {
-            $releaseOutput = $releaseName;
+        foreach ($releases->all() as $release) {
+            $releaseOutput = $release->name();
 
-            if (!\in_array($releaseName, $milestoneTitles, true)) {
+            if (!$milestones->exists($release->name())) {
                 if ($input->getOption('create-missing') === true) {
-                    $io->note('Creating milestone: ' . $releaseName);
-                    $this->github()->issue()->milestones()->create($project->organization(), $project->name(), ['title' => $releaseName]);
+                    $io->note('Creating milestone: ' . $release->name());
+                    $this->githubClient()->createMilestone($project, $release->name());
                 } else {
                     $releaseOutput .= ' - <fg=yellow>missing milestone</>';
-                    $missingMilestones[] = $releaseName;
+                    $missingMilestones[] = $release;
                 }
             }
 

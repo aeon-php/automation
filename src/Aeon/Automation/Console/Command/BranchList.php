@@ -4,9 +4,8 @@ declare(strict_types=1);
 
 namespace Aeon\Automation\Console\Command;
 
+use Aeon\Automation\Console\AbstractCommand;
 use Aeon\Automation\Console\AeonStyle;
-use Aeon\Automation\GitHub\Branches;
-use Aeon\Automation\GitHub\Repository;
 use Aeon\Automation\Project;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
@@ -34,8 +33,8 @@ final class BranchList extends AbstractCommand
 
         $io->title('Branch - List');
 
-        $branches = Branches::getAll($this->github(), $project);
-        $repository = Repository::fromProject($this->github(), $project);
+        $branches = $this->githubClient()->branches($project);
+        $repository = $this->githubClient()->repository($project);
 
         foreach ($branches->all() as $branch) {
             if ($branch->isDefault($repository)) {

@@ -23,11 +23,6 @@ final class Commit implements ChangesSource
         $this->data = $data;
     }
 
-    public static function fromSHA(Client $client, Project $project, string $sha) : self
-    {
-        return new self($client->repo()->commits()->show($project->organization(), $project->name(), $sha));
-    }
-
     public function id() : string
     {
         return $this->sha();

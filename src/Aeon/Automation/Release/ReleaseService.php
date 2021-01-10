@@ -5,10 +5,10 @@ declare(strict_types=1);
 namespace Aeon\Automation\Release;
 
 use Aeon\Automation\Configuration;
+use Aeon\Automation\GitHub\GitHub;
 use Aeon\Automation\Project;
 use Aeon\Automation\Release;
 use Aeon\Calendar\Gregorian\Calendar;
-use Github\Client;
 
 final class ReleaseService
 {
@@ -18,11 +18,11 @@ final class ReleaseService
 
     private Calendar $calendar;
 
-    private Client $github;
+    private GitHub $github;
 
     private Project $project;
 
-    public function __construct(Configuration $configuration, Options $changelogOptions, Calendar $calendar, Client $github, Project $project)
+    public function __construct(Configuration $configuration, Options $changelogOptions, Calendar $calendar, GitHub $github, Project $project)
     {
         $this->configuration = $configuration;
         $this->options = $changelogOptions;

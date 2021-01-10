@@ -4,10 +4,6 @@ declare(strict_types=1);
 
 namespace Aeon\Automation\GitHub;
 
-use Aeon\Automation\Project;
-use Github\Client;
-use Github\HttpClient\Message\ResponseMediator;
-
 final class Workflows
 {
     /**
@@ -20,25 +16,10 @@ final class Workflows
         $this->workflows = $tags;
     }
 
-    public static function getAll(Client $client, Project $project) : self
-    {
-        $workflowsData = ResponseMediator::getContent(
-            $client->getHttpClient()->get(
-                '/repos/' . \rawurlencode($project->organization()) . '/' . \rawurlencode($project->name()) . '/actions/workflows',
-                ['Accept' => 'application/vnd.github.v3+json']
-            )
-        );
-
-        return new self(...\array_map(
-            fn (array $workflowData) : Workflow => new Workflow($workflowData),
-            $workflowsData['workflows']
-        ));
-    }
-
     /**
      * @return Workflow[]
      */
-    public function all()
+    public function all() : array
     {
         return $this->workflows;
     }
