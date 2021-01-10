@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Aeon\Automation\Console\Command;
 
 use Aeon\Automation\Console\AeonStyle;
+use Aeon\Automation\Project;
 use Composer\Semver\Semver;
 use Composer\Semver\VersionParser;
 use Symfony\Component\Console\Command\Command;
@@ -30,7 +31,7 @@ final class MilestoneCreate extends AbstractCommand
     {
         $io = new AeonStyle($input, $output);
 
-        $project = $this->configuration()->project($input->getArgument('project'));
+        $project = new Project($input->getArgument('project'));
 
         $io->title('Milestone - Create');
 

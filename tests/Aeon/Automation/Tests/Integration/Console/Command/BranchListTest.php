@@ -6,9 +6,9 @@ namespace Aeon\Automation\Tests\Integration\Console\Command;
 
 use Aeon\Automation\Console\AeonApplication;
 use Aeon\Automation\Console\Command\BranchList;
-use Aeon\Automation\Tests\Http\HttpRequestStub;
+use Aeon\Automation\Tests\Double\HttpRequestStub;
 use Aeon\Automation\Tests\Integration\Console\CommandTestCase;
-use Aeon\Automation\Tests\Mother\GitHubResponseMother;
+use Aeon\Automation\Tests\Mother\GitHub\GitHubResponseMother;
 use Aeon\Automation\Tests\Mother\ResponseMother;
 use Github\Client;
 use Symfony\Component\Console\Output\ConsoleOutput;
@@ -23,7 +23,7 @@ final class BranchListTest extends CommandTestCase
             new HttpRequestStub('GET', '/repos/aeon-php/automation/branches', ResponseMother::jsonSuccess([['name' => '1.x']])),
         ));
 
-        $command = new BranchList();
+        $command = new BranchList(\getenv('AUTOMATION_ROOT_DIR'));
         $command->setGithub($client);
 
         $application = new AeonApplication();

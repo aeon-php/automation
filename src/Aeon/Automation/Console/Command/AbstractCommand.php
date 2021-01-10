@@ -22,10 +22,12 @@ use Symfony\Component\Console\Output\OutputInterface;
 
 abstract class AbstractCommand extends Command
 {
+    private string $rootDir;
+
     /**
      * @var string[];
      */
-    protected array $defaultConfigPaths;
+    private array $defaultConfigPaths;
 
     private ?Configuration $configuration;
 
@@ -35,10 +37,11 @@ abstract class AbstractCommand extends Command
 
     private ?Calendar $calendar;
 
-    public function __construct(array $defaultConfigPaths = [])
+    public function __construct(string $rootDir, array $defaultConfigPaths = [])
     {
         parent::__construct();
 
+        $this->rootDir = $rootDir;
         $this->defaultConfigPaths = $defaultConfigPaths;
         $this->configuration = null;
         $this->github = null;
@@ -92,9 +95,16 @@ abstract class AbstractCommand extends Command
         return $this->cache;
     }
 
+    protected function interact(InputInterface $input, OutputInterface $output) : void
+    {
+        if ($input->hasArgument('project') && $input->getArgument('project') === null && $this->configuration()->project()) {
+            $input->setArgument('project', $this->configuration()->project()->fullName());
+        }
+    }
+
     protected function initialize(InputInterface $input, OutputInterface $output) : void
     {
-        $this->configuration = new Configuration($this->defaultConfigPaths, $input->getOption('configuration'));
+        $this->configuration = new Configuration($this->rootDir, $this->defaultConfigPaths, $input->getOption('configuration'));
         $this->cache = new FilesystemAdapter('aeon-automation');
 
         $this->initializeCalendar();

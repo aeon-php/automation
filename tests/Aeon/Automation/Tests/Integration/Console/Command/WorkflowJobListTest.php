@@ -6,9 +6,9 @@ namespace Aeon\Automation\Tests\Integration\Console\Command;
 
 use Aeon\Automation\Console\AeonApplication;
 use Aeon\Automation\Console\Command\WorkflowJobList;
-use Aeon\Automation\Tests\Http\HttpRequestStub;
+use Aeon\Automation\Tests\Double\HttpRequestStub;
 use Aeon\Automation\Tests\Integration\Console\CommandTestCase;
-use Aeon\Automation\Tests\Mother\GitHubResponseMother;
+use Aeon\Automation\Tests\Mother\GitHub\GitHubResponseMother;
 use Aeon\Automation\Tests\Mother\ResponseMother;
 use Github\Client;
 use Symfony\Component\Console\Output\ConsoleOutput;
@@ -39,7 +39,7 @@ final class WorkflowJobListTest extends CommandTestCase
             ])),
         ));
 
-        $command = new WorkflowJobList();
+        $command = new WorkflowJobList(\getenv('AUTOMATION_ROOT_DIR'));
         $command->setGithub($client);
         $application = new AeonApplication();
         $application->add($command);

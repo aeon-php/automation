@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Aeon\Automation;
 
 use Aeon\Automation\Changes\Change;
+use Aeon\Automation\Changes\Changes;
 use Aeon\Automation\Changes\Type;
 use Aeon\Calendar\Gregorian\Day;
 

@@ -4,18 +4,11 @@ declare(strict_types=1);
 
 namespace Aeon\Automation\Console;
 
-use Aeon\Automation\Console\Command\Help;
 use Symfony\Component\Console\Application;
-use Symfony\Component\Console\Command\ListCommand;
 use Symfony\Component\Console\Input\InputOption;
 
 final class AeonApplication extends Application
 {
-    protected function getDefaultCommands() : array
-    {
-        return [new Help(), new ListCommand()];
-    }
-
     protected function getDefaultInputDefinition()
     {
         $definition = parent::getDefaultInputDefinition();

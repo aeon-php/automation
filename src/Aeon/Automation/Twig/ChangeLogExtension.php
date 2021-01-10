@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Aeon\Automation\Twig;
 
-use Aeon\Automation\ChangesSource;
+use Aeon\Automation\Changes\ChangesSource;
 use Aeon\Automation\GitHub\Commit;
 use Aeon\Automation\GitHub\PullRequest;
 use Twig\Extension\AbstractExtension;
