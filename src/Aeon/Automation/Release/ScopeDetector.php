@@ -4,19 +4,19 @@ declare(strict_types=1);
 
 namespace Aeon\Automation\Release;
 
+use Aeon\Automation\GitHub\GitHub;
 use Aeon\Automation\GitHub\Tags;
 use Aeon\Automation\Project;
-use Github\Client;
 
 final class ScopeDetector
 {
-    private Client $github;
+    private GitHub $github;
 
     private Project $project;
 
     private ?Tags $tags;
 
-    public function __construct(Client $github, Project $project)
+    public function __construct(GitHub $github, Project $project)
     {
         $this->github = $github;
         $this->project = $project;
@@ -84,7 +84,7 @@ final class ScopeDetector
             return $this->tags;
         }
 
-        $this->tags = Tags::getAll($this->github, $this->project)->semVerRsort();
+        $this->tags = $this->github->tags($this->project)->semVerRsort();
 
         return $this->tags;
     }

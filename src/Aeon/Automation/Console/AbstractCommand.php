@@ -2,9 +2,10 @@
 
 declare(strict_types=1);
 
-namespace Aeon\Automation\Console\Command;
+namespace Aeon\Automation\Console;
 
 use Aeon\Automation\Configuration;
+use Aeon\Automation\GitHub\GitHubClient;
 use Aeon\Calendar\Gregorian\Calendar;
 use Aeon\Calendar\Gregorian\GregorianCalendar;
 use Github\Client;
@@ -49,13 +50,9 @@ abstract class AbstractCommand extends Command
         $this->calendar = null;
     }
 
-    public function github() : Client
+    public function githubClient() : GitHubClient
     {
-        if ($this->github === null) {
-            throw new \RuntimeException("Github client not initialized. Github client is only accessible in Command::execute() method because it's initialized in Command::initialize()");
-        }
-
-        return $this->github;
+        return new GitHubClient($this->github());
     }
 
     public function setGithub(Client $client) : void
@@ -168,5 +165,14 @@ abstract class AbstractCommand extends Command
         }
 
         $this->calendar = GregorianCalendar::UTC();
+    }
+
+    private function github() : Client
+    {
+        if ($this->github === null) {
+            throw new \RuntimeException("Github client not initialized. Github client is only accessible in Command::execute() method because it's initialized in Command::initialize()");
+        }
+
+        return $this->github;
     }
 }

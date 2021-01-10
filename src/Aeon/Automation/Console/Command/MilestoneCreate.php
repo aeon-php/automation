@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace Aeon\Automation\Console\Command;
 
+use Aeon\Automation\Console\AbstractCommand;
 use Aeon\Automation\Console\AeonStyle;
 use Aeon\Automation\Project;
-use Composer\Semver\Semver;
 use Composer\Semver\VersionParser;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
@@ -35,15 +35,13 @@ final class MilestoneCreate extends AbstractCommand
 
         $io->title('Milestone - Create');
 
-        $milestones = $this->github()->issue()->milestones()->all($project->organization(), $project->name(), ['state' => 'all']);
+        $milestones = $this->githubClient()->milestones($project)->semVerSort();
 
         $io->title($project->name());
 
-        $milestoneTitles = Semver::sort(\array_map(fn (array $milestoneData) => $milestoneData['title'], $milestones));
-
         $newMilestone = $input->getArgument('milestone');
 
-        if (\in_array($newMilestone, $milestoneTitles, true)) {
+        if ($milestones->exists($newMilestone)) {
             $io->error('Milestone already exists');
 
             return Command::FAILURE;
@@ -59,7 +57,7 @@ final class MilestoneCreate extends AbstractCommand
             return Command::FAILURE;
         }
 
-        $this->github()->issue()->milestones()->create($project->organization(), $project->name(), ['title' => $newMilestone]);
+        $this->githubClient()->createMilestone($project, $newMilestone);
 
         $io->success('Milestone created');
 

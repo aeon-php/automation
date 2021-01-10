@@ -36,6 +36,11 @@ final class Reference
         return \strpos($this->data['ref'], 'refs/tags/') === 0 ? \str_replace('refs/tags/', '', $this->data['ref']) : null;
     }
 
+    public function type() : string
+    {
+        return $this->data['object']['type'];
+    }
+
     public function commit(Client $client, Project $project) : Commit
     {
         if ($this->data['object']['type'] === 'tag') {

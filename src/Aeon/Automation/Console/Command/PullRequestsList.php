@@ -4,12 +4,9 @@ declare(strict_types=1);
 
 namespace Aeon\Automation\Console\Command;
 
+use Aeon\Automation\Console\AbstractCommand;
 use Aeon\Automation\Console\AeonStyle;
-use Aeon\Automation\GitHub\PullRequests;
-use Aeon\Automation\GitHub\Reference;
-use Aeon\Automation\GitHub\Repository;
 use Aeon\Automation\Project;
-use Github\Exception\RuntimeException;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
@@ -40,7 +37,7 @@ final class PullRequestsList extends AbstractCommand
 
         $io->title('Pull Request - List');
 
-        $repository = Repository::fromProject($this->github(), $project);
+        $repository = $this->githubClient()->repository($project);
         $branchName = $input->getOption('branch') !== null ? $input->getOption('branch') : $repository->defaultBranch();
         $status = $input->getOption('status');
 
@@ -54,16 +51,16 @@ final class PullRequestsList extends AbstractCommand
         }
 
         try {
-            Reference::commitFromString($this->github(), $project, 'heads/' . $branchName);
-        } catch (RuntimeException $e) {
+            $this->githubClient()->branch($project, $branchName);
+        } catch (\Exception $e) {
             $io->error('Branch "heads/' . $branchName . '" does not exists: ' . $e->getMessage());
 
             return Command::FAILURE;
         }
 
         $pullRequests = $status === 'open'
-            ? PullRequests::allOpenFor($this->github(), $project, $branchName, (int) $input->getOption('limit'))
-            : PullRequests::allClosedFor($this->github(), $project, $branchName, (int) $input->getOption('limit'))->onlyMerged();
+            ? $this->githubClient()->pullRequestsOpen($project, $branchName, (int) $input->getOption('limit'))
+            : $this->githubClient()->pullRequestsClosed($project, $branchName, (int) $input->getOption('limit'))->onlyMerged();
 
         foreach ($pullRequests->all() as $pullRequest) {
             $pullRequestOutput = '#' . $pullRequest->id() . ' - ' . $pullRequest->description();
