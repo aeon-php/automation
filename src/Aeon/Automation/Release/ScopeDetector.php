@@ -33,7 +33,7 @@ final class ScopeDetector
             $scope = $scope->override(Scope::fromDefaultBranchHead($this->github, $this->project));
         }
 
-        if ($scope->commitEnd() === null) {
+        if ($scope->commitEnd() === null && $scope->tagStart() === null) {
             if ($this->tags()->count()) {
                 $scope = $scope->override(Scope::fromTagEnd($this->tags()->first()->name(), $this->github, $this->project));
             }

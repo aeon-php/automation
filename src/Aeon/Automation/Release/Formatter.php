@@ -6,9 +6,9 @@ use Aeon\Automation\Release;
 
 interface Formatter
 {
-    public function format() : string;
-
-    public function theme() : string;
+    public function disableFooter() : self;
 
     public function formatRelease(Release $release) : string;
+
+    public function formatFooter() : string;
 }
