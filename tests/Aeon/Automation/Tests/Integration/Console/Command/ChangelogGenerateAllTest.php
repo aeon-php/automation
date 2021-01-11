@@ -17,7 +17,7 @@ use Symfony\Component\Console\Tester\CommandTester;
 
 final class ChangelogGenerateAllTest extends CommandTestCase
 {
-    public function test_changelog_generate_without_parameters_with_tags() : void
+    public function test_changelog_generate_all_with_github_release_update() : void
     {
         $client = Client::createWithHttpClient($httpClient = $this->httpClient(
             new HttpRequestStub('GET', '/repos/aeon-php/automation', ResponseMother::jsonSuccess(
@@ -79,6 +79,14 @@ final class ChangelogGenerateAllTest extends CommandTestCase
             )),
             new HttpRequestStub('GET', '/repos/aeon-php/automation/commits/' . $commit1Tag100 . '/pulls', ResponseMother::jsonSuccess([])),
             new HttpRequestStub('GET', '/repos/aeon-php/automation/commits/' . $commit2Tag100 . '/pulls', ResponseMother::jsonSuccess([])),
+            new HttpRequestStub('GET', '/repos/aeon-php/automation/releases', ResponseMother::jsonSuccess([
+                GitHubResponseMother::release(3, '1.2.0'),
+                GitHubResponseMother::release(2, '1.1.0'),
+                GitHubResponseMother::release(1, '1.0.0'),
+            ])),
+            new HttpRequestStub('PATCH', '/repos/aeon-php/automation/releases/3', ResponseMother::jsonSuccess([])),
+            new HttpRequestStub('PATCH', '/repos/aeon-php/automation/releases/2', ResponseMother::jsonSuccess([])),
+            new HttpRequestStub('PATCH', '/repos/aeon-php/automation/releases/1', ResponseMother::jsonSuccess([])),
         ));
 
         $command = new ChangelogGenerateAll(\getenv('AUTOMATION_ROOT_DIR'));
@@ -92,7 +100,7 @@ final class ChangelogGenerateAllTest extends CommandTestCase
         $commandTester->setInputs(['verbosity' => ConsoleOutput::VERBOSITY_VERY_VERBOSE]);
 
         $commandTester->execute(
-            ['project' => 'aeon-php/automation'],
+            ['project' => 'aeon-php/automation', '--github-release-update' => true],
             ['verbosity' => ConsoleOutput::VERBOSITY_VERBOSE]
         );
 

@@ -131,4 +131,15 @@ final class Releases
 
         return false;
     }
+
+    public function get(string $name) : Release
+    {
+        foreach ($this->releases as $release) {
+            if ($release->name() === $name) {
+                return $release;
+            }
+        }
+
+        throw new \RuntimeException('Release ' . $name . ' not found');
+    }
 }

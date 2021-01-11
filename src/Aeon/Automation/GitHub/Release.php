@@ -17,4 +17,9 @@ final class Release
     {
         return $this->data['name'];
     }
+
+    public function id() : int
+    {
+        return $this->data['id'];
+    }
 }

@@ -35,7 +35,7 @@ abstract class CommandTestCase extends TestCase
                         }
                     }
 
-                    return ResponseMother::json404('Invalid Path: ' . $request->getUri()->getPath());
+                    return ResponseMother::json404('Invalid Path: ' . $request->getMethod() . ' : ' . $request->getUri()->getPath());
                 })
             );
 

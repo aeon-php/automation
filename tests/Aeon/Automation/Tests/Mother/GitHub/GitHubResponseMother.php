@@ -114,4 +114,12 @@ final class GitHubResponseMother
             'completed_at' => $status === 'completed' ? DateTime::fromString($completedAt)->toISO8601() : null,
         ];
     }
+
+    public static function release(int $id, string $name) : array
+    {
+        return [
+            'id' => $id,
+            'name' => $name,
+        ];
+    }
 }

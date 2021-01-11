@@ -36,7 +36,8 @@ final class ChangelogGenerateAll extends AbstractCommand
             ->addOption('only-pull-requests', 'opr', InputOption::VALUE_NONE, 'Use only pull requests to generate changelog')
             ->addOption('compare-reverse', 'cpr', InputOption::VALUE_NONE, 'When comparing commits, revers the order and compare start to end, instead end to start.')
             ->addOption('format', 'f', InputOption::VALUE_REQUIRED, 'How to format generated changelog, available formatters: <fg=yellow>"' . \implode('"</>, <fg=yellow>"', ['markdown', 'html']) . '"</>', 'markdown')
-            ->addOption('theme', 'th', InputOption::VALUE_REQUIRED, 'Theme of generated changelog: <fg=yellow>"' . \implode('"</>, <fg=yellow>"', ['keepachangelog', 'classic']) . '"</>', 'keepachangelog');
+            ->addOption('theme', 'th', InputOption::VALUE_REQUIRED, 'Theme of generated changelog: <fg=yellow>"' . \implode('"</>, <fg=yellow>"', ['keepachangelog', 'classic']) . '"</>', 'keepachangelog')
+            ->addOption('github-release-update', 'gru', InputOption::VALUE_NONE, 'Update GitHub release description if you have right permissions and release exists');
     }
 
     protected function execute(InputInterface $input, OutputInterface $output) : int
@@ -116,6 +117,22 @@ final class ChangelogGenerateAll extends AbstractCommand
                         ->disableFooter()
                         ->formatRelease($release)
                 );
+
+                if ($input->getOption('github-release-update')) {
+                    $releases = $this->githubClient()->releases($project);
+
+                    if (!$releases->exists($release->name())) {
+                        $io->error('Release ' . $release->name() . ' not found');
+
+                        return Command::FAILURE;
+                    }
+
+                    $io->note('Updating release description...');
+
+                    $this->githubClient()->updateRelease($project, $releases->get($release->name())->id(), $formatter->formatRelease($release));
+
+                    $io->note('Release description updated');
+                }
             } else {
                 $io->note('No changes');
             }
