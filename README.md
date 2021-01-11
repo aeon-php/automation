@@ -253,6 +253,7 @@ Options:
   -cpr, --compare-reverse               When comparing commits, revers the order and compare start to end, instead end to start.
   -th, --theme=THEME                    Theme of generated changelog: "keepachangelog", "classic" [default: "keepachangelog"]
   -sf, --skip-from=SKIP-FROM            Skip changes from given author|authors (multiple values allowed)
+  -gru, --github-release-update         Update GitHub release description if you have right permissions and release exists
   -v|vv|vvv, --verbose                  Increase the verbosity of messages: 1 for normal output, 2 for more verbose output and 3 for debug
   -gt, --github-token=GITHUB-TOKEN      Github personal access token, generated here: https://github.com/settings/tokens By default taken from AEON_AUTOMATION_GH_TOKEN env variable
 
@@ -289,6 +290,7 @@ Options:
   -opr, --only-pull-requests         Use only pull requests to generate changelog
   -cpr, --compare-reverse            When comparing commits, revers the order and compare start to end, instead end to start.
   -th, --theme=THEME                 Theme of generated changelog: "keepachangelog", "classic" [default: "keepachangelog"]
+  -gru, --github-release-update      Update GitHub release description if you have right permissions and release exists
   -v|vv|vvv, --verbose               Increase the verbosity of messages: 1 for normal output, 2 for more verbose output and 3 for debug
   -gt, --github-token=GITHUB-TOKEN   Github personal access token, generated here: https://github.com/settings/tokens By default taken from AEON_AUTOMATION_GH_TOKEN env variable
 
