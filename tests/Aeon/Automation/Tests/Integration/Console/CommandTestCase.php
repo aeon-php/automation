@@ -23,7 +23,7 @@ abstract class CommandTestCase extends TestCase
         $httpClient = $this->createMock(ClientInterface::class);
 
         $httpClient
-            ->expects($this->exactly(\count($stubs)))
+            ->expects($this->any())
             ->method('sendRequest')
             ->will(
                 $this->returnCallback(function (Request $request) use ($stubs) : Response {

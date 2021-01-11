@@ -18,6 +18,8 @@ final class TwigFormatter implements Formatter
 
     private string $theme;
 
+    private bool $footer;
+
     public function __construct(string $rootDir, string $format, string $theme)
     {
         $format = \strtolower($format);
@@ -39,25 +41,37 @@ final class TwigFormatter implements Formatter
         $this->twig->addExtension(new ChangeLogExtension());
         $this->format = $format;
         $this->theme = $theme;
+        $this->footer = true;
     }
 
-    public function theme() : string
+    public function disableFooter() : self
     {
-        return $this->theme;
-    }
+        $this->footer = false;
 
-    public function format() : string
-    {
-        return $this->format;
+        return $this;
     }
 
     public function formatRelease(Release $release) : string
     {
         switch ($this->format) {
             case 'markdown':
-                return $this->twig->render('changelog.md.twig', ['release' => $release]);
+                return $this->twig->render('changelog.md.twig', ['release' => $release, 'footer' => $this->footer]);
             case 'html':
-                return $this->twig->render('changelog.html.twig', ['release' => $release]);
+                return $this->twig->render('changelog.html.twig', ['release' => $release, 'footer' => $this->footer]);
+
+            default:
+
+                throw new \RuntimeException('Unknown format ' . $this->format);
+        }
+    }
+
+    public function formatFooter() : string
+    {
+        switch ($this->format) {
+            case 'markdown':
+                return $this->twig->render('footer.md.twig');
+            case 'html':
+                return $this->twig->render('footer.html.twig');
 
             default:
 

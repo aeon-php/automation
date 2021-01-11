@@ -120,4 +120,66 @@ final class Tags
     {
         return new self(...\array_slice($this->tags, 0, $limit));
     }
+
+    public function exists(string $name) : bool
+    {
+        foreach ($this->tags as $tag) {
+            if ($tag->name() === $name) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    public function since(string $name) : self
+    {
+        $tags = [];
+
+        $before = true;
+
+        foreach ($this->tags as $tag) {
+            if ($tag->name() === $name) {
+                $before = false;
+            }
+
+            if (!$before) {
+                $tags[] = $tag;
+            }
+        }
+
+        return new self(...$tags);
+    }
+
+    public function until(string $name) : self
+    {
+        $tags = [];
+
+        foreach ($this->tags as $tag) {
+            if ($tag->name() === $name) {
+                $tags[] = $tag;
+
+                break;
+            }
+
+            $tags[] = $tag;
+        }
+
+        return new self(...$tags);
+    }
+
+    public function without(array $tagsSkip) : self
+    {
+        $tags = [];
+
+        foreach ($this->tags as $tag) {
+            if (\in_array($tag->name(), $tagsSkip, true)) {
+                continue;
+            }
+
+            $tags[] = $tag;
+        }
+
+        return new self(...$tags);
+    }
 }
