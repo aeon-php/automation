@@ -229,6 +229,22 @@ final class GitHubClient implements GitHub
         ));
     }
 
+    public function release(Project $project, int $id) : Release
+    {
+        return new Release($this->client->repository()->releases()->show($project->organization(), $project->name(), $id));
+    }
+
+    public function updateRelease(Project $project, int $id, ?string $body = null) : Release
+    {
+        $parameters = [];
+
+        if ($body !== null) {
+            $parameters['body'] = $body;
+        }
+
+        return new Release($this->client->repository()->releases()->edit($project->organization(), $project->name(), $id, $parameters));
+    }
+
     public function tags(Project $project) : Tags
     {
         $tagsPaginator = new ResultPager($this->client);

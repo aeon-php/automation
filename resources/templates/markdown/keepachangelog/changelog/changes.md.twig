@@ -3,9 +3,9 @@
 ### {{ type | capitalize }}
 {% for change in changes %}
 {% if change.source | is_commit %}
-  - [{{ change.source.id | slice(0, 6) }}]({{ change.source.url }}) - **{{ change.description }}** - [@{{ change.source.user }}]({{ change.source.userUrl }})
+  - [{{ change.source.id | slice(0, 6) }}]({{ change.source.url }}) - **{{ change.description|trim }}** - [@{{ change.source.user }}]({{ change.source.userUrl }})
 {% elseif change.source | is_pr %}
-  - [#{{ change.source.id }}]({{ change.source.url }}) - **{{ change.description }}** - [@{{ change.source.user }}]({{ change.source.userUrl }})
+  - [#{{ change.source.id }}]({{ change.source.url }}) - **{{ change.description|trim }}** - [@{{ change.source.user }}]({{ change.source.userUrl }})
 {% endif %}
 {% endfor %}
 {% endif %}

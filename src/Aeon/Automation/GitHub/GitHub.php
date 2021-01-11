@@ -37,6 +37,10 @@ interface GitHub
 
     public function releases(Project $project) : Releases;
 
+    public function release(Project $project, int $id) : Release;
+
+    public function updateRelease(Project $project, int $id, ?string $body = null) : Release;
+
     public function tags(Project $project) : Tags;
 
     public function tagCommit(Project $project, Tag $tag) : Commit;

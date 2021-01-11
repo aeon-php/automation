@@ -41,7 +41,8 @@ final class ChangelogGenerate extends AbstractCommand
             ->addOption('compare-reverse', 'cpr', InputOption::VALUE_NONE, 'When comparing commits, revers the order and compare start to end, instead end to start.')
             ->addOption('format', 'f', InputOption::VALUE_REQUIRED, 'How to format generated changelog, available formatters: <fg=yellow>"' . \implode('"</>, <fg=yellow>"', ['markdown', 'html']) . '"</>', 'markdown')
             ->addOption('theme', 'th', InputOption::VALUE_REQUIRED, 'Theme of generated changelog: <fg=yellow>"' . \implode('"</>, <fg=yellow>"', ['keepachangelog', 'classic']) . '"</>', 'keepachangelog')
-            ->addOption('skip-from', 'sf', InputOption::VALUE_REQUIRED | InputOption::VALUE_IS_ARRAY, 'Skip changes from given author|authors');
+            ->addOption('skip-from', 'sf', InputOption::VALUE_REQUIRED | InputOption::VALUE_IS_ARRAY, 'Skip changes from given author|authors')
+            ->addOption('github-release-update', 'gru', InputOption::VALUE_NONE, 'Update GitHub release description if you have right permissions and release exists');
     }
 
     protected function execute(InputInterface $input, OutputInterface $output) : int
@@ -134,10 +135,26 @@ final class ChangelogGenerate extends AbstractCommand
             return Command::FAILURE;
         }
 
+        $formatter =  (new FormatterFactory($this->configuration()))->create($input->getOption('format'), $input->getOption('theme'));
+
         if (!$release->empty()) {
-            $io->write(
-                (new FormatterFactory($this->configuration()))->create($input->getOption('format'), $input->getOption('theme'))->formatRelease($release)
-            );
+            $io->write($formatter->formatRelease($release));
+
+            if ($input->getOption('github-release-update')) {
+                $releases = $this->githubClient()->releases($project);
+
+                if (!$releases->exists($release->name())) {
+                    $io->error('Release ' . $release->name() . ' not found');
+
+                    return Command::FAILURE;
+                }
+
+                $io->note('Updating release description...');
+
+                $this->githubClient()->updateRelease($project, $releases->get($release->name())->id(), $formatter->formatRelease($release));
+
+                $io->note('Release description updated');
+            }
         } else {
             $io->note('No changes');
         }
