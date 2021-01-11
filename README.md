@@ -204,11 +204,10 @@ Available commands:
   cache:clear                     Clears cache used to cache HTTP responses from GitHub
  changelog
   changelog:generate              Generate change log for a release.
+  changelog:generate:all          Generate change log for all tags.
  milestone
   milestone:create                Create new milestone for project
   milestone:list                  
- project
-  project:list                    List all projects defined in automation.xml file
  pull-request
   pull-request:description:check  Check if pull request has changes in expected by Automation format.
   pull-request:list               
@@ -217,6 +216,8 @@ Available commands:
   release:list                    List all project releases
  tag
   tag:list                        Display all tags following SemVer convention sorted from the latest to oldest
+ workflow
+  workflow:job:list               List project Github actions jobs status from the latest workflow run
 ```
 
 ### changelog:generate
@@ -257,6 +258,42 @@ Options:
 
 Help:
   When no parameters are provided, this command will generate UNRELEASED change log.
+```
+
+### changelog:generate:all
+
+```bash
+Description:
+  Generate change log for all tags.
+
+Usage:
+  changelog:generate:all [options] [--] <project>
+
+Arguments:
+  project                            project name, for example aeon-php/calendar
+
+Options:
+  -f, --format=FORMAT                How to format generated changelog, available formatters: "markdown", "html" [default: "markdown"]
+  -h, --help                         Display help for the given command. When no command is given display help for the list command
+  -q, --quiet                        Do not output any message
+  -V, --version                      Display this application version
+      --ansi                         Force ANSI output
+      --no-ansi                      Disable ANSI output
+  -n, --no-interaction               Do not ask any interactive question
+  -c, --configuration=CONFIGURATION  Custom path to the automation.xml configuration file.
+  -ts, --tag-start=TAG-START         Generate changelog from given tag, if not provided it starts from the earliest tag
+  -te, --tag-end=TAG-END             Generate changelog until given tag, if not provided it ends at the last tag
+  -tsk, --tag-skip=TAG-SKIP          Skip specific tags (multiple values allowed)
+  -sf, --skip-from=SKIP-FROM         Skip changes from given author|authors (multiple values allowed)
+  -oc, --only-commits                Use only commits to generate changelog
+  -opr, --only-pull-requests         Use only pull requests to generate changelog
+  -cpr, --compare-reverse            When comparing commits, revers the order and compare start to end, instead end to start.
+  -th, --theme=THEME                 Theme of generated changelog: "keepachangelog", "classic" [default: "keepachangelog"]
+  -v|vv|vvv, --verbose               Increase the verbosity of messages: 1 for normal output, 2 for more verbose output and 3 for debug
+  -gt, --github-token=GITHUB-TOKEN   Github personal access token, generated here: https://github.com/settings/tokens By default taken from AEON_AUTOMATION_GH_TOKEN env variable
+
+Help:
+  When no parameters are provided, this command will generate changelog for each commit that follows semver semantic.
 ```
 
 ### tag:list
