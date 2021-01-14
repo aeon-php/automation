@@ -15,11 +15,11 @@ final class AeonApplication extends Application
 
         $definition->addOption(
             new InputOption(
-            'configuration',
-            'c',
-            InputOption::VALUE_REQUIRED,
-            'Custom path to the automation.xml configuration file.'
-        )
+                'configuration',
+                'c',
+                InputOption::VALUE_REQUIRED,
+                'Custom path to the automation.xml configuration file.'
+            )
         );
         $definition->addOption(new InputOption(
             'github-token',

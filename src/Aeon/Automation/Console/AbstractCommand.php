@@ -6,12 +6,10 @@ namespace Aeon\Automation\Console;
 
 use Aeon\Automation\Configuration;
 use Aeon\Automation\GitHub\GitHubClient;
-use Aeon\Automation\Http\Client\Plugin\AeonAutomationUserAgentPlugin;
 use Aeon\Calendar\Gregorian\Calendar;
 use Aeon\Calendar\Gregorian\GregorianCalendar;
 use Github\Client;
 use Github\HttpClient\Builder;
-use Http\Client\Common\Plugin\HeaderAppendPlugin;
 use Http\Client\Common\Plugin\HeaderDefaultsPlugin;
 use Http\Client\Common\Plugin\LoggerPlugin;
 use Http\Message\Formatter\FullHttpMessageFormatter;
