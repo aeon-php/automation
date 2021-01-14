@@ -6,10 +6,13 @@ namespace Aeon\Automation\Console;
 
 use Aeon\Automation\Configuration;
 use Aeon\Automation\GitHub\GitHubClient;
+use Aeon\Automation\Http\Client\Plugin\AeonAutomationUserAgentPlugin;
 use Aeon\Calendar\Gregorian\Calendar;
 use Aeon\Calendar\Gregorian\GregorianCalendar;
 use Github\Client;
 use Github\HttpClient\Builder;
+use Http\Client\Common\Plugin\HeaderAppendPlugin;
+use Http\Client\Common\Plugin\HeaderDefaultsPlugin;
 use Http\Client\Common\Plugin\LoggerPlugin;
 use Http\Message\Formatter\FullHttpMessageFormatter;
 use Http\Message\Formatter\SimpleFormatter;
@@ -145,6 +148,8 @@ abstract class AbstractCommand extends Command
         if ($output->getVerbosity() > OutputInterface::VERBOSITY_VERBOSE) {
             $builder->addPlugin(new LoggerPlugin($logger, $formatter));
         }
+
+        $builder->addPlugin(new HeaderDefaultsPlugin(['User-Agent' => 'aeon-php/automation (https://github.com/aeon-php/automation)']));
 
         $githubEnterpriseUrl = null;
 
