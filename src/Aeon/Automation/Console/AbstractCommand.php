@@ -146,7 +146,15 @@ abstract class AbstractCommand extends Command
             $builder->addPlugin(new LoggerPlugin($logger, $formatter));
         }
 
-        $client = new Client($builder);
+        $githubEnterpriseUrl = null;
+
+        if ($input->getOption('github-enterprise-url')) {
+            $githubEnterpriseUrl = $input->getOption('github-enterprise-url');
+        } elseif (\getenv('AEON_AUTOMATION_GH_ENTERPRISE_URL')) {
+            $githubEnterpriseUrl = \getenv('AEON_AUTOMATION_GH_ENTERPRISE_URL');
+        }
+
+        $client = new Client($builder, null, $githubEnterpriseUrl);
         $client->addCache($cache);
 
         $this->github = $client;
