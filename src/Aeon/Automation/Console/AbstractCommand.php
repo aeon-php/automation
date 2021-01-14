@@ -10,6 +10,7 @@ use Aeon\Calendar\Gregorian\Calendar;
 use Aeon\Calendar\Gregorian\GregorianCalendar;
 use Github\Client;
 use Github\HttpClient\Builder;
+use Http\Client\Common\Plugin\HeaderDefaultsPlugin;
 use Http\Client\Common\Plugin\LoggerPlugin;
 use Http\Message\Formatter\FullHttpMessageFormatter;
 use Http\Message\Formatter\SimpleFormatter;
@@ -146,7 +147,17 @@ abstract class AbstractCommand extends Command
             $builder->addPlugin(new LoggerPlugin($logger, $formatter));
         }
 
-        $client = new Client($builder);
+        $builder->addPlugin(new HeaderDefaultsPlugin(['User-Agent' => 'aeon-php/automation (https://github.com/aeon-php/automation)']));
+
+        $githubEnterpriseUrl = null;
+
+        if ($input->getOption('github-enterprise-url')) {
+            $githubEnterpriseUrl = $input->getOption('github-enterprise-url');
+        } elseif (\getenv('AEON_AUTOMATION_GH_ENTERPRISE_URL')) {
+            $githubEnterpriseUrl = \getenv('AEON_AUTOMATION_GH_ENTERPRISE_URL');
+        }
+
+        $client = new Client($builder, null, $githubEnterpriseUrl);
         $client->addCache($cache);
 
         $this->github = $client;
