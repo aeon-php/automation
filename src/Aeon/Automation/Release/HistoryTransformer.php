@@ -34,7 +34,7 @@ final class HistoryTransformer
             $source = null;
 
             if ($this->releaseOptions->onlyCommits()) {
-                $source = $commit;
+                $source = ChangesSource::fromCommit($commit);
             }
 
             if ($this->releaseOptions->onlyPullRequests()) {
@@ -44,13 +44,13 @@ final class HistoryTransformer
                     continue;
                 }
 
-                $source = $pullRequests->first();
+                $source = ChangesSource::fromPullRequest($pullRequests->first());
             }
 
             if ($this->releaseOptions->allSources()) {
                 $pullRequests = $this->github->commitPullRequests($this->project, $commit);
 
-                $source = $pullRequests->count() ? $pullRequests->first() : $commit;
+                $source = $pullRequests->count() ? ChangesSource::fromPullRequest($pullRequests->first()) : ChangesSource::fromCommit($commit);
             }
 
             if ($source instanceof ChangesSource) {

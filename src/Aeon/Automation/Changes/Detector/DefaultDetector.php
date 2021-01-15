@@ -20,7 +20,6 @@ final class DefaultDetector implements ChangesDetector
     public function detect(ChangesSource $changesSource) : Changes
     {
         return new Changes(
-            $changesSource,
             new Change($changesSource, Type::changed(), $changesSource->title())
         );
     }

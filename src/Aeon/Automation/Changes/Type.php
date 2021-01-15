@@ -25,6 +25,27 @@ final class Type
         $this->type = $type;
     }
 
+    public static function fromString(string $type) : self
+    {
+        switch (\strtolower($type)) {
+            case 'added':
+                return self::added();
+            case 'changed':
+                return self::changed();
+            case 'fixed':
+                return self::fixed();
+            case 'removed':
+                return self::removed();
+            case 'deprecated':
+                return self::deprecated();
+            case 'security':
+                return self::security();
+
+            default:
+                throw new \InvalidArgumentException('Unknown change type: ' . $type);
+        }
+    }
+
     public static function added() : self
     {
         return new self(self::TYPE_ADDED);

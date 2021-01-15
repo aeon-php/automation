@@ -46,6 +46,6 @@ final class HTMLChangesDetector implements ChangesDetector
             }
         }
 
-        return new Changes($changesSource, ...$changes);
+        return new Changes(...$changes);
     }
 }

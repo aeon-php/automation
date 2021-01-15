@@ -6,6 +6,7 @@ namespace Aeon\Automation;
 
 use Aeon\Automation\Changes\Change;
 use Aeon\Automation\Changes\Changes;
+use Aeon\Automation\Changes\ChangesSource;
 use Aeon\Automation\Changes\Type;
 use Aeon\Calendar\Gregorian\Day;
 
@@ -25,6 +26,14 @@ final class Release
         $this->name = $name;
         $this->day = $day;
         $this->changes = [];
+    }
+
+    public function update(string $newName, Day $newDay) : self
+    {
+        $release = new self($newName, $newDay);
+        $release->changes = $this->changes;
+
+        return $release;
     }
 
     public function name() : string
@@ -49,6 +58,10 @@ final class Release
         return $this->changes;
     }
 
+    /**
+     * Only one set of changes is allowed for a single source. This prevents duplications when
+     * change comes from Commit and Pull Request that merged that commit.
+     */
     public function add(Changes $changes) : void
     {
         foreach ($this->changes as $change) {
@@ -58,6 +71,28 @@ final class Release
         }
 
         $this->changes[] = $changes;
+    }
+
+    public function hasFrom(ChangesSource $source) : bool
+    {
+        foreach ($this->changes as $change) {
+            if ($change->source()->equals($source)) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    public function getFrom(ChangesSource $source) : Changes
+    {
+        foreach ($this->changes as $changes) {
+            if ($changes->source()->equals($source)) {
+                return $changes;
+            }
+        }
+
+        throw new \InvalidArgumentException("There are no changes in this release from source with id: {$source->id()}");
     }
 
     /**

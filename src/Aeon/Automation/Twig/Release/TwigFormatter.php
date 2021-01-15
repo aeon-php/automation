@@ -6,7 +6,6 @@ namespace Aeon\Automation\Twig\Release;
 
 use Aeon\Automation\Release;
 use Aeon\Automation\Release\Formatter;
-use Aeon\Automation\Twig\ChangeLogExtension;
 use Twig\Environment;
 use Twig\Loader\FilesystemLoader;
 
@@ -38,7 +37,6 @@ final class TwigFormatter implements Formatter
         }
 
         $this->twig = new Environment(new FilesystemLoader($rootDir . '/resources/templates/' . $format . '/' . $theme), []);
-        $this->twig->addExtension(new ChangeLogExtension());
         $this->format = $format;
         $this->theme = $theme;
         $this->footer = true;

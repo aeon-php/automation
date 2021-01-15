@@ -12,6 +12,10 @@ final class Change
 
     private string $description;
 
+    /**
+     * The reason for change to not use source description/title is that multiple changes might come from single source.
+     * For example when parsing HTML content of Pull Request.
+     */
     public function __construct(ChangesSource $source, Type $type, string $description)
     {
         $this->source = $source;
