@@ -48,7 +48,7 @@ final class ChangelogGenerate extends AbstractCommand
             ->addOption('skip-from', 'sf', InputOption::VALUE_REQUIRED | InputOption::VALUE_IS_ARRAY, 'Skip changes from given author|authors')
             ->addOption('github-release-update', null, InputOption::VALUE_NONE, 'Update GitHub release description if you have right permissions and release exists')
             ->addOption('github-file-update-path', null, InputOption::VALUE_REQUIRED, 'Update changelog file directly at GitHub by reading existing file content and changing related release section. For example: <fg=yellow>--github-file-update-path=/CHANGELOG.md</>')
-            ->addOption('github-file-update-ref', null, InputOption::VALUE_REQUIRED, 'The name of the commit/branch/tag from which to take file for <fg=yellow>--github-file-update-path=/CHANGELOG.md</> option. Default: the repository’s default branch.');
+            ->addOption('github-file-update-ref', null, InputOption::VALUE_REQUIRED, 'The name of the commit/branch/tag from which to take file for <fg=yellow>--github-file-update-path=CHANGELOG.md</> option. Default: the repository’s default branch.');
     }
 
     protected function execute(InputInterface $input, OutputInterface $output) : int
@@ -147,9 +147,9 @@ final class ChangelogGenerate extends AbstractCommand
             $io->write($formatter->formatRelease($release));
 
             if ($input->getOption('github-release-update')) {
-                $changelogReleases = $this->githubClient()->releases($project);
+                $remoteReleases = $this->githubClient()->releases($project);
 
-                if (!$changelogReleases->exists($release->name())) {
+                if (!$remoteReleases->exists($release->name())) {
                     $io->error('Release ' . $release->name() . ' not found');
 
                     return Command::FAILURE;
@@ -157,7 +157,7 @@ final class ChangelogGenerate extends AbstractCommand
 
                 $io->note('Updating release description...');
 
-                $this->githubClient()->updateRelease($project, $changelogReleases->get($release->name())->id(), $formatter->formatRelease($release));
+                $this->githubClient()->updateRelease($project, $remoteReleases->get($release->name())->id(), $formatter->formatRelease($release));
 
                 $io->note('Release description updated');
             }

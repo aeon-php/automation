@@ -114,4 +114,51 @@ final class ManipulatorTest extends TestCase
         $this->assertSame('2021-05-01', $releases->all()[0]->day()->toString());
         $this->assertSame(2, \count($releases->all()[0]->changed()));
     }
+
+    public function test_release_without_unreleased() : void
+    {
+        $this->expectException(\InvalidArgumentException::class);
+        $this->expectExceptionMessage('There is nothing to release');
+
+        $release = new Release('0.1.0', Day::fromString('2021-01-4'));
+        $release->add(
+            new Changes(
+                ChangeMother::pullRequestChanged(1, 'Update CHANGELOG.md', 'norberttech'),
+                ChangeMother::pullRequestChanged(1, 'Update README.md', 'norberttech')
+            )
+        );
+
+        (new Manipulator())->release(
+            new ReleasesSource(new Releases($release)),
+            '0.1.0',
+            Day::fromString('2021-05-01')
+        );
+    }
+
+    public function test_release_of_something_that_was_already_released() : void
+    {
+        $this->expectException(\InvalidArgumentException::class);
+        $this->expectExceptionMessage("Release 0.1.0 already exists and can't be released again.");
+
+        $releaseUnreleased = new Release('Unreleased', Day::fromString('2021-01-5'));
+        $releaseUnreleased->add(
+            new Changes(
+                ChangeMother::pullRequestChanged(2, 'Update CHANGELOG.md', 'norberttech'),
+            )
+        );
+
+        $release010 = new Release('0.1.0', Day::fromString('2021-01-4'));
+        $release010->add(
+            new Changes(
+                ChangeMother::pullRequestChanged(1, 'Update CHANGELOG.md', 'norberttech'),
+                ChangeMother::pullRequestChanged(1, 'Update README.md', 'norberttech')
+            )
+        );
+
+        (new Manipulator())->release(
+            new ReleasesSource(new Releases($releaseUnreleased, $release010)),
+            '0.1.0',
+            Day::fromString('2021-05-01')
+        );
+    }
 }
