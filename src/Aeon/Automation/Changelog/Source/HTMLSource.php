@@ -13,6 +13,7 @@ use Aeon\Automation\Release;
 use Aeon\Automation\Releases;
 use Aeon\Calendar\Gregorian\DateTime;
 use Aeon\Calendar\Gregorian\Day;
+use Aeon\Calendar\TimeUnit;
 use Symfony\Component\DomCrawler\Crawler;
 
 final class HTMLSource implements Source
@@ -34,8 +35,10 @@ final class HTMLSource implements Source
     {
         $changelogContent = new Crawler($this->content);
 
-        $currentDate = DateTime::fromString('now');
+        $currentDate = DateTime::fromString('2005-04-01 00:00:00 UTC'); // Git release date: 7 April 2005
         $releases = new Releases();
+
+        $change = 0;
 
         foreach ($changelogContent->filter('h2 ~ h3') as $changeTypeNode) {
             $releaseNode = $this->skipToPreviousSibling($changeTypeNode, 'h2');
@@ -55,6 +58,8 @@ final class HTMLSource implements Source
             }
 
             foreach ($changeNodes as $changeNode) {
+                $change += 1;
+
                 $changeNodeContent = (new Crawler($changeNode));
 
                 $sourceNode = $changeNodeContent->filter('a:first-child');
@@ -67,20 +72,20 @@ final class HTMLSource implements Source
                             \strpos($sourceNode->text(), '#') === 0 ? ChangesSource::TYPE_PULL_REQUEST : ChangesSource::TYPE_COMMIT,
                             \strpos($sourceNode->text(), '#') === 0 ? \substr($sourceNode->text(), 1, \strlen($sourceNode->text()) - 1) : $sourceNode->text(),
                             $sourceNode->attr('href'),
-                            $descriptionNode->text(),
-                            $descriptionNode->text(),
-                            $currentDate,
+                            $descriptionNode->html(),
+                            $descriptionNode->html(),
+                            $currentDate->sub(TimeUnit::seconds($change)),
                             \substr($userNode->text(), 1, \strlen($userNode->text()) - 1),
                             $userNode->attr('href')
                         ),
                         Type::fromString($changeTypeNode->nodeValue),
-                        $descriptionNode->text(),
+                        $descriptionNode->html(),
                     )
                 );
 
                 if ($releases->has($releaseName)) {
                     if ($releases->get($releaseName)->hasFrom($changes->source())) {
-                        $releases->get($releaseName)->getFrom($changes->source())->merge($changes);
+                        $releases->get($releaseName)->replace($releases->get($releaseName)->getFrom($changes->source())->merge($changes));
                     } else {
                         $releases->get($releaseName)->add($changes);
                     }

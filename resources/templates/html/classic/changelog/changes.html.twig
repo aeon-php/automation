@@ -3,9 +3,9 @@
 <ul>
 {% for change in changes %}
 {% if change.source.isCommit %}
-  <li><a href="{{ change.source.url }}">{{ change.source.id | slice(0, 6) }}</a> - {{ change.description }} - <a href="{{ change.source.userUrl }}">@{{ change.source.user }}</a></li>
+  <li><a href="{{ change.source.url }}">{{ change.source.id | slice(0, 6) }}</a> - {{ change.description|trim|raw }} - <a href="{{ change.source.userUrl }}">@{{ change.source.user }}</a></li>
 {% elseif change.source.isPullRequest %}
-  <li><a href="{{ change.source.url }}">#{{ change.source.id }}</a> - {{ change.description }} - <a href="{{ change.source.userUrl }}">@{{ change.source.user }}</a></li>
+  <li><a href="{{ change.source.url }}">#{{ change.source.id }}</a> - {{ change.description|trim|raw }} - <a href="{{ change.source.userUrl }}">@{{ change.source.user }}</a></li>
 {% endif %}
 {% endfor %}
 </ul>

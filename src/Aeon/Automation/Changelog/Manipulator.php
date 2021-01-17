@@ -18,7 +18,7 @@ final class Manipulator
             return $releases->add($release);
         }
 
-        return $source->releases()->update($release);
+        return $releases->update($release);
     }
 
     public function release(Source $source, string $newRelease, Day $day) : Releases
@@ -30,5 +30,20 @@ final class Manipulator
         }
 
         return $releases->replace('Unreleased', $releases->get('Unreleased')->update($newRelease, $day));
+    }
+
+    public function updateAll(Source $source, Releases $releases)
+    {
+        $sourceReleases = $source->releases();
+
+        foreach ($releases->all() as $release) {
+            if (!$sourceReleases->has($release->name())) {
+                $sourceReleases = $sourceReleases->add($release);
+            } else {
+                $sourceReleases = $sourceReleases->update($release);
+            }
+        }
+
+        return $sourceReleases;
     }
 }

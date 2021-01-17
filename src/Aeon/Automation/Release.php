@@ -51,11 +51,17 @@ final class Release
      */
     public function changes() : array
     {
-        \uasort($this->changes, function (Changes $changeA, Changes $changeB) : int {
+        $changes = $this->changes;
+
+        \uasort($changes, function (Changes $changeA, Changes $changeB) : int {
+            if ($changeB->source()->date()->isEqual($changeA->source()->date())) {
+                return $changeA->source()->description() <=> $changeB->source()->description();
+            }
+
             return $changeB->source()->date()->toDateTimeImmutable() <=> $changeA->source()->date()->toDateTimeImmutable();
         });
 
-        return $this->changes;
+        return $changes;
     }
 
     /**
@@ -100,9 +106,19 @@ final class Release
      */
     public function all() : array
     {
-        return \array_merge(
+        $all = \array_merge(
             ...\array_map(fn (Changes $changes) => $changes->all(), $this->changes())
         );
+
+        \uasort($all, function (Change $changeA, Change $changeB) : int {
+            if ($changeB->source()->date()->isEqual($changeA->source()->date())) {
+                return $changeA->source()->description() <=> $changeB->source()->description();
+            }
+
+            return $changeB->source()->date()->toDateTimeImmutable() <=> $changeA->source()->date()->toDateTimeImmutable();
+        });
+
+        return $all;
     }
 
     /**
@@ -110,9 +126,19 @@ final class Release
      */
     public function added() : array
     {
-        return \array_merge(
+        $added = \array_merge(
             ...\array_map(fn (Changes $changes) => $changes->withType(Type::added()), $this->changes())
         );
+
+        \uasort($added, function (Change $changeA, Change $changeB) : int {
+            if ($changeB->source()->date()->isEqual($changeA->source()->date())) {
+                return $changeA->source()->description() <=> $changeB->source()->description();
+            }
+
+            return $changeB->source()->date()->toDateTimeImmutable() <=> $changeA->source()->date()->toDateTimeImmutable();
+        });
+
+        return $added;
     }
 
     /**
@@ -120,9 +146,19 @@ final class Release
      */
     public function changed() : array
     {
-        return \array_merge(
+        $changed = \array_merge(
             ...\array_map(fn (Changes $changes) => $changes->withType(Type::changed()), $this->changes())
         );
+
+        \uasort($changed, function (Change $changeA, Change $changeB) : int {
+            if ($changeB->source()->date()->isEqual($changeA->source()->date())) {
+                return $changeA->source()->description() <=> $changeB->source()->description();
+            }
+
+            return $changeB->source()->date()->toDateTimeImmutable() <=> $changeA->source()->date()->toDateTimeImmutable();
+        });
+
+        return $changed;
     }
 
     /**
@@ -130,9 +166,19 @@ final class Release
      */
     public function fixed() : array
     {
-        return \array_merge(
+        $fixed = \array_merge(
             ...\array_map(fn (Changes $changes) => $changes->withType(Type::fixed()), $this->changes())
         );
+
+        \uasort($fixed, function (Change $changeA, Change $changeB) : int {
+            if ($changeB->source()->date()->isEqual($changeA->source()->date())) {
+                return $changeA->source()->description() <=> $changeB->source()->description();
+            }
+
+            return $changeB->source()->date()->toDateTimeImmutable() <=> $changeA->source()->date()->toDateTimeImmutable();
+        });
+
+        return $fixed;
     }
 
     /**
@@ -140,9 +186,19 @@ final class Release
      */
     public function removed() : array
     {
-        return \array_merge(
+        $removed =  \array_merge(
             ...\array_map(fn (Changes $changes) => $changes->withType(Type::removed()), $this->changes())
         );
+
+        \uasort($removed, function (Change $changeA, Change $changeB) : int {
+            if ($changeB->source()->date()->isEqual($changeA->source()->date())) {
+                return $changeA->source()->description() <=> $changeB->source()->description();
+            }
+
+            return $changeB->source()->date()->toDateTimeImmutable() <=> $changeA->source()->date()->toDateTimeImmutable();
+        });
+
+        return $removed;
     }
 
     /**
@@ -150,9 +206,19 @@ final class Release
      */
     public function deprecated() : array
     {
-        return \array_merge(
+        $deprecated = \array_merge(
             ...\array_map(fn (Changes $changes) => $changes->withType(Type::deprecated()), $this->changes())
         );
+
+        \uasort($deprecated, function (Change $changeA, Change $changeB) : int {
+            if ($changeB->source()->date()->isEqual($changeA->source()->date())) {
+                return $changeA->source()->description() <=> $changeB->source()->description();
+            }
+
+            return $changeB->source()->date()->toDateTimeImmutable() <=> $changeA->source()->date()->toDateTimeImmutable();
+        });
+
+        return $deprecated;
     }
 
     /**
@@ -160,13 +226,34 @@ final class Release
      */
     public function security() : array
     {
-        return \array_merge(
+        $security = \array_merge(
             ...\array_map(fn (Changes $changes) => $changes->withType(Type::security()), $this->changes())
         );
+
+        \uasort($security, function (Change $changeA, Change $changeB) : int {
+            if ($changeB->source()->date()->isEqual($changeA->source()->date())) {
+                return $changeA->source()->description() <=> $changeB->source()->description();
+            }
+
+            return $changeB->source()->date()->toDateTimeImmutable() <=> $changeA->source()->date()->toDateTimeImmutable();
+        });
+
+        return $security;
     }
 
     public function empty() : bool
     {
         return \count($this->all()) === 0;
+    }
+
+    public function replace(Changes $changes) : void
+    {
+        $newChanges = [];
+
+        foreach ($this->changes as $existingChanges) {
+            $newChanges[] = $existingChanges->source()->equals($changes->source()) ? $changes : $existingChanges;
+        }
+
+        $this->changes = $newChanges;
     }
 }

@@ -1,8 +1,5 @@
-<h2>[{{ release.name }}] - {{ release.day.toString }}</h2>
-{% if release.changes|length %}
-{% include 'changelog/changes.html.twig' with {changes : release.all } %}
-{% endif %}
-{% if footer == true %}
+{% for release in releases.all %}
+{% include 'release.html.twig' with {release: release, footer: false} %}
 
+{% endfor %}
 {% include 'footer.html.twig' %}
-{% endif %}

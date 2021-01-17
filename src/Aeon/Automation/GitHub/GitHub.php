@@ -50,4 +50,8 @@ interface GitHub
     public function workflowLatestRun(Project $project, Workflow $workflow) : ?WorkflowRun;
 
     public function workflowRunJobs(Project $project, WorkflowRun $workflowRun) : WorkflowRunJobs;
+
+    public function file(Project $project, string $path, ?string $fileRef) : File;
+
+    public function putFile(Project $project, string $path, string $commitMessage, string $commiterName, string $commiterEmail, string $content, ?string $fileSHA) : void;
 }
