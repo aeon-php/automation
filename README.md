@@ -205,6 +205,7 @@ Available commands:
  changelog
   changelog:generate              Generate change log for a release.
   changelog:generate:all          Generate change log for all tags.
+  changelog:release:unreleased    Update changelog file by turning Unreleased section into the next release
  milestone
   milestone:create                Create new milestone for project
   milestone:list                  
@@ -233,32 +234,35 @@ Arguments:
   project                               project name, for example aeon-php/calendar
 
 Options:
-  -t, --tag=TAG                         List only changes from given release
-  -f, --format=FORMAT                   How to format generated changelog, available formatters: "markdown", "html" [default: "markdown"]
-  -h, --help                            Display help for the given command. When no command is given display help for the list command
-  -q, --quiet                           Do not output any message
-  -V, --version                         Display this application version
-      --ansi                            Force ANSI output
-      --no-ansi                         Disable ANSI output
-  -n, --no-interaction                  Do not ask any interactive question
-  -c, --configuration=CONFIGURATION     Custom path to the automation.xml configuration file.
-  -cs, --commit-start=COMMIT-START      Optional commit sha from which changelog is generated . When not provided, default branch latest commit is taken
-  -ce, --commit-end=COMMIT-END          Optional commit sha until which changelog is generated . When not provided, latest tag is taken
-  -ca, --changed-after=CHANGED-AFTER    Ignore all changes after given date, relative date formats like "-1 day" are also supported
-  -cb, --changed-before=CHANGED-BEFORE  Ignore all changes before given date, relative date formats like "-1 day" are also supported
-  -tn, --tag-next=TAG-NEXT              List only changes until given release
-  -rn, --release-name=RELEASE-NAME      Name of the release when --tag option is not provided [default: "Unreleased"]
-  -oc, --only-commits                   Use only commits to generate changelog
-  -opr, --only-pull-requests            Use only pull requests to generate changelog
-  -cpr, --compare-reverse               When comparing commits, revers the order and compare start to end, instead end to start.
-  -th, --theme=THEME                    Theme of generated changelog: "keepachangelog", "classic" [default: "keepachangelog"]
-  -sf, --skip-from=SKIP-FROM            Skip changes from given author|authors (multiple values allowed)
-  -gru, --github-release-update         Update GitHub release description if you have right permissions and release exists
-  -v|vv|vvv, --verbose                  Increase the verbosity of messages: 1 for normal output, 2 for more verbose output and 3 for debug
-  -gt, --github-token=GITHUB-TOKEN      Github personal access token, generated here: https://github.com/settings/tokens By default taken from AEON_AUTOMATION_GH_TOKEN env variable
+  -t, --tag=TAG                                          List only changes from given release
+  -f, --format=FORMAT                                    How to format generated changelog, available formatters: "markdown", "html" [default: "markdown"]
+      --github-release-update                            Update GitHub release description if you have right permissions and release exists
+      --github-file-update-path=GITHUB-FILE-UPDATE-PATH  Update changelog file directly at GitHub by reading existing file content and changing related release section. For example: --github-file-update-path=/CHANGELOG.md
+      --github-file-update-ref=GITHUB-FILE-UPDATE-REF    The name of the commit/branch/tag from which to take file for --github-file-update-path=CHANGELOG.md option. Default: the repository’s default branch.
+  -h, --help                                             Display help for the given command. When no command is given display help for the list command
+  -q, --quiet                                            Do not output any message
+  -V, --version                                          Display this application version
+      --ansi                                             Force ANSI output
+      --no-ansi                                          Disable ANSI output
+  -n, --no-interaction                                   Do not ask any interactive question
+  -c, --configuration=CONFIGURATION                      Custom path to the automation.xml configuration file.
+  -cs, --commit-start=COMMIT-START                       Optional commit sha from which changelog is generated . When not provided, default branch latest commit is taken
+  -ce, --commit-end=COMMIT-END                           Optional commit sha until which changelog is generated . When not provided, latest tag is taken
+  -ca, --changed-after=CHANGED-AFTER                     Ignore all changes after given date, relative date formats like "-1 day" are also supported
+  -cb, --changed-before=CHANGED-BEFORE                   Ignore all changes before given date, relative date formats like "-1 day" are also supported
+  -tn, --tag-next=TAG-NEXT                               List only changes until given release
+  -rn, --release-name=RELEASE-NAME                       Name of the release when --tag option is not provided [default: "Unreleased"]
+  -oc, --only-commits                                    Use only commits to generate changelog
+  -opr, --only-pull-requests                             Use only pull requests to generate changelog
+  -cpr, --compare-reverse                                When comparing commits, revers the order and compare start to end, instead end to start.
+  -th, --theme=THEME                                     Theme of generated changelog: "keepachangelog", "classic" [default: "keepachangelog"]
+  -sf, --skip-from=SKIP-FROM                             Skip changes from given author|authors (multiple values allowed)
+  -v|vv|vvv, --verbose                                   Increase the verbosity of messages: 1 for normal output, 2 for more verbose output and 3 for debug
+  -gt, --github-token=GITHUB-TOKEN                       Github personal access token, generated here: https://github.com/settings/tokens By default taken from AEON_AUTOMATION_GH_TOKEN env variable
+  -geu, --github-enterprise-url=GITHUB-ENTERPRISE-URL    Github enterprise URL, by default taken from AEON_AUTOMATION_GH_ENTERPRISE_URL env variable
 
 Help:
-  When no parameters are provided, this command will generate UNRELEASED change log.
+  When no parameters are provided, this command will generate Unreleased change log. Please be careful when using --github-release-update and --github-file-update-path since those options will do changes in project repository.
 ```
 
 ### changelog:generate:all
@@ -274,28 +278,66 @@ Arguments:
   project                            project name, for example aeon-php/calendar
 
 Options:
-  -f, --format=FORMAT                How to format generated changelog, available formatters: "markdown", "html" [default: "markdown"]
-  -h, --help                         Display help for the given command. When no command is given display help for the list command
-  -q, --quiet                        Do not output any message
-  -V, --version                      Display this application version
-      --ansi                         Force ANSI output
-      --no-ansi                      Disable ANSI output
-  -n, --no-interaction               Do not ask any interactive question
-  -c, --configuration=CONFIGURATION  Custom path to the automation.xml configuration file.
-  -ts, --tag-start=TAG-START         Generate changelog from given tag, if not provided it starts from the earliest tag
-  -te, --tag-end=TAG-END             Generate changelog until given tag, if not provided it ends at the last tag
-  -tsk, --tag-skip=TAG-SKIP          Skip specific tags (multiple values allowed)
-  -sf, --skip-from=SKIP-FROM         Skip changes from given author|authors (multiple values allowed)
-  -oc, --only-commits                Use only commits to generate changelog
-  -opr, --only-pull-requests         Use only pull requests to generate changelog
-  -cpr, --compare-reverse            When comparing commits, revers the order and compare start to end, instead end to start.
-  -th, --theme=THEME                 Theme of generated changelog: "keepachangelog", "classic" [default: "keepachangelog"]
-  -gru, --github-release-update      Update GitHub release description if you have right permissions and release exists
-  -v|vv|vvv, --verbose               Increase the verbosity of messages: 1 for normal output, 2 for more verbose output and 3 for debug
-  -gt, --github-token=GITHUB-TOKEN   Github personal access token, generated here: https://github.com/settings/tokens By default taken from AEON_AUTOMATION_GH_TOKEN env variable
+  -f, --format=FORMAT                                    How to format generated changelog, available formatters: "markdown", "html" [default: "markdown"]
+      --github-release-update                            Update GitHub release description if you have right permissions and release exists
+      --github-file-update-path=GITHUB-FILE-UPDATE-PATH  Update changelog file directly at GitHub by reading existing file content and changing related release section. For example: --github-file-update-path=/CHANGELOG.md
+      --github-file-update-ref=GITHUB-FILE-UPDATE-REF    The name of the commit/branch/tag from which to take file for --github-file-update-path=CHANGELOG.md option. Default: the repository’s default branch.
+  -h, --help                                             Display help for the given command. When no command is given display help for the list command
+  -q, --quiet                                            Do not output any message
+  -V, --version                                          Display this application version
+      --ansi                                             Force ANSI output
+      --no-ansi                                          Disable ANSI output
+  -n, --no-interaction                                   Do not ask any interactive question
+  -c, --configuration=CONFIGURATION                      Custom path to the automation.xml configuration file.
+  -ts, --tag-start=TAG-START                             Generate changelog from given tag, if not provided it starts from the earliest tag
+  -te, --tag-end=TAG-END                                 Generate changelog until given tag, if not provided it ends at the last tag
+  -tsk, --tag-skip=TAG-SKIP                              Skip specific tags (multiple values allowed)
+  -sf, --skip-from=SKIP-FROM                             Skip changes from given author|authors (multiple values allowed)
+  -oc, --only-commits                                    Use only commits to generate changelog
+  -opr, --only-pull-requests                             Use only pull requests to generate changelog
+  -cpr, --compare-reverse                                When comparing commits, revers the order and compare start to end, instead end to start.
+  -th, --theme=THEME                                     Theme of generated changelog: "keepachangelog", "classic" [default: "keepachangelog"]
+  -v|vv|vvv, --verbose                                   Increase the verbosity of messages: 1 for normal output, 2 for more verbose output and 3 for debug
+  -gt, --github-token=GITHUB-TOKEN                       Github personal access token, generated here: https://github.com/settings/tokens By default taken from AEON_AUTOMATION_GH_TOKEN env variable
+  -geu, --github-enterprise-url=GITHUB-ENTERPRISE-URL    Github enterprise URL, by default taken from AEON_AUTOMATION_GH_ENTERPRISE_URL env variable
 
 Help:
   When no parameters are provided, this command will generate changelog for each commit that follows semver semantic.
+```
+
+### changelog:release:unreleased
+
+```bash
+Description:
+  Update changelog file by turning Unreleased section into the next release
+
+Usage:
+  changelog:release:unreleased [options] [--] <project> <changelog-file-path> <release-name>
+
+Arguments:
+  project                                              project name, for example aeon-php/calendar
+  changelog-file-path                                  Path to the changelog file from repository root. For example: CHANGELOG.md
+  release-name                                         Name of the next release.
+
+Options:
+  -f, --format=FORMAT                                  How to format generated changelog, available formatters: "markdown", "html" [default: "markdown"]
+      --github-release-update                          Update GitHub release description if you have right permissions and release exists
+      --github-file-changelog-update                   Update changelog file by pushing commit to GitHub directly
+      --github-file-update-ref=GITHUB-FILE-UPDATE-REF  The name of the commit/branch/tag from which to take file for changelog-file-path argument. Default: the repository’s default branch.
+  -h, --help                                           Display help for the given command. When no command is given display help for the list command
+  -q, --quiet                                          Do not output any message
+  -V, --version                                        Display this application version
+      --ansi                                           Force ANSI output
+      --no-ansi                                        Disable ANSI output
+  -n, --no-interaction                                 Do not ask any interactive question
+  -c, --configuration=CONFIGURATION                    Custom path to the automation.xml configuration file.
+  -th, --theme=THEME                                   Theme of generated changelog: "keepachangelog", "classic" [default: "keepachangelog"]
+  -v|vv|vvv, --verbose                                 Increase the verbosity of messages: 1 for normal output, 2 for more verbose output and 3 for debug
+  -gt, --github-token=GITHUB-TOKEN                     Github personal access token, generated here: https://github.com/settings/tokens By default taken from AEON_AUTOMATION_GH_TOKEN env variable
+  -geu, --github-enterprise-url=GITHUB-ENTERPRISE-URL  Github enterprise URL, by default taken from AEON_AUTOMATION_GH_ENTERPRISE_URL env variable
+
+Help:
+  This command only manipulates the changelog file, it does not create new releases.
 ```
 
 ### tag:list

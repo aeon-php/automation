@@ -29,6 +29,10 @@ final class Manipulator
             throw new \InvalidArgumentException('There is nothing to release');
         }
 
+        if ($releases->has($newRelease)) {
+            throw new \InvalidArgumentException("Release {$newRelease} already exists and can't be released again.");
+        }
+
         return $releases->replace('Unreleased', $releases->get('Unreleased')->update($newRelease, $day));
     }
 
