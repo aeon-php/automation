@@ -18,11 +18,11 @@ final class ConventionalParserTest extends TestCase
     {
         $this->assertEquals(
             $expectedType,
-            (new ConventionalCommitDetector())->detect(ChangesSourceMother::withContent($message))->all()[0]->type()
+            (new ConventionalCommitDetector())->detect(ChangesSourceMother::withDescription($message))->all()[0]->type()
         );
         $this->assertEquals(
             $expectedDescription,
-            (new ConventionalCommitDetector())->detect(ChangesSourceMother::withContent($message))->all()[0]->description()
+            (new ConventionalCommitDetector())->detect(ChangesSourceMother::withDescription($message))->all()[0]->description()
         );
     }
 

@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Aeon\Automation\Console\Command;
 
+use Aeon\Automation\Changes\ChangesSource;
 use Aeon\Automation\Changes\Detector\HTMLChangesDetector;
 use Aeon\Automation\Console\AbstractCommand;
 use Aeon\Automation\Console\AeonStyle;
@@ -72,22 +73,30 @@ final class PullRequestDescriptionCheck extends AbstractCommand
 
         $htmlChangeParser = new HTMLChangesDetector();
 
-        if (!$htmlChangeParser->support($pullRequest)) {
+        $source = ChangesSource::fromPullRequest($pullRequest);
+
+        if (!$htmlChangeParser->support($source)) {
             $io->error('Invalid Pull Request syntax.');
 
             return Command::FAILURE;
         }
 
-        $changes = $htmlChangeParser->detect($pullRequest);
+        try {
+            $changes = $htmlChangeParser->detect($source);
 
-        if ($skipChangesCount == false && !$changes->count()) {
-            $io->error('Pull Request syntax is valid but it\'s empty.');
+            $io->success('Detected changes: ' . $changes->count());
 
-            return Command::FAILURE;
+            return Command::SUCCESS;
+        } catch (\InvalidArgumentException $e) {
+            if ($skipChangesCount == false) {
+                $io->error('Pull Request syntax is valid but it\'s empty.');
+
+                return Command::FAILURE;
+            }
+
+            $io->success('Detected changes: 0');
+
+            return Command::SUCCESS;
         }
-
-        $io->success('Detected changes: ' . $changes->count());
-
-        return Command::SUCCESS;
     }
 }

@@ -3,12 +3,13 @@
 namespace Aeon\Automation\Release;
 
 use Aeon\Automation\Release;
+use Aeon\Automation\Releases;
 
 interface Formatter
 {
-    public function disableFooter() : self;
-
     public function formatRelease(Release $release) : string;
+
+    public function formatReleases(Releases $releases) : string;
 
     public function formatFooter() : string;
 }

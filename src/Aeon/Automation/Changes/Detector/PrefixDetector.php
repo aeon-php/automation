@@ -40,7 +40,6 @@ final class PrefixDetector implements ChangesDetector
             foreach ($prefixes as $prefix) {
                 if ($this->startsWith($prefix . ' ', \strtolower($changesSource->title()))) {
                     return new Changes(
-                        $changesSource,
                         new Change(
                             $changesSource,
                             Type::$type(),

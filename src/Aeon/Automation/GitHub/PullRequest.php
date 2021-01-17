@@ -4,10 +4,9 @@ declare(strict_types=1);
 
 namespace Aeon\Automation\GitHub;
 
-use Aeon\Automation\Changes\ChangesSource;
 use Aeon\Calendar\Gregorian\DateTime;
 
-final class PullRequest implements ChangesSource
+final class PullRequest
 {
     private array $data;
 
@@ -16,14 +15,9 @@ final class PullRequest implements ChangesSource
         $this->data = $data;
     }
 
-    public function id() : string
+    public function number() : int
     {
-        return $this->number();
-    }
-
-    public function number() : string
-    {
-        return (string) $this->data['number'];
+        return $this->data['number'];
     }
 
     public function url() : string
@@ -51,17 +45,6 @@ final class PullRequest implements ChangesSource
         return $this->data['user']['login'];
     }
 
-    public function isFrom(string ...$users) : bool
-    {
-        foreach ($users as $user) {
-            if (\strtolower(\trim($this->user())) === \strtolower(\trim($user))) {
-                return true;
-            }
-        }
-
-        return false;
-    }
-
     public function userUrl() : string
     {
         return $this->data['user']['html_url'];
@@ -75,10 +58,5 @@ final class PullRequest implements ChangesSource
     public function hasMilestone() : bool
     {
         return isset($this->data['milestone']);
-    }
-
-    public function equals(ChangesSource $source) : bool
-    {
-        return $source->id() === $this->id();
     }
 }

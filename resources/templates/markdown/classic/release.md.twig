@@ -1,0 +1,8 @@
+## [{{ release.name }}] - {{ release.day.toString }}
+{% if release.changes|length %}
+{% include 'changelog/changes.md.twig' with {changes : release.all } %}
+{% endif %}
+{% if footer == true %}
+
+{% include 'footer.md.twig' %}
+{% endif %}

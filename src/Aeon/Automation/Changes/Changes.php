@@ -6,27 +6,30 @@ namespace Aeon\Automation\Changes;
 
 final class Changes
 {
-    private ChangesSource $source;
-
     /**
      * @var Change[]
      */
     private array $changes;
 
-    public function __construct(ChangesSource $source, Change ...$changes)
+    public function __construct(Change ...$changes)
     {
-        $this->source = $source;
-        $this->changes = $changes;
-    }
+        $types = \array_unique(\array_map(fn (Change $change) : string => $change->source()->type(), $changes));
+        $id = \array_unique(\array_map(fn (Change $change) : string => $change->source()->id(), $changes));
 
-    public function empty() : bool
-    {
-        return \count($this->changes) === 0;
+        if (\count($types) > 1 || \count($id) > 1) {
+            throw new \InvalidArgumentException('All changes must come from the same source and must be the same type');
+        }
+
+        if (!\count($changes)) {
+            throw new \InvalidArgumentException("Changes can't be empty");
+        }
+
+        $this->changes = $changes;
     }
 
     public function source() : ChangesSource
     {
-        return $this->source;
+        return \current($this->changes)->source();
     }
 
     /**
@@ -78,5 +81,10 @@ final class Changes
     public function count() : int
     {
         return \count($this->all());
+    }
+
+    public function merge(self $changes) : self
+    {
+        return new self(...\array_merge($this->changes, $changes->changes));
     }
 }

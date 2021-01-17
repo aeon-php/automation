@@ -303,4 +303,41 @@ final class GitHubClient implements GitHub
 
         return new WorkflowRunJobs(...\array_map(fn (array $jobData) : WorkflowRunJob => new WorkflowRunJob($jobData), $jobsData['jobs']));
     }
+
+    public function file(Project $project, string $path, ?string $fileRef) : File
+    {
+        return new File($this->client->repo()->contents()->show($project->organization(), $project->name(), $path, $fileRef));
+    }
+
+    public function putFile(Project $project, string $path, string $commitMessage, string $commiterName, string $commiterEmail, string $content, ?string $fileSHA) : void
+    {
+        if ($fileSHA) {
+            $this->client->repo()->contents()->update(
+                $project->organization(),
+                $project->name(),
+                $path,
+                $content,
+                $commitMessage,
+                $fileSHA,
+                null,
+                [
+                    'name' => $commiterName,
+                    'email' => $commiterEmail,
+                ]
+            );
+        } else {
+            $this->client->repo()->contents()->create(
+                $project->organization(),
+                $project->name(),
+                $path,
+                $content,
+                $commitMessage,
+                null,
+                [
+                    'name' => $commiterName,
+                    'email' => $commiterEmail,
+                ]
+            );
+        }
+    }
 }

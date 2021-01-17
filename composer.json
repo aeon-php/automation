@@ -37,7 +37,8 @@
         "symfony/monolog-bridge": "^5.2",
         "symfony/cache": "^5.2",
         "ramsey/conventional-commits": "^1.1",
-        "twig/twig": "^3.1"
+        "twig/twig": "^3.1",
+        "erusev/parsedown": "^1.7"
     },
     "require-dev": {
         "coduo/php-matcher": "6.x@dev"

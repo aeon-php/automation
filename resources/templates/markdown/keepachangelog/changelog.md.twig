@@ -1,13 +1,5 @@
-## [{{ release.name }}] - {{ release.day.toString }}
-{% if release.changes|length %}
-{% include 'changelog/changes.md.twig' with {changes : release.added, type: 'added'} %}
-{% include 'changelog/changes.md.twig' with {changes : release.changed, type: 'changed'} %}
-{% include 'changelog/changes.md.twig' with {changes : release.fixed, type: 'fixed'} %}
-{% include 'changelog/changes.md.twig' with {changes : release.updated, type: 'updated'} %}
-{% include 'changelog/changes.md.twig' with {changes : release.deprecated, type: 'deprecated'} %}
-{% include 'changelog/changes.md.twig' with {changes : release.security, type: 'security'} %}
-{% endif %}
-{% if footer == true %}
+{% for release in releases.all %}
+{% include 'release.md.twig' with {release: release, footer: false} %}
 
+{% endfor %}
 {% include 'footer.md.twig' %}
-{% endif %}

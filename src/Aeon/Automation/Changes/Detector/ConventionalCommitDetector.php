@@ -49,41 +49,35 @@ final class ConventionalCommitDetector implements ChangesDetector
             case 'added':
             case 'feat':
                 return new Changes(
-                    $changesSource,
                     new Change($changesSource, Type::added(), $message->getDescription()->toString()),
                 );
             case 'updated':
             case 'changed':
             case 'change':
                 return new Changes(
-                    $changesSource,
                     new Change($changesSource, Type::changed(), $message->getDescription()->toString())
                 );
             case 'cs':
             case 'fixed':
             case 'fix':
                 return new Changes(
-                    $changesSource,
                     new Change($changesSource, Type::fixed(), $message->getDescription()->toString())
                 );
             case 'removed':
             case 'rm':
             case 'remove':
                 return new Changes(
-                    $changesSource,
                     new Change($changesSource, Type::removed(), $message->getDescription()->toString())
                 );
             case 'dep':
             case 'deprecated':
             case 'deprecate':
                 return new Changes(
-                    $changesSource,
                     new Change($changesSource, Type::deprecated(), $message->getDescription()->toString())
                 );
             case 'sec':
             case 'security':
                 return new Changes(
-                    $changesSource,
                     new Change($changesSource, Type::security(), $message->getDescription()->toString())
                 );
 

@@ -1,0 +1,7 @@
+{% for release in releases.all %}
+{% include 'release.html.twig' with {release: relase, footer: false} %}
+{% endfor %}
+{% if footer == true %}
+
+{% include 'footer.html.twig' %}
+{% endif %}

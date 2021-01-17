@@ -53,6 +53,22 @@ final class Configuration
         );
     }
 
+    /**
+     * TODO: Make possible to overwrite commiter name in the automation.xml file.
+     */
+    public function commiterName() : string
+    {
+        return 'aeon-automation';
+    }
+
+    /**
+     * TODO: Make possible to overwrite commiter email in the automation.xml file.
+     */
+    public function commiterEmail() : string
+    {
+        return 'automation-bot@aeon-php.org';
+    }
+
     private function config() : \DOMDocument
     {
         if ($this->config !== null) {

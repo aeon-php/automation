@@ -1,13 +1,5 @@
-<h2>[{{ release.name }}] - {{ release.day.toString }}</h2>
-{% if release.changes|length %}
-{% include 'changelog/changes.html.twig' with {changes : release.added, type: 'added'} %}
-{% include 'changelog/changes.html.twig' with {changes : release.changed, type: 'changed'} %}
-{% include 'changelog/changes.html.twig' with {changes : release.fixed, type: 'fixed'} %}
-{% include 'changelog/changes.html.twig' with {changes : release.updated, type: 'updated'} %}
-{% include 'changelog/changes.html.twig' with {changes : release.deprecated, type: 'deprecated'} %}
-{% include 'changelog/changes.html.twig' with {changes : release.security, type: 'security'} %}
-{% endif %}
-{% if footer == true %}
+{% for release in releases.all %}
+{% include 'release.html.twig' with {release: release, footer: false} %}
 
+{% endfor %}
 {% include 'footer.html.twig' %}
-{% endif %}

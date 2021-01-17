@@ -14,6 +14,8 @@ final class HttpRequestStub
 
     private Response $response;
 
+    private ?string $body = null;
+
     public function __construct(string $method, string $pathPattern, Response $response)
     {
         $this->method = $method;
@@ -34,5 +36,17 @@ final class HttpRequestStub
     public function response() : Response
     {
         return $this->response;
+    }
+
+    public function body() : ?string
+    {
+        return $this->body;
+    }
+
+    public function withBody(string $body) : self
+    {
+        $this->body = $body;
+
+        return $this;
     }
 }

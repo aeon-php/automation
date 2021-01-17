@@ -4,12 +4,17 @@ declare(strict_types=1);
 
 namespace Aeon\Automation\Console\Command;
 
+use Aeon\Automation\Changelog\Manipulator;
+use Aeon\Automation\Changelog\Source\EmptySource;
+use Aeon\Automation\Changelog\SourceFactory;
 use Aeon\Automation\Console\AbstractCommand;
 use Aeon\Automation\Console\AeonStyle;
+use Aeon\Automation\GitHub\File;
 use Aeon\Automation\Project;
 use Aeon\Automation\Release\FormatterFactory;
 use Aeon\Automation\Release\Options;
 use Aeon\Automation\Release\ReleaseService;
+use Aeon\Automation\Releases;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
@@ -37,7 +42,9 @@ final class ChangelogGenerateAll extends AbstractCommand
             ->addOption('compare-reverse', 'cpr', InputOption::VALUE_NONE, 'When comparing commits, revers the order and compare start to end, instead end to start.')
             ->addOption('format', 'f', InputOption::VALUE_REQUIRED, 'How to format generated changelog, available formatters: <fg=yellow>"' . \implode('"</>, <fg=yellow>"', ['markdown', 'html']) . '"</>', 'markdown')
             ->addOption('theme', 'th', InputOption::VALUE_REQUIRED, 'Theme of generated changelog: <fg=yellow>"' . \implode('"</>, <fg=yellow>"', ['keepachangelog', 'classic']) . '"</>', 'keepachangelog')
-            ->addOption('github-release-update', 'gru', InputOption::VALUE_NONE, 'Update GitHub release description if you have right permissions and release exists');
+            ->addOption('github-release-update', null, InputOption::VALUE_NONE, 'Update GitHub release description if you have right permissions and release exists')
+            ->addOption('github-file-update-path', null, InputOption::VALUE_REQUIRED, 'Update changelog file directly at GitHub by reading existing file content and changing related release section. For example: <fg=yellow>--github-file-update-path=/CHANGELOG.md</>')
+            ->addOption('github-file-update-ref', null, InputOption::VALUE_REQUIRED, 'The name of the commit/branch/tag from which to take file for <fg=yellow>--github-file-update-path=/CHANGELOG.md</> option. Default: the repository’s default branch.');
     }
 
     protected function execute(InputInterface $input, OutputInterface $output) : int
@@ -72,6 +79,8 @@ final class ChangelogGenerateAll extends AbstractCommand
 
         $formatter = (new FormatterFactory($this->configuration()))
             ->create($input->getOption('format'), $input->getOption('theme'));
+
+        $releases = new Releases();
 
         foreach ($tags->all() as $tag) {
             $io->title('[' . $tag->name() . ']');
@@ -112,16 +121,12 @@ final class ChangelogGenerateAll extends AbstractCommand
             }
 
             if (!$release->empty()) {
-                $io->write(
-                    $formatter
-                        ->disableFooter()
-                        ->formatRelease($release)
-                );
+                $releases = $releases->add($release);
 
                 if ($input->getOption('github-release-update')) {
-                    $releases = $this->githubClient()->releases($project);
+                    $githubReleases = $this->githubClient()->releases($project);
 
-                    if (!$releases->exists($release->name())) {
+                    if (!$githubReleases->exists($release->name())) {
                         $io->error('Release ' . $release->name() . ' not found');
 
                         return Command::FAILURE;
@@ -129,20 +134,57 @@ final class ChangelogGenerateAll extends AbstractCommand
 
                     $io->note('Updating release description...');
 
-                    $this->githubClient()->updateRelease($project, $releases->get($release->name())->id(), $formatter->formatRelease($release));
+                    $this->githubClient()->updateRelease($project, $githubReleases->get($release->name())->id(), $formatter->formatRelease($release));
 
                     $io->note('Release description updated');
                 }
             } else {
                 $io->note('No changes');
             }
-
-            $io->newLine();
         }
 
-        if ($tags->count()) {
-            $io->write($formatter->formatFooter());
-            $io->newLine();
+        $io->write($formatter->formatReleases($releases));
+
+        $filePath = $input->getOption('github-file-update-path');
+
+        if ($filePath) {
+            $fileRef = $input->getOption('github-file-update-ref');
+
+            $io->note('Changelog file: ' . $filePath);
+            $io->note('Changelog file ref: ' . ($fileRef ? $fileRef : 'N/A'));
+
+            try {
+                $file = $this->githubClient()->file($project, $filePath, $fileRef);
+                $source = (new SourceFactory())->create($input->getOption('format'), $file);
+            } catch (\Exception $e) {
+                $io->note("File \"{$filePath}\" does not exists, it will be created.");
+                $file = null;
+                $source = new EmptySource();
+            }
+
+            $manipulator = new Manipulator();
+
+            $changelogReleases = $manipulator->updateAll($source, $releases)->sortDateDesc();
+
+            $fileContent = $formatter->formatReleases($changelogReleases);
+
+            $io->note("Updating file {$filePath} content...");
+
+            if ($file === null || ($file instanceof File && $file->hasDifferentContent($fileContent))) {
+                $this->githubClient()->putFile(
+                    $project,
+                    $filePath,
+                    'Updated ' . \ltrim($filePath, '/'),
+                    'aeon-automation',
+                    'automation-bot@aeon-php.org',
+                    $fileContent,
+                    $file instanceof File ? $file->sha() : null
+                );
+                $io->note("File {$filePath} content updated.");
+                $this->cache()->clear();
+            } else {
+                $io->note('No changes detected, skipping update.');
+            }
         }
 
         return Command::SUCCESS;

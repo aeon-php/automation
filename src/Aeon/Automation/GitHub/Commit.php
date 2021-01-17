@@ -4,13 +4,12 @@ declare(strict_types=1);
 
 namespace Aeon\Automation\GitHub;
 
-use Aeon\Automation\Changes\ChangesSource;
 use Aeon\Automation\Project;
 use Aeon\Calendar\Gregorian\DateTime;
 use Github\Client;
 use Github\HttpClient\Message\ResponseMediator;
 
-final class Commit implements ChangesSource
+final class Commit
 {
     private array $data;
 
@@ -66,17 +65,6 @@ final class Commit implements ChangesSource
         return $this->data['commit']['author']['email'];
     }
 
-    public function isFrom(string ...$users) : bool
-    {
-        foreach ($users as $user) {
-            if (\strtolower(\trim($this->user())) === \strtolower(\trim($user))) {
-                return true;
-            }
-        }
-
-        return false;
-    }
-
     public function userUrl() : string
     {
         if (!isset($this->data['author']['html_url'])) {
@@ -84,11 +72,6 @@ final class Commit implements ChangesSource
         }
 
         return $this->data['author']['html_url'];
-    }
-
-    public function equals(ChangesSource $source) : bool
-    {
-        return $source->id() === $this->id();
     }
 
     public function pullRequests(Client $client, Project $project) : PullRequests

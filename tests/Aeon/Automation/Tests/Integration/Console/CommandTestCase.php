@@ -31,6 +31,14 @@ abstract class CommandTestCase extends TestCase
                         if ((new PHPMatcher())->match(\strtolower($request->getUri()->getPath()), $stub->pathPattern())
                             && \strtolower($stub->method()) === \strtolower($request->getMethod())
                         ) {
+                            if ($stub->body() !== null) {
+                                $requestBody = $request->getBody()->getContents();
+
+                                if (!(new PHPMatcher())->match($stub->body(), $requestBody)) {
+                                    return ResponseMother::json404('Invalid Body: ' . $request->getMethod() . ' : ' . $request->getUri()->getPath() . " \n\ngot: \n" . $requestBody . "\n\nexpected: \n" . $stub->body());
+                                }
+                            }
+
                             return $stub->response();
                         }
                     }
