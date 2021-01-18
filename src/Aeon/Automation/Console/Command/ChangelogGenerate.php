@@ -146,7 +146,7 @@ final class ChangelogGenerate extends AbstractCommand
         if (!$release->empty()) {
             $io->write($formatter->formatRelease($release));
 
-            if ($input->getOption('github-release-update')) {
+            if ($input->getOption('github-release-update') && !$release->isUnreleased()) {
                 $remoteReleases = $this->githubClient()->releases($project);
 
                 if (!$remoteReleases->exists($release->name())) {
