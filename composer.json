@@ -6,6 +6,7 @@
             "email": "norbert@orzechowicz.pl"
         }
     ],
+    "license": "MIT",
     "bin": [
         "bin/automation"
     ],
