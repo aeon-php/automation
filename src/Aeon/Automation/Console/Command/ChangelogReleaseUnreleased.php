@@ -46,6 +46,7 @@ final class ChangelogReleaseUnreleased extends AbstractCommand
 
         $io->title('Changelog - Release Unreleased');
 
+        $tags = $this->githubClient()->tags($project);
         $releaseName = $input->getArgument('release-name');
         $fileRef = $input->getOption('github-file-update-ref');
         $filePath = $input->getArgument('changelog-file-path');
@@ -59,10 +60,8 @@ final class ChangelogReleaseUnreleased extends AbstractCommand
             return Command::FAILURE;
         }
 
-        $remoteReleases = $this->githubClient()->releases($project);
-
-        if (!$remoteReleases->exists($releaseName)) {
-            $io->error('Release ' . $releaseName . ' not found, please release new version before moving forward.');
+        if (!$tags->exists($releaseName)) {
+            $io->error("Tag {$releaseName} does not exists.");
 
             return Command::FAILURE;
         }
@@ -87,6 +86,14 @@ final class ChangelogReleaseUnreleased extends AbstractCommand
         $io->write($fileContent);
 
         if ($input->getOption('github-release-update')) {
+            $remoteReleases = $this->githubClient()->releases($project);
+
+            if (!$remoteReleases->exists($releaseName)) {
+                $io->error('Release ' . $releaseName . ' not found, please release new version before moving forward.');
+
+                return Command::FAILURE;
+            }
+
             $remoteReleases = $this->githubClient()->releases($project);
 
             $io->note('Updating release description...');
