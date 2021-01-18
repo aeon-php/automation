@@ -54,7 +54,7 @@ final class ManipulatorTest extends TestCase
         $releases = (new Manipulator())->update(
             new ReleasesSource(new Releases($release)),
             $unreleased
-        )->sortDateDesc();
+        )->sort();
 
         $this->assertSame(2, $releases->count());
         $this->assertSame('Unreleased', $releases->all()[0]->name());

@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace Aeon\Automation;
 
+use Composer\Semver\Comparator;
+
 final class Releases
 {
     /**
@@ -97,11 +99,23 @@ final class Releases
         return new self(...$releases);
     }
 
-    public function sortDateDesc() : self
+    public function sort() : self
     {
         $releases = $this->releases;
 
         \uasort($releases, function (Release $releaseA, Release $releaseB) : int {
+            if (\strtolower($releaseB->name()) === 'unreleased') {
+                return 1;
+            }
+
+            if (Comparator::greaterThan($releaseB->name(), $releaseA->name())) {
+                return 1;
+            }
+
+            if (Comparator::lessThan($releaseB->name(), $releaseA->name())) {
+                return -1;
+            }
+
             return $releaseB->day()->toDateTimeImmutable() <=> $releaseA->day()->toDateTimeImmutable();
         });
 
