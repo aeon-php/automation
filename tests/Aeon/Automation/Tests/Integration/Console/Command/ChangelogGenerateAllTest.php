@@ -40,6 +40,9 @@ final class ChangelogGenerateAllTest extends CommandTestCase
             new HttpRequestStub('GET', '/repos/aeon-php/automation/git/refs/tags/1.0.0', ResponseMother::jsonSuccess(
                 GitHubResponseMother::refCommit('tags/1.0.0', $tag100SHA)
             )),
+            new HttpRequestStub('GET', '/repos/aeon-php/automation/commits/' . $branchSHA, ResponseMother::jsonSuccess(
+                GitHubResponseMother::commit('Unreleased 1', $branchSHA, '2021-01-01'),
+            )),
             new HttpRequestStub('GET', '/repos/aeon-php/automation/commits/' . $tag120SHA, ResponseMother::jsonSuccess(
                 GitHubResponseMother::commit('Tag 1.2.0', $tag120SHA, '2020-03-01 00:00:00'),
             )),
@@ -49,6 +52,15 @@ final class ChangelogGenerateAllTest extends CommandTestCase
             new HttpRequestStub('GET', '/repos/aeon-php/automation/commits/' . $tag100SHA, ResponseMother::jsonSuccess(
                 GitHubResponseMother::commit('Tag 1.0.0', $tag100SHA, '2020-01-01 00:00:00'),
             )),
+            new HttpRequestStub('GET', '/repos/aeon-php/automation/compare/' . $tag120SHA . '...' . $branchSHA, ResponseMother::jsonSuccess(
+                [
+                    'total_commits' => 1,
+                    'commits' => [
+                        GitHubResponseMother::commit('Commit 1 - Unreleased', $commit1Unreleased = SHAMother::random()),
+                    ],
+                ]
+            )),
+            new HttpRequestStub('GET', '/repos/aeon-php/automation/commits/' . $commit1Unreleased . '/pulls', ResponseMother::jsonSuccess([])),
             new HttpRequestStub('GET', '/repos/aeon-php/automation/compare/' . $tag110SHA . '...' . $tag120SHA, ResponseMother::jsonSuccess(
                 [
                     'total_commits' => 2,

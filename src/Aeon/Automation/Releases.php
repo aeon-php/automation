@@ -104,8 +104,12 @@ final class Releases
         $releases = $this->releases;
 
         \uasort($releases, function (Release $releaseA, Release $releaseB) : int {
-            if (\strtolower($releaseB->name()) === 'unreleased') {
+            if ($releaseB->isUnreleased()) {
                 return 1;
+            }
+
+            if ($releaseA->isUnreleased()) {
+                return -1;
             }
 
             if (Comparator::greaterThan($releaseB->name(), $releaseA->name())) {

@@ -47,6 +47,18 @@ final class ReleasesTest extends TestCase
         $this->assertSame(['Unreleased', '5.0.0', '4.1.0', '3.3.6'], \array_map(fn (Release $release) : string => $release->name(), $releases->all()));
     }
 
+    public function test_sort_releases_with_the_same_date_and_unreleased_first() : void
+    {
+        $releases = (new Releases(
+            new Release('Unreleased', Day::fromString('2021-01-09')),
+            new Release('5.0.0', Day::fromString('2021-01-09')),
+            new Release('3.3.6', Day::fromString('2021-01-09')),
+            new Release('4.1.0', Day::fromString('2021-01-09')),
+        ))->sort();
+
+        $this->assertSame(['Unreleased', '5.0.0', '4.1.0', '3.3.6'], \array_map(fn (Release $release) : string => $release->name(), $releases->all()));
+    }
+
     public function test_sort_releases_with_the_same_date_but_not_semver() : void
     {
         $releases = (new Releases(

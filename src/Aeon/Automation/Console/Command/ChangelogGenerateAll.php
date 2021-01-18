@@ -82,15 +82,15 @@ final class ChangelogGenerateAll extends AbstractCommand
 
         $releases = new Releases();
 
-        foreach ($tags->all() as $tag) {
-            $io->title('[' . $tag->name() . ']');
+        foreach (\array_merge([null], $tags->all()) as $tag) {
+            $io->title('[' . ($tag === null ? 'Unreleased' : $tag->name()) . ']');
 
             try {
                 $options = new Options(
-                    $releaseName = $tag->name(),
+                    $releaseName = ($tag === null ? 'Unreleased' : $tag->name()),
                     $commitStart = null,
                     $commitEnd = null,
-                    $tagName = $tag->name(),
+                    $tagName = ($tag === null ? null: $tag->name()),
                     $tagNext = null,
                     $input->getOption('only-commits'),
                     $input->getOption('only-pull-requests'),
@@ -123,7 +123,7 @@ final class ChangelogGenerateAll extends AbstractCommand
             if (!$release->empty()) {
                 $releases = $releases->add($release);
 
-                if ($input->getOption('github-release-update')) {
+                if ($input->getOption('github-release-update') && !$release->isUnreleased()) {
                     $githubReleases = $this->githubClient()->releases($project);
 
                     if (!$githubReleases->exists($release->name())) {
@@ -142,6 +142,8 @@ final class ChangelogGenerateAll extends AbstractCommand
                 $io->note('No changes');
             }
         }
+
+        $releases = $releases->sort();
 
         $io->write($formatter->formatReleases($releases));
 
