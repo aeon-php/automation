@@ -78,7 +78,7 @@ final class ChangelogReleaseUnreleased extends AbstractCommand
             return Command::FAILURE;
         }
 
-        $changelogReleases = $manipulator->release($source, $releaseName, $this->calendar()->currentDay())->sortDateDesc();
+        $changelogReleases = $manipulator->release($source, $releaseName, $this->calendar()->currentDay())->sort();
 
         $formatter = (new FormatterFactory($this->configuration()))->create($input->getOption('format'), $input->getOption('theme'));
 

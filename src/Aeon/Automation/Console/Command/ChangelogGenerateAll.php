@@ -164,7 +164,7 @@ final class ChangelogGenerateAll extends AbstractCommand
 
             $manipulator = new Manipulator();
 
-            $changelogReleases = $manipulator->updateAll($source, $releases)->sortDateDesc();
+            $changelogReleases = $manipulator->updateAll($source, $releases)->sort();
 
             $fileContent = $formatter->formatReleases($changelogReleases);
 
