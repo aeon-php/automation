@@ -20,7 +20,7 @@ final class ReleasesTest extends TestCase
             new Release('Unreleased', Day::fromString('2021-01-10')),
         ))->sort();
 
-        $this->assertSame(['Unreleased', '5.0.0', '4.1.0', '3.3.6'], \array_map(fn(Release $release) : string => $release->name(), $releases->all()));
+        $this->assertSame(['Unreleased', '5.0.0', '4.1.0', '3.3.6'], \array_map(fn (Release $release) : string => $release->name(), $releases->all()));
     }
 
     public function test_sort_releases_not_semver_releases() : void
@@ -32,8 +32,9 @@ final class ReleasesTest extends TestCase
             new Release('Unreleased', Day::fromString('2021-01-10')),
         ))->sort();
 
-        $this->assertSame(['Unreleased', 'Release-A', 'Release-C', 'Release-B'], \array_map(fn(Release $release) : string => $release->name(), $releases->all()));
+        $this->assertSame(['Unreleased', 'Release-A', 'Release-C', 'Release-B'], \array_map(fn (Release $release) : string => $release->name(), $releases->all()));
     }
+
     public function test_sort_releases_with_the_same_date() : void
     {
         $releases = (new Releases(
@@ -43,7 +44,7 @@ final class ReleasesTest extends TestCase
             new Release('Unreleased', Day::fromString('2021-01-09')),
         ))->sort();
 
-        $this->assertSame(['Unreleased', '5.0.0', '4.1.0', '3.3.6'], \array_map(fn(Release $release) : string => $release->name(), $releases->all()));
+        $this->assertSame(['Unreleased', '5.0.0', '4.1.0', '3.3.6'], \array_map(fn (Release $release) : string => $release->name(), $releases->all()));
     }
 
     public function test_sort_releases_with_the_same_date_but_not_semver() : void
@@ -55,6 +56,6 @@ final class ReleasesTest extends TestCase
             new Release('Unreleased', Day::fromString('2021-01-09')),
         ))->sort();
 
-        $this->assertSame(['Unreleased', 'Release-A', 'Release-C', 'Release-B'], \array_map(fn(Release $release) : string => $release->name(), $releases->all()));
+        $this->assertSame(['Unreleased', 'Release-A', 'Release-C', 'Release-B'], \array_map(fn (Release $release) : string => $release->name(), $releases->all()));
     }
 }
