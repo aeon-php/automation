@@ -26,7 +26,17 @@ final class AeonApplication extends Application
             'cp',
             InputOption::VALUE_REQUIRED,
             'Path to root cache directory, taken from sys_get_tmp_dir() function or <fg=yellow>AEON_AUTOMATION_CACHE_DIR</> env variable',
-            \getenv('AEON_AUTOMATION_CACHE_DIR') ? \getenv('AEON_AUTOMATION_CACHE_DIR') : \sys_get_temp_dir()
+            \getenv('AEON_AUTOMATION_CACHE_DIR')
+                ? \getenv('AEON_AUTOMATION_CACHE_DIR')
+                : (
+                    \getenv('HOME') !== false
+                    ? (\getenv('HOME') . DIRECTORY_SEPARATOR . '.automation')
+                    : (
+                        (\getenv('USERPROFILE') !== false)
+                        ? \getenv('USERPROFILE') . DIRECTORY_SEPARATOR . '.automation'
+                        : \sys_get_temp_dir() . DIRECTORY_SEPARATOR . '.automation'
+                    )
+                )
         ));
         $definition->addOption(new InputOption(
             'github-token',
