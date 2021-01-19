@@ -15,6 +15,7 @@ use Aeon\Calendar\Gregorian\DateTime;
 use Aeon\Calendar\Gregorian\GregorianCalendarStub;
 use Aeon\Calendar\Gregorian\TimeZone;
 use Github\Client;
+use Symfony\Component\Cache\Adapter\ArrayAdapter;
 use Symfony\Component\Console\Output\ConsoleOutput;
 use Symfony\Component\Console\Tester\CommandTester;
 
@@ -45,11 +46,14 @@ CHANGELOG),
             new HttpRequestStub('PUT', '/repos/aeon-php/automation/contents/CHANGELOG.md', ResponseMother::jsonSuccess([]))
         ));
 
-        $command = new ChangelogReleaseUnreleased(\getenv('AUTOMATION_ROOT_DIR'));
-        $command->setGithub($client);
         $calendar = new GregorianCalendarStub(TimeZone::UTC());
         $calendar->setNow(DateTime::fromString('2021-01-15'));
+
+        $command = new ChangelogReleaseUnreleased(\getenv('AUTOMATION_ROOT_DIR'));
+        $command->setGithub($client);
         $command->setCalendar($calendar);
+        $command->setHttpCache(new ArrayAdapter());
+        $command->setGitHubCache(new ArrayAdapter());
 
         $application = new AeonApplication();
         $application->add($command);

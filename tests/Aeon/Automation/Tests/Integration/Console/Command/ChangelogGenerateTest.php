@@ -15,6 +15,7 @@ use Aeon\Calendar\Gregorian\DateTime;
 use Aeon\Calendar\Gregorian\GregorianCalendarStub;
 use Aeon\Calendar\Gregorian\TimeZone;
 use Github\Client;
+use Symfony\Component\Cache\Adapter\ArrayAdapter;
 use Symfony\Component\Console\Output\ConsoleOutput;
 use Symfony\Component\Console\Tester\CommandTester;
 
@@ -60,6 +61,8 @@ final class ChangelogGenerateTest extends CommandTestCase
 
         $command = new ChangelogGenerate(\getenv('AUTOMATION_ROOT_DIR'));
         $command->setGithub($client);
+        $command->setHttpCache(new ArrayAdapter());
+        $command->setGitHubCache(new ArrayAdapter());
 
         $application = new AeonApplication();
         $application->add($command);
@@ -129,6 +132,8 @@ final class ChangelogGenerateTest extends CommandTestCase
         $command = new ChangelogGenerate(\getenv('AUTOMATION_ROOT_DIR'));
         $command->setGithub($client);
         $command->setCalendar($calendar);
+        $command->setHttpCache(new ArrayAdapter());
+        $command->setGitHubCache(new ArrayAdapter());
 
         $application = new AeonApplication();
         $application->add($command);
@@ -195,6 +200,8 @@ final class ChangelogGenerateTest extends CommandTestCase
         $command = new ChangelogGenerate(\getenv('AUTOMATION_ROOT_DIR'));
         $command->setGithub($client);
         $command->setCalendar($calendar);
+        $command->setHttpCache(new ArrayAdapter());
+        $command->setGitHubCache(new ArrayAdapter());
 
         $application = new AeonApplication();
         $application->add($command);
@@ -254,6 +261,8 @@ final class ChangelogGenerateTest extends CommandTestCase
         $command = new ChangelogGenerate(\getenv('AUTOMATION_ROOT_DIR'));
         $command->setGithub($client);
         $command->setCalendar($calendar);
+        $command->setHttpCache(new ArrayAdapter());
+        $command->setGitHubCache(new ArrayAdapter());
 
         $application = new AeonApplication();
         $application->add($command);
@@ -351,6 +360,8 @@ CHANGELOG),
 
         $command = new ChangelogGenerate(\getenv('AUTOMATION_ROOT_DIR'));
         $command->setGithub($client);
+        $command->setHttpCache(new ArrayAdapter());
+        $command->setGitHubCache(new ArrayAdapter());
 
         $application = new AeonApplication();
         $application->add($command);
@@ -426,6 +437,8 @@ CHANGELOG),
 
         $command = new ChangelogGenerate(\getenv('AUTOMATION_ROOT_DIR'));
         $command->setGithub($client);
+        $command->setHttpCache(new ArrayAdapter());
+        $command->setGitHubCache(new ArrayAdapter());
 
         $application = new AeonApplication();
         $application->add($command);
@@ -502,6 +515,8 @@ CHANGELOG),
 
         $command = new ChangelogGenerate(\getenv('AUTOMATION_ROOT_DIR'));
         $command->setGithub($client);
+        $command->setHttpCache(new ArrayAdapter());
+        $command->setGitHubCache(new ArrayAdapter());
 
         $application = new AeonApplication();
         $application->add($command);
@@ -577,6 +592,8 @@ CHANGELOG),
 
         $command = new ChangelogGenerate(\getenv('AUTOMATION_ROOT_DIR'));
         $command->setGithub($client);
+        $command->setHttpCache(new ArrayAdapter());
+        $command->setGitHubCache(new ArrayAdapter());
 
         $application = new AeonApplication();
         $application->add($command);
@@ -636,6 +653,8 @@ CHANGELOG),
 
         $command = new ChangelogGenerate(\getenv('AUTOMATION_ROOT_DIR'));
         $command->setGithub($client);
+        $command->setHttpCache(new ArrayAdapter());
+        $command->setGitHubCache(new ArrayAdapter());
 
         $application = new AeonApplication();
         $application->add($command);
