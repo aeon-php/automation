@@ -1,6 +1,7 @@
 ## [Unreleased] - 2021-01-19
 
 ### Added
+  - [#40](https://github.com/aeon-php/automation/pull/40) - **cache directory and config file path into logs** - [@norberttech](https://github.com/norberttech)
   - [#39](https://github.com/aeon-php/automation/pull/39) - **keep automation cache between changelog update workflows execution** - [@norberttech](https://github.com/norberttech)
   - [#38](https://github.com/aeon-php/automation/pull/38) - **GitHub objects cache without expiration date to speed up fetching pull requests** - [@norberttech](https://github.com/norberttech)
   - [#38](https://github.com/aeon-php/automation/pull/38) - **Possibility to clear both caches independently** - [@norberttech](https://github.com/norberttech)
