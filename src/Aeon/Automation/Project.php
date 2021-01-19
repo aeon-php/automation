@@ -24,7 +24,7 @@ final class Project
 
     public function fullName() : string
     {
-        return $this->name;
+        return \strtolower($this->name);
     }
 
     public function organization() : string

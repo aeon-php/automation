@@ -118,7 +118,7 @@ final class ChangelogReleaseUnreleased extends AbstractCommand
                 );
                 $io->note("File {$filePath} content updated.");
 
-                $this->cache()->clear();
+                $this->httpCache()->clear();
             } else {
                 $io->note('No changes detected, skipping update.');
             }

@@ -12,6 +12,7 @@ use Aeon\Automation\Tests\Mother\GitHub\GitHubResponseMother;
 use Aeon\Automation\Tests\Mother\GitHub\SHAMother;
 use Aeon\Automation\Tests\Mother\ResponseMother;
 use Github\Client;
+use Symfony\Component\Cache\Adapter\ArrayAdapter;
 use Symfony\Component\Console\Output\ConsoleOutput;
 use Symfony\Component\Console\Tester\CommandTester;
 
@@ -30,6 +31,9 @@ final class TagListTest extends CommandTestCase
 
         $command = new TagList(\getenv('AUTOMATION_ROOT_DIR'));
         $command->setGithub($client);
+        $command->setHttpCache(new ArrayAdapter());
+        $command->setGitHubCache(new ArrayAdapter());
+
         $application = new AeonApplication();
         $application->add($command);
 

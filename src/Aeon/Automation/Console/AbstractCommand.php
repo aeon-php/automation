@@ -35,7 +35,9 @@ abstract class AbstractCommand extends Command
 
     private ?Client $github;
 
-    private ?CacheItemPoolInterface $cache;
+    private ?CacheItemPoolInterface $httpCache;
+
+    private ?CacheItemPoolInterface $githubCache;
 
     private ?Calendar $calendar;
 
@@ -47,18 +49,29 @@ abstract class AbstractCommand extends Command
         $this->defaultConfigPaths = $defaultConfigPaths;
         $this->configuration = null;
         $this->github = null;
-        $this->cache = null;
+        $this->httpCache = null;
+        $this->githubCache = null;
         $this->calendar = null;
     }
 
     public function githubClient() : GitHubClient
     {
-        return new GitHubClient($this->github());
+        return new GitHubClient($this->github(), $this->githubCache());
     }
 
     public function setGithub(Client $client) : void
     {
         $this->github = $client;
+    }
+
+    public function setGitHubCache(CacheItemPoolInterface $githubCache) : void
+    {
+        $this->githubCache = $githubCache;
+    }
+
+    public function setHttpCache(CacheItemPoolInterface $httpCache) : void
+    {
+        $this->httpCache = $httpCache;
     }
 
     public function calendar() : Calendar
@@ -84,13 +97,22 @@ abstract class AbstractCommand extends Command
         return $this->configuration;
     }
 
-    public function cache() : CacheItemPoolInterface
+    public function httpCache() : CacheItemPoolInterface
     {
-        if ($this->cache === null) {
+        if ($this->httpCache === null) {
             throw new \RuntimeException("Cache is only accessible in Command::execute() method because it's initialized in Command::initialize()");
         }
 
-        return $this->cache;
+        return $this->httpCache;
+    }
+
+    public function githubCache() : CacheItemPoolInterface
+    {
+        if ($this->githubCache === null) {
+            throw new \RuntimeException("Cache is only accessible in Command::execute() method because it's initialized in Command::initialize()");
+        }
+
+        return $this->githubCache;
     }
 
     protected function interact(InputInterface $input, OutputInterface $output) : void
@@ -103,10 +125,17 @@ abstract class AbstractCommand extends Command
     protected function initialize(InputInterface $input, OutputInterface $output) : void
     {
         $this->configuration = new Configuration($this->rootDir, $this->defaultConfigPaths, $input->getOption('configuration'));
-        $this->cache = new FilesystemAdapter('aeon-automation');
+        $cachePath = $input->getOption('cache-path');
+
+        if (\getenv('AEON_AUTOMATION_CACHE_DIR')) {
+            $cachePath = \getenv('AEON_AUTOMATION_CACHE_DIR');
+        }
+
+        $this->httpCache = $this->httpCache === null ? new FilesystemAdapter('http-cache', 0, $cachePath . \DIRECTORY_SEPARATOR . 'automation-cache') : $this->httpCache;
+        $this->githubCache = $this->githubCache === null ? new FilesystemAdapter('github-cache', 0, $cachePath . \DIRECTORY_SEPARATOR . 'automation-cache') : $this->githubCache;
 
         $this->initializeCalendar();
-        $this->initializeGithub($this->cache, $output, $input);
+        $this->initializeGithub($this->httpCache, $output, $input);
     }
 
     private function initializeGithub(CacheItemPoolInterface $cache, OutputInterface $output, InputInterface $input) : void

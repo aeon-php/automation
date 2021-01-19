@@ -9,14 +9,18 @@ use Aeon\Calendar\Gregorian\DateTime;
 use Github\Client;
 use Github\HttpClient\Message\ResponseMediator;
 use Github\ResultPager;
+use Psr\Cache\CacheItemPoolInterface;
 
 final class GitHubClient implements GitHub
 {
     private Client $client;
 
-    public function __construct(Client $client)
+    private CacheItemPoolInterface $cache;
+
+    public function __construct(Client $client, CacheItemPoolInterface $cache)
     {
         $this->client = $client;
+        $this->cache = $cache;
     }
 
     public function branch(Project $project, string $name) : Branch
@@ -34,12 +38,21 @@ final class GitHubClient implements GitHub
 
     public function commitPullRequests(Project $project, Commit $commit) : PullRequests
     {
-        $pullRequestsData = ResponseMediator::getContent(
-            $this->client->getHttpClient()->get(
-                '/repos/' . \rawurlencode($project->organization()) . '/' . \rawurlencode($project->name()) . '/commits/' . \rawurlencode($commit->sha()) . '/pulls',
-                ['Accept' => 'application/vnd.github.groot-preview+json']
-            )
-        );
+        $pullRequestsCacheItem = $this->cache->getItem("github.{$project->organization()}.{$project->name()}.commit.{$commit->sha()}.pull_requests");
+
+        if (!$pullRequestsCacheItem->isHit()) {
+            $pullRequestsData = ResponseMediator::getContent(
+                $this->client->getHttpClient()->get(
+                    '/repos/' . \rawurlencode($project->organization()) . '/' . \rawurlencode($project->name()) . '/commits/' . \rawurlencode($commit->sha()) . '/pulls',
+                    ['Accept' => 'application/vnd.github.groot-preview+json']
+                )
+            );
+
+            $pullRequestsCacheItem->set($pullRequestsData);
+            $this->cache->save($pullRequestsCacheItem);
+        } else {
+            $pullRequestsData = $pullRequestsCacheItem->get();
+        }
 
         return new PullRequests(...\array_map(fn (array $pullRequestData) : PullRequest => new PullRequest($pullRequestData), $pullRequestsData));
     }
@@ -183,7 +196,18 @@ final class GitHubClient implements GitHub
 
     public function referenceTag(Project $project, string $name) : Reference
     {
-        return new Reference($this->client->gitData()->references()->show($project->organization(), $project->name(), 'tags/' . $name));
+        $referenceCacheItem = $this->cache->getItem("github.{$project->organization()}.{$project->name()}.reference_tag.{$name}");
+
+        if (!$referenceCacheItem->isHit()) {
+            $referenceTagData = $this->client->gitData()->references()->show($project->organization(), $project->name(), 'tags/' . $name);
+
+            $referenceCacheItem->set($referenceTagData);
+            $this->cache->save($referenceCacheItem);
+        } else {
+            $referenceTagData = $referenceCacheItem->get();
+        }
+
+        return new Reference($referenceTagData);
     }
 
     public function referenceCommit(Project $project, Reference $reference) : Commit
@@ -199,7 +223,18 @@ final class GitHubClient implements GitHub
 
     public function repository(Project $project) : Repository
     {
-        return new Repository($this->client->repositories()->show($project->organization(), $project->name()));
+        $repositoryCacheItem = $this->cache->getItem("github.{$project->organization()}.{$project->name()}.repository");
+
+        if (!$repositoryCacheItem->isHit()) {
+            $repositoryData = $this->client->repositories()->show($project->organization(), $project->name());
+
+            $repositoryCacheItem->set($repositoryData);
+            $this->cache->save($repositoryCacheItem);
+        } else {
+            $repositoryData = $repositoryCacheItem->get();
+        }
+
+        return new Repository($repositoryData);
     }
 
     public function milestones(Project $project) : Milestones
