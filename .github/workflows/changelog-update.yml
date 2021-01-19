@@ -7,7 +7,7 @@ name: "Changelog - Update Unreleased"
 on:
   push:
     branches:
-      - main
+      - 1.x
 
 jobs:
   changelog-update-unreleased:
@@ -16,6 +16,15 @@ jobs:
     runs-on: "ubuntu-latest"
 
     steps:
+      - name: "Restore Automation cache"
+        uses: "actions/cache@v2"
+        with:
+          path: |
+            ~/.automation
+          key: "${{ runner.os }}-automation-"
+          restore-keys: |
+            ${{ runner.os }}-automation-
+
       - name: "Update CHANGELOG"
         uses: "docker://aeonphp/automation:latest"
         env:
