@@ -1,0 +1,25 @@
+name: "Changelog - Update Unreleased"
+
+###################################################################
+# WARNING - THIS ACTION WILL PUSH COMMIT DIRECTLY INTO REPOSITORY #
+###################################################################
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  changelog-update-unreleased:
+    name: "Changelog - Update Unreleased"
+
+    runs-on: "ubuntu-latest"
+
+    steps:
+      - name: "Update CHANGELOG"
+        uses: "docker://aeonphp/automation:latest"
+        env:
+          AEON_AUTOMATION_GH_TOKEN: "${{ secrets.GITHUB_TOKEN }}"
+        with:
+          entrypoint: "/composer/vendor/bin/automation"
+          args: "changelog:generate ${{ github.repository }} --github-file-update-path=CHANGELOG.md --skip-from=\"dependabot[bot]\" --skip-from=\"aeon-automation\""

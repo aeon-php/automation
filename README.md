@@ -1,6 +1,6 @@
 # Automation 
 
-Command Line Application to automatically generate changelog from any github project pull requests/commits history.
+Command Line Application that can automatically update changelog file of your project after each commit/pull request/tag/release  
 
 Table of contents: 
 
@@ -10,6 +10,8 @@ Table of contents:
 * [Installation](#installation)
 * [Contributing](#contributing)
 * [Documentation](#documentation)
+* Integrations
+  * [GitHub Actions](docs/github_actions.md)
 
 ## Why? 
 
