@@ -125,8 +125,14 @@ abstract class AbstractCommand extends Command
     protected function initialize(InputInterface $input, OutputInterface $output) : void
     {
         $this->configuration = new Configuration($this->rootDir, $this->defaultConfigPaths, $input->getOption('configuration'));
-        $this->httpCache = $this->httpCache === null ? new FilesystemAdapter('automation-http-cache', 0, \sys_get_temp_dir() . \DIRECTORY_SEPARATOR . 'automation-cache') : $this->httpCache;
-        $this->githubCache = $this->githubCache === null ? new FilesystemAdapter('automation-github-cache', 0, \sys_get_temp_dir() . \DIRECTORY_SEPARATOR . 'automation-cache') : $this->githubCache;
+        $cachePath = $input->getOption('cache-path');
+
+        if (\getenv('AEON_AUTOMATION_CACHE_DIR')) {
+            $cachePath = \getenv('AEON_AUTOMATION_CACHE_DIR');
+        }
+
+        $this->httpCache = $this->httpCache === null ? new FilesystemAdapter('http-cache', 0, $cachePath . \DIRECTORY_SEPARATOR . 'automation-cache') : $this->httpCache;
+        $this->githubCache = $this->githubCache === null ? new FilesystemAdapter('github-cache', 0, $cachePath . \DIRECTORY_SEPARATOR . 'automation-cache') : $this->githubCache;
 
         $this->initializeCalendar();
         $this->initializeGithub($this->httpCache, $output, $input);
