@@ -1,6 +1,11 @@
-## [Unreleased] - 2021-01-18
+## [Unreleased] - 2021-01-19
 
 ### Added
+  - [#39](https://github.com/aeon-php/automation/pull/39) - **keep automation cache between changelog update workflows execution** - [@norberttech](https://github.com/norberttech)
+  - [#38](https://github.com/aeon-php/automation/pull/38) - **GitHub objects cache without expiration date to speed up fetching pull requests** - [@norberttech](https://github.com/norberttech)
+  - [#38](https://github.com/aeon-php/automation/pull/38) - **Possibility to clear both caches independently** - [@norberttech](https://github.com/norberttech)
+  - [#38](https://github.com/aeon-php/automation/pull/38) - **AEON_AUTOMATION_CACHE_DIR env variable** - [@norberttech](https://github.com/norberttech)
+  - [773da7](https://github.com/aeon-php/automation/commit/773da7ce378907709441f37c5794be0eb1271e56) - **GitHub Actions integration** - [@norberttech](https://github.com/norberttech)
   - [#33](https://github.com/aeon-php/automation/pull/33) - **Unreleased to changelog:generate:all command** - [@norberttech](https://github.com/norberttech)
   - [#31](https://github.com/aeon-php/automation/pull/31) - **Added changelog:release:unreleased command** - [@norberttech](https://github.com/norberttech)
   - [#30](https://github.com/aeon-php/automation/pull/30) - **--github-file-update-path and --github-file-update-ref options to changelog:generate:all** - [@norberttech](https://github.com/norberttech)
@@ -26,8 +31,8 @@
   - [#6](https://github.com/aeon-php/automation/pull/6) - **twig template for changelog generation** - [@norberttech](https://github.com/norberttech)
   - [#6](https://github.com/aeon-php/automation/pull/6) - **--changed-before option to changelog:generate command** - [@norberttech](https://github.com/norberttech)
   - [#6](https://github.com/aeon-php/automation/pull/6) - **--with-commit to tag:list command** - [@norberttech](https://github.com/norberttech)
-  - [#5](https://github.com/aeon-php/automation/pull/5) - **PrefixParser to detect change type from change title prefix** - [@norberttech](https://github.com/norberttech)
   - [#5](https://github.com/aeon-php/automation/pull/5) - **`Change::name() : string` and `Change::all() : array`  methods** - [@norberttech](https://github.com/norberttech)
+  - [#5](https://github.com/aeon-php/automation/pull/5) - **PrefixParser to detect change type from change title prefix** - [@norberttech](https://github.com/norberttech)
   - [#4](https://github.com/aeon-php/automation/pull/4) - **Make first character of change title uppercase** - [@norberttech](https://github.com/norberttech)
   - [#3](https://github.com/aeon-php/automation/pull/3) - **support for conventional commit format** - [@norberttech](https://github.com/norberttech)
   - [#3](https://github.com/aeon-php/automation/pull/3) - **Change object that holds Type and description** - [@norberttech](https://github.com/norberttech)
@@ -39,6 +44,8 @@
   - [e5849d](https://github.com/aeon-php/automation/commit/e5849da3147caaf1394cfc149fdc405589d818ec) - **initial changelog** - [@norberttech](https://github.com/norberttech)
 
 ### Changed
+  - [#38](https://github.com/aeon-php/automation/pull/38) - **current cache name into HTTP Cache** - [@norberttech](https://github.com/norberttech)
+  - [#38](https://github.com/aeon-php/automation/pull/38) - **moved default cache directory to $HOME/.automation** - [@norberttech](https://github.com/norberttech)
   - [f164ec](https://github.com/aeon-php/automation/commit/f164ec7576b26597225f879504986e64a9cc8fdb) - **dependencies, added missing license to composer.json** - [@norberttech](https://github.com/norberttech)
   - [#35](https://github.com/aeon-php/automation/pull/35) - **fetch tags instead of releases when checking if the release exists in changelog:release:unreleased command** - [@norberttech](https://github.com/norberttech)
   - [#28](https://github.com/aeon-php/automation/pull/28) - **Default user-agent header to aeon-php/automation** - [@norberttech](https://github.com/norberttech)
@@ -48,8 +55,6 @@
   - [#19](https://github.com/aeon-php/automation/pull/19) - **ChangelogGenerate command refactoring** - [@norberttech](https://github.com/norberttech)
   - [6c2011](https://github.com/aeon-php/automation/commit/6c2011feedad4fdd20bae0802eb320f82fa759e0) - **Update README.md** - [@norberttech](https://github.com/norberttech)
   - [f35b74](https://github.com/aeon-php/automation/commit/f35b7451486951efd214d2352cfadfe69e8c69c9) - **Update README.md** - [@norberttech](https://github.com/norberttech)
-  - [#14](https://github.com/aeon-php/automation/pull/14) - **twig/twig from 3.1.1 to 3.2.1** - [@dependabot[bot]](https://github.com/apps/dependabot)
-  - [#11](https://github.com/aeon-php/automation/pull/11) - **aeon-php/calendar from 0.13.2 to 0.13.3** - [@dependabot[bot]](https://github.com/apps/dependabot)
   - [f47a3e](https://github.com/aeon-php/automation/commit/f47a3e4602247b85cb401dd24ff1a7838d7eb74f) - **Update README.md** - [@norberttech](https://github.com/norberttech)
   - [38ffae](https://github.com/aeon-php/automation/commit/38ffaeb0dd3bf9b21045d5dc3d36448fd5730795) - **README** - [@norberttech](https://github.com/norberttech)
   - [#10](https://github.com/aeon-php/automation/pull/10) - **Increased verbosity of changelog:generate command** - [@norberttech](https://github.com/norberttech)
@@ -70,6 +75,7 @@
   - [72564b](https://github.com/aeon-php/automation/commit/72564ba0991f280a74428d10fc1dee9b02659b02) - **Initial commit** - [@norberttech](https://github.com/norberttech)
 
 ### Fixed
+  - [#39](https://github.com/aeon-php/automation/pull/39) - **automation workflow target branch** - [@norberttech](https://github.com/norberttech)
   - [#34](https://github.com/aeon-php/automation/pull/34) - **critical bug in keepachangelog theme templates - missing removed change type section** - [@norberttech](https://github.com/norberttech)
   - [#33](https://github.com/aeon-php/automation/pull/33) - **sort releases sorting** - [@norberttech](https://github.com/norberttech)
   - [#32](https://github.com/aeon-php/automation/pull/32) - **sorting releases by using semver comparison** - [@norberttech](https://github.com/norberttech)
