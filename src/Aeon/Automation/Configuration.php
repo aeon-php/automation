@@ -10,9 +10,12 @@ use Aeon\Automation\Changes\Detector\DefaultDetector;
 use Aeon\Automation\Changes\Detector\HTMLChangesDetector;
 use Aeon\Automation\Changes\Detector\PrefixDetector;
 use Aeon\Automation\Changes\Detector\PrioritizedDetector;
+use Psr\Log\LoggerInterface;
 
 final class Configuration
 {
+    private LoggerInterface $logger;
+
     private string $rootDir;
 
     private array $defaultPaths;
@@ -21,8 +24,9 @@ final class Configuration
 
     private ?\DOMDocument $config;
 
-    public function __construct(string $rootDir, array $defaultPaths, ?string $path = null)
+    public function __construct(LoggerInterface $logger, string $rootDir, array $defaultPaths, ?string $path = null)
     {
+        $this->logger = $logger;
         $this->rootDir = $rootDir;
         $this->defaultPaths = $defaultPaths;
         $this->path = $path;
@@ -92,11 +96,15 @@ final class Configuration
         if ($configFilePath === null || !\file_exists($configFilePath)) {
             $this->config = new \DOMDocument();
 
+            $this->logger->info('Config file path not found.');
+
             return $this->config;
         }
 
         $this->config = new \DOMDocument();
         $this->config->loadXML(\file_get_contents($configFilePath));
+
+        $this->logger->info('Config file path: ' . $configFilePath);
 
         return $this->config;
     }

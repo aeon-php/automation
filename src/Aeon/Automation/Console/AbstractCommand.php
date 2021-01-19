@@ -15,6 +15,7 @@ use Http\Client\Common\Plugin\LoggerPlugin;
 use Http\Message\Formatter\FullHttpMessageFormatter;
 use Http\Message\Formatter\SimpleFormatter;
 use Psr\Cache\CacheItemPoolInterface;
+use Psr\Log\LoggerInterface;
 use Psr\Log\LogLevel;
 use Symfony\Component\Cache\Adapter\FilesystemAdapter;
 use Symfony\Component\Console\Command\Command;
@@ -39,6 +40,8 @@ abstract class AbstractCommand extends Command
 
     private ?CacheItemPoolInterface $githubCache;
 
+    private ?LoggerInterface $logger;
+
     private ?Calendar $calendar;
 
     public function __construct(string $rootDir, array $defaultConfigPaths = [])
@@ -52,6 +55,7 @@ abstract class AbstractCommand extends Command
         $this->httpCache = null;
         $this->githubCache = null;
         $this->calendar = null;
+        $this->logger = null;
     }
 
     public function githubClient() : GitHubClient
@@ -124,28 +128,9 @@ abstract class AbstractCommand extends Command
 
     protected function initialize(InputInterface $input, OutputInterface $output) : void
     {
-        $this->configuration = new Configuration($this->rootDir, $this->defaultConfigPaths, $input->getOption('configuration'));
-        $cachePath = $input->getOption('cache-path');
-
-        if (\getenv('AEON_AUTOMATION_CACHE_DIR')) {
-            $cachePath = \getenv('AEON_AUTOMATION_CACHE_DIR');
-        }
-
-        $this->httpCache = $this->httpCache === null ? new FilesystemAdapter('http-cache', 0, $cachePath . \DIRECTORY_SEPARATOR . 'automation-cache') : $this->httpCache;
-        $this->githubCache = $this->githubCache === null ? new FilesystemAdapter('github-cache', 0, $cachePath . \DIRECTORY_SEPARATOR . 'automation-cache') : $this->githubCache;
-
-        $this->initializeCalendar();
-        $this->initializeGithub($this->httpCache, $output, $input);
-    }
-
-    private function initializeGithub(CacheItemPoolInterface $cache, OutputInterface $output, InputInterface $input) : void
-    {
-        if ($this->github !== null) {
-            return;
-        }
-
         $verbosityLevelMap = [
-            LogLevel::INFO => OutputInterface::VERBOSITY_VERBOSE,
+            LogLevel::NOTICE => OutputInterface::VERBOSITY_VERBOSE,
+            LogLevel::INFO => OutputInterface::VERBOSITY_VERY_VERBOSE,
         ];
 
         $formatLevelMap = [
@@ -154,7 +139,32 @@ abstract class AbstractCommand extends Command
             LogLevel::INFO => ConsoleLogger::INFO,
         ];
 
-        $logger = new ConsoleLogger($output, $verbosityLevelMap, $formatLevelMap);
+        $this->logger = new ConsoleLogger($output, $verbosityLevelMap, $formatLevelMap);
+
+        $this->configuration = new Configuration($this->logger, $this->rootDir, $this->defaultConfigPaths, $input->getOption('configuration'));
+        $cachePath = $input->getOption('cache-path');
+
+        if (\getenv('AEON_AUTOMATION_CACHE_DIR')) {
+            $cachePath = \getenv('AEON_AUTOMATION_CACHE_DIR');
+        }
+
+        $this->logger->info('Cache directory: ' . $cachePath);
+
+        $this->httpCache = $this->httpCache === null ? new FilesystemAdapter('http-cache', 0, $cachePath . \DIRECTORY_SEPARATOR . 'automation-cache') : $this->httpCache;
+        $this->httpCache->setLogger($this->logger);
+
+        $this->githubCache = $this->githubCache === null ? new FilesystemAdapter('github-cache', 0, $cachePath . \DIRECTORY_SEPARATOR . 'automation-cache') : $this->githubCache;
+        $this->githubCache->setLogger($this->logger);
+
+        $this->initializeCalendar();
+        $this->initializeGithub($this->httpCache, $this->logger, $output, $input);
+    }
+
+    private function initializeGithub(CacheItemPoolInterface $cache, LoggerInterface $logger, OutputInterface $output, InputInterface $input) : void
+    {
+        if ($this->github !== null) {
+            return;
+        }
 
         switch ($output->getVerbosity()) {
             case OutputInterface::VERBOSITY_VERY_VERBOSE:
