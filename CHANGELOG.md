@@ -1,6 +1,7 @@
-## [Unreleased] - 2021-01-19
+## [Unreleased] - 2021-01-20
 
 ### Added
+  - [#41](https://github.com/aeon-php/automation/pull/41) - **changelog:get command with possibility to display --sha1-hash of the file** - [@norberttech](https://github.com/norberttech)
   - [#40](https://github.com/aeon-php/automation/pull/40) - **cache directory and config file path into logs** - [@norberttech](https://github.com/norberttech)
   - [#39](https://github.com/aeon-php/automation/pull/39) - **keep automation cache between changelog update workflows execution** - [@norberttech](https://github.com/norberttech)
   - [#38](https://github.com/aeon-php/automation/pull/38) - **GitHub objects cache without expiration date to speed up fetching pull requests** - [@norberttech](https://github.com/norberttech)
@@ -9,8 +10,8 @@
   - [773da7](https://github.com/aeon-php/automation/commit/773da7ce378907709441f37c5794be0eb1271e56) - **GitHub Actions integration** - [@norberttech](https://github.com/norberttech)
   - [#33](https://github.com/aeon-php/automation/pull/33) - **Unreleased to changelog:generate:all command** - [@norberttech](https://github.com/norberttech)
   - [#31](https://github.com/aeon-php/automation/pull/31) - **Added changelog:release:unreleased command** - [@norberttech](https://github.com/norberttech)
-  - [#30](https://github.com/aeon-php/automation/pull/30) - **--github-file-update-path and --github-file-update-ref options to changelog:generate:all** - [@norberttech](https://github.com/norberttech)
   - [#30](https://github.com/aeon-php/automation/pull/30) - **--github-file-update-path and --github-file-update-ref options to changelog:generate** - [@norberttech](https://github.com/norberttech)
+  - [#30](https://github.com/aeon-php/automation/pull/30) - **--github-file-update-path and --github-file-update-ref options to changelog:generate:all** - [@norberttech](https://github.com/norberttech)
   - [#28](https://github.com/aeon-php/automation/pull/28) - **Possibility to setup github enterprise url** - [@norberttech](https://github.com/norberttech)
   - [#26](https://github.com/aeon-php/automation/pull/26) - **Added --github-release-update option** - [@norberttech](https://github.com/norberttech)
   - [#25](https://github.com/aeon-php/automation/pull/25) - **changelog:generate:all command that can generate changelog for all/multiple/selected tags** - [@norberttech](https://github.com/norberttech)
@@ -20,8 +21,8 @@
   - [#20](https://github.com/aeon-php/automation/pull/20) - **--release-name option to changelog:generate command that will be used when --tag option is not provided to customize release name** - [@norberttech](https://github.com/norberttech)
   - [96d189](https://github.com/aeon-php/automation/commit/96d189f2ab16b54fd73f73463eaeb7178064090b) - **Completed At column to workflow job list** - [@norberttech](https://github.com/norberttech)
   - [#18](https://github.com/aeon-php/automation/pull/18) - **workflow:job:list to display current status of all jobs from all workflows** - [@norberttech](https://github.com/norberttech)
-  - [#17](https://github.com/aeon-php/automation/pull/17) - **--tag-next option that will overwrite guessing End Commit SHA when detecting scope changes** - [@norberttech](https://github.com/norberttech)
   - [#17](https://github.com/aeon-php/automation/pull/17) - **--compare-reverse option that will reverse start with end commit before comparison** - [@norberttech](https://github.com/norberttech)
+  - [#17](https://github.com/aeon-php/automation/pull/17) - **--tag-next option that will overwrite guessing End Commit SHA when detecting scope changes** - [@norberttech](https://github.com/norberttech)
   - [#16](https://github.com/aeon-php/automation/pull/16) - **--skip-from option to changelog:generate command that makes possible to skip bots when generating changelogs** - [@norberttech](https://github.com/norberttech)
   - [#13](https://github.com/aeon-php/automation/pull/13) - **pull-request:description:check command** - [@norberttech](https://github.com/norberttech)
   - [#15](https://github.com/aeon-php/automation/pull/15) - **Added documentation linter github action** - [@norberttech](https://github.com/norberttech)
@@ -32,8 +33,8 @@
   - [#6](https://github.com/aeon-php/automation/pull/6) - **twig template for changelog generation** - [@norberttech](https://github.com/norberttech)
   - [#6](https://github.com/aeon-php/automation/pull/6) - **--changed-before option to changelog:generate command** - [@norberttech](https://github.com/norberttech)
   - [#6](https://github.com/aeon-php/automation/pull/6) - **--with-commit to tag:list command** - [@norberttech](https://github.com/norberttech)
-  - [#5](https://github.com/aeon-php/automation/pull/5) - **`Change::name() : string` and `Change::all() : array`  methods** - [@norberttech](https://github.com/norberttech)
   - [#5](https://github.com/aeon-php/automation/pull/5) - **PrefixParser to detect change type from change title prefix** - [@norberttech](https://github.com/norberttech)
+  - [#5](https://github.com/aeon-php/automation/pull/5) - **`Change::name() : string` and `Change::all() : array`  methods** - [@norberttech](https://github.com/norberttech)
   - [#4](https://github.com/aeon-php/automation/pull/4) - **Make first character of change title uppercase** - [@norberttech](https://github.com/norberttech)
   - [#3](https://github.com/aeon-php/automation/pull/3) - **support for conventional commit format** - [@norberttech](https://github.com/norberttech)
   - [#3](https://github.com/aeon-php/automation/pull/3) - **Change object that holds Type and description** - [@norberttech](https://github.com/norberttech)
