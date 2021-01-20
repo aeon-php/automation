@@ -16,12 +16,15 @@ jobs:
     runs-on: "ubuntu-latest"
 
     steps:
+      - name: "Checkout"
+        uses: "actions/checkout@v2"
+
       - name: "Restore Automation cache"
         uses: "actions/cache@v2"
         with:
           path: |
-            ~/.automation
-          key: "${{ runner.os }}-automation-"
+            cache
+          key: "${{ runner.os }}-automation-${{ hashFiles('**/CHANGELOG.md') }}"
           restore-keys: |
             ${{ runner.os }}-automation-
 
@@ -29,6 +32,7 @@ jobs:
         uses: "docker://aeonphp/automation:latest"
         env:
           AEON_AUTOMATION_GH_TOKEN: "${{ secrets.GITHUB_TOKEN }}"
+          EON_AUTOMATION_CACHE_DIR: "/github/workspace/cache"
         with:
           entrypoint: "/composer/vendor/bin/automation"
           args: "changelog:generate ${{ github.repository }} --github-file-update-path=CHANGELOG.md --skip-from=\"dependabot[bot]\" --skip-from=\"aeon-automation\""
