@@ -77,6 +77,7 @@
   - [72564b](https://github.com/aeon-php/automation/commit/72564ba0991f280a74428d10fc1dee9b02659b02) - **Initial commit** - [@norberttech](https://github.com/norberttech)
 
 ### Fixed
+  - [0197d2](https://github.com/aeon-php/automation/commit/0197d2cce8bcef8aabfe3086331439dd9d3c085b) - **github actions cache usage in changelog-update workflow** - [@norberttech](https://github.com/norberttech)
   - [#39](https://github.com/aeon-php/automation/pull/39) - **automation workflow target branch** - [@norberttech](https://github.com/norberttech)
   - [#34](https://github.com/aeon-php/automation/pull/34) - **critical bug in keepachangelog theme templates - missing removed change type section** - [@norberttech](https://github.com/norberttech)
   - [#33](https://github.com/aeon-php/automation/pull/33) - **sort releases sorting** - [@norberttech](https://github.com/norberttech)
