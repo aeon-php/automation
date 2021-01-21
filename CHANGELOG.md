@@ -1,6 +1,7 @@
-## [Unreleased] - 2021-01-20
+## [Unreleased] - 2021-01-21
 
 ### Added
+  - [#42](https://github.com/aeon-php/automation/pull/42) - **--tag-only-stable option to changelog:generate and changelog:generate:all commands** - [@norberttech](https://github.com/norberttech)
   - [#41](https://github.com/aeon-php/automation/pull/41) - **changelog:get command with possibility to display --sha1-hash of the file** - [@norberttech](https://github.com/norberttech)
   - [#40](https://github.com/aeon-php/automation/pull/40) - **cache directory and config file path into logs** - [@norberttech](https://github.com/norberttech)
   - [#39](https://github.com/aeon-php/automation/pull/39) - **keep automation cache between changelog update workflows execution** - [@norberttech](https://github.com/norberttech)
@@ -10,8 +11,8 @@
   - [773da7](https://github.com/aeon-php/automation/commit/773da7ce378907709441f37c5794be0eb1271e56) - **GitHub Actions integration** - [@norberttech](https://github.com/norberttech)
   - [#33](https://github.com/aeon-php/automation/pull/33) - **Unreleased to changelog:generate:all command** - [@norberttech](https://github.com/norberttech)
   - [#31](https://github.com/aeon-php/automation/pull/31) - **Added changelog:release:unreleased command** - [@norberttech](https://github.com/norberttech)
-  - [#30](https://github.com/aeon-php/automation/pull/30) - **--github-file-update-path and --github-file-update-ref options to changelog:generate** - [@norberttech](https://github.com/norberttech)
   - [#30](https://github.com/aeon-php/automation/pull/30) - **--github-file-update-path and --github-file-update-ref options to changelog:generate:all** - [@norberttech](https://github.com/norberttech)
+  - [#30](https://github.com/aeon-php/automation/pull/30) - **--github-file-update-path and --github-file-update-ref options to changelog:generate** - [@norberttech](https://github.com/norberttech)
   - [#28](https://github.com/aeon-php/automation/pull/28) - **Possibility to setup github enterprise url** - [@norberttech](https://github.com/norberttech)
   - [#26](https://github.com/aeon-php/automation/pull/26) - **Added --github-release-update option** - [@norberttech](https://github.com/norberttech)
   - [#25](https://github.com/aeon-php/automation/pull/25) - **changelog:generate:all command that can generate changelog for all/multiple/selected tags** - [@norberttech](https://github.com/norberttech)
