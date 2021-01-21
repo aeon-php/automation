@@ -37,7 +37,7 @@ final class TagList extends AbstractCommand
 
         $io->title('Tag - List');
 
-        $tags = $this->githubClient()->tags($project)->semVerRsort();
+        $tags = $this->githubClient()->tags($project)->rsort();
 
         if ($input->getOption('limit')) {
             $tags = $tags->limit((int) $input->getOption('limit'));

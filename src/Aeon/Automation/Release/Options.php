@@ -18,6 +18,8 @@ final class Options
 
     private ?string $tagNext;
 
+    private bool $tagOnlyStable;
+
     private bool $onlyCommits;
 
     private bool $onlyPullRequests;
@@ -58,6 +60,7 @@ final class Options
         $this->commitEndSHA = $commitEndSHA;
         $this->tagStart = $tagStart;
         $this->tagNext = $tagNext;
+        $this->tagOnlyStable = false;
         $this->onlyCommits = $onlyCommits;
         $this->onlyPullRequests = $onlyPullRequests;
         $this->compareReverse = $compareReverse;
@@ -89,6 +92,16 @@ final class Options
     public function tagEnd() : ?string
     {
         return $this->tagNext;
+    }
+
+    public function tagOnlyStable() : void
+    {
+        $this->tagOnlyStable = true;
+    }
+
+    public function isTagOnlyStable() : bool
+    {
+        return $this->tagOnlyStable;
     }
 
     public function onlyCommits() : bool

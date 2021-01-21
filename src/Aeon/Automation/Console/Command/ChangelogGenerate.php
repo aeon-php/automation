@@ -39,6 +39,7 @@ final class ChangelogGenerate extends AbstractCommand
             ->addOption('changed-before', 'cb', InputOption::VALUE_REQUIRED, 'Ignore all changes before given date, relative date formats like "-1 day" are also supported')
             ->addOption('tag', 't', InputOption::VALUE_REQUIRED, 'List only changes from given release')
             ->addOption('tag-next', 'tn', InputOption::VALUE_REQUIRED, 'List only changes until given release')
+            ->addOption('tag-only-stable', null, InputOption::VALUE_NONE, 'Check SemVer stability of all tags and remove all unstable')
             ->addOption('release-name', 'rn', InputOption::VALUE_REQUIRED, 'Name of the release when --tag option is not provided', 'Unreleased')
             ->addOption('only-commits', 'oc', InputOption::VALUE_NONE, 'Use only commits to generate changelog')
             ->addOption('only-pull-requests', 'opr', InputOption::VALUE_NONE, 'Use only pull requests to generate changelog')
@@ -73,6 +74,10 @@ final class ChangelogGenerate extends AbstractCommand
                 $input->getOption('changed-before') ? DateTime::fromString($input->getOption('changed-before')) : null,
                 (array) $input->getOption('skip-from'),
             );
+
+            if ($input->getOption('tag-only-stable')) {
+                $options->tagOnlyStable();
+            }
 
             $releaseService = new ReleaseService($this->configuration(), $options, $this->calendar(), $this->githubClient(), $project);
 

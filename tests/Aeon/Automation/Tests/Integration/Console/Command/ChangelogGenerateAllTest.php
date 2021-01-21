@@ -30,6 +30,7 @@ final class ChangelogGenerateAllTest extends CommandTestCase
             new HttpRequestStub('GET', '/repos/aeon-php/automation/tags', ResponseMother::jsonSuccess([
                 GitHubResponseMother::tag('1.2.0', $tag120SHA = SHAMother::random()),
                 GitHubResponseMother::tag('1.1.0', $tag110SHA = SHAMother::random()),
+                GitHubResponseMother::tag('1.1.0-RC1', $tag110RC1SHA = SHAMother::random()),
                 GitHubResponseMother::tag('1.0.0', $tag100SHA = SHAMother::random()),
             ])),
             new HttpRequestStub('GET', '/repos/aeon-php/automation/git/refs/tags/1.2.0', ResponseMother::jsonSuccess(
@@ -37,6 +38,9 @@ final class ChangelogGenerateAllTest extends CommandTestCase
             )),
             new HttpRequestStub('GET', '/repos/aeon-php/automation/git/refs/tags/1.1.0', ResponseMother::jsonSuccess(
                 GitHubResponseMother::refCommit('tags/1.1.0', $tag110SHA)
+            )),
+            new HttpRequestStub('GET', '/repos/aeon-php/automation/git/refs/tags/1.1.0-RC1', ResponseMother::jsonSuccess(
+                GitHubResponseMother::refCommit('tags/1.1.0-RC1', $tag110RC1SHA)
             )),
             new HttpRequestStub('GET', '/repos/aeon-php/automation/git/refs/tags/1.0.0', ResponseMother::jsonSuccess(
                 GitHubResponseMother::refCommit('tags/1.0.0', $tag100SHA)
@@ -49,6 +53,9 @@ final class ChangelogGenerateAllTest extends CommandTestCase
             )),
             new HttpRequestStub('GET', '/repos/aeon-php/automation/commits/' . $tag110SHA, ResponseMother::jsonSuccess(
                 GitHubResponseMother::commit('Tag 1.1.0', $tag110SHA, '2020-02-01 00:00:00'),
+            )),
+            new HttpRequestStub('GET', '/repos/aeon-php/automation/commits/' . $tag110RC1SHA, ResponseMother::jsonSuccess(
+                GitHubResponseMother::commit('Tag 1.1.0-RC1', $tag110RC1SHA, '2020-02-01 00:00:00'),
             )),
             new HttpRequestStub('GET', '/repos/aeon-php/automation/commits/' . $tag100SHA, ResponseMother::jsonSuccess(
                 GitHubResponseMother::commit('Tag 1.0.0', $tag100SHA, '2020-01-01 00:00:00'),
@@ -116,7 +123,7 @@ final class ChangelogGenerateAllTest extends CommandTestCase
         $commandTester->setInputs(['verbosity' => ConsoleOutput::VERBOSITY_VERY_VERBOSE]);
 
         $commandTester->execute(
-            ['project' => 'aeon-php/automation', '--github-release-update' => true, '--github-file-update-path'=> 'CHANGELOG.md'],
+            ['project' => 'aeon-php/automation', '--github-release-update' => true, '--github-file-update-path'=> 'CHANGELOG.md', '--tag-only-stable' => true],
             ['verbosity' => ConsoleOutput::VERBOSITY_VERBOSE]
         );
 

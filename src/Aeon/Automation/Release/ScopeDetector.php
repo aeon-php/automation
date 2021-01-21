@@ -16,11 +16,14 @@ final class ScopeDetector
 
     private ?Tags $tags;
 
-    public function __construct(GitHub $github, Project $project)
+    private bool $onlyStableTags;
+
+    public function __construct(GitHub $github, Project $project, bool $onlyStableTags)
     {
         $this->github = $github;
         $this->project = $project;
         $this->tags = null;
+        $this->onlyStableTags = $onlyStableTags;
     }
 
     public function default(Scope $scope) : Scope
@@ -84,7 +87,11 @@ final class ScopeDetector
             return $this->tags;
         }
 
-        $this->tags = $this->github->tags($this->project)->semVerRsort();
+        $this->tags = $this->github->tags($this->project)->rsort();
+
+        if ($this->onlyStableTags) {
+            $this->tags = $this->tags->onlyStable();
+        }
 
         return $this->tags;
     }

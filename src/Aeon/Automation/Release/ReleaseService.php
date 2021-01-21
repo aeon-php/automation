@@ -33,7 +33,7 @@ final class ReleaseService
 
     public function fetch() : History
     {
-        $scopeDetector = new ScopeDetector($this->github, $this->project);
+        $scopeDetector = new ScopeDetector($this->github, $this->project, $this->options->isTagOnlyStable());
 
         $scope = $scopeDetector->default(
             $scopeDetector->fromTags($this->options->tagStart(), $this->options->tagEnd())

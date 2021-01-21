@@ -187,15 +187,17 @@ Usage:
   command [options] [arguments]
 
 Options:
-  -h, --help                         Display help for the given command. When no command is given display help for the list command
-  -q, --quiet                        Do not output any message
-  -V, --version                      Display this application version
-      --ansi                         Force ANSI output
-      --no-ansi                      Disable ANSI output
-  -n, --no-interaction               Do not ask any interactive question
-  -c, --configuration=CONFIGURATION  Custom path to the automation.xml configuration file.
-  -v|vv|vvv, --verbose               Increase the verbosity of messages: 1 for normal output, 2 for more verbose output and 3 for debug
-  -gt, --github-token=GITHUB-TOKEN   Github personal access token, generated here: https://github.com/settings/tokens By default taken from AEON_AUTOMATION_GH_TOKEN env variable
+  -h, --help                                           Display help for the given command. When no command is given display help for the list command
+  -q, --quiet                                          Do not output any message
+  -V, --version                                        Display this application version
+      --ansi                                           Force ANSI output
+      --no-ansi                                        Disable ANSI output
+  -n, --no-interaction                                 Do not ask any interactive question
+  -c, --configuration=CONFIGURATION                    Custom path to the automation.xml configuration file.
+  -v|vv|vvv, --verbose                                 Increase the verbosity of messages: 1 for normal output, 2 for more verbose output and 3 for debug
+  -cp, --cache-path=CACHE-PATH                         Path to root cache directory, taken from sys_get_tmp_dir() function or AEON_AUTOMATION_CACHE_DIR env variable [default: "/Users/automation/.automation"]
+  -gt, --github-token=GITHUB-TOKEN                     Github personal access token, generated here: https://github.com/settings/tokens By default taken from AEON_AUTOMATION_GH_TOKEN env variable
+  -geu, --github-enterprise-url=GITHUB-ENTERPRISE-URL  Github enterprise URL, by default taken from AEON_AUTOMATION_GH_ENTERPRISE_URL env variable
 
 Available commands:
   help                            Displays help for a command
@@ -203,10 +205,11 @@ Available commands:
  branch
   branch:list                     List project branches
  cache
-  cache:clear                     Clears cache used to cache HTTP responses from GitHub
+  cache:clear                     Clears all or specific caches.
  changelog
   changelog:generate              Generate change log for a release.
   changelog:generate:all          Generate change log for all tags.
+  changelog:get                   Get project changelog.
   changelog:release:unreleased    Update changelog file by turning Unreleased section into the next release
  milestone
   milestone:create                Create new milestone for project
@@ -237,6 +240,7 @@ Arguments:
 
 Options:
   -t, --tag=TAG                                          List only changes from given release
+      --tag-only-stable                                  Check SemVer stability of all tags and remove all unstable
   -f, --format=FORMAT                                    How to format generated changelog, available formatters: "markdown", "html" [default: "markdown"]
       --github-release-update                            Update GitHub release description if you have right permissions and release exists
       --github-file-update-path=GITHUB-FILE-UPDATE-PATH  Update changelog file directly at GitHub by reading existing file content and changing related release section. For example: --github-file-update-path=/CHANGELOG.md
@@ -260,6 +264,7 @@ Options:
   -th, --theme=THEME                                     Theme of generated changelog: "keepachangelog", "classic" [default: "keepachangelog"]
   -sf, --skip-from=SKIP-FROM                             Skip changes from given author|authors (multiple values allowed)
   -v|vv|vvv, --verbose                                   Increase the verbosity of messages: 1 for normal output, 2 for more verbose output and 3 for debug
+  -cp, --cache-path=CACHE-PATH                           Path to root cache directory, taken from sys_get_tmp_dir() function or AEON_AUTOMATION_CACHE_DIR env variable [default: "/Users/automation/.automation"]
   -gt, --github-token=GITHUB-TOKEN                       Github personal access token, generated here: https://github.com/settings/tokens By default taken from AEON_AUTOMATION_GH_TOKEN env variable
   -geu, --github-enterprise-url=GITHUB-ENTERPRISE-URL    Github enterprise URL, by default taken from AEON_AUTOMATION_GH_ENTERPRISE_URL env variable
 
@@ -280,6 +285,7 @@ Arguments:
   project                            project name, for example aeon-php/calendar
 
 Options:
+      --tag-only-stable                                  Check SemVer stability of all tags and remove all unstable
   -f, --format=FORMAT                                    How to format generated changelog, available formatters: "markdown", "html" [default: "markdown"]
       --github-release-update                            Update GitHub release description if you have right permissions and release exists
       --github-file-update-path=GITHUB-FILE-UPDATE-PATH  Update changelog file directly at GitHub by reading existing file content and changing related release section. For example: --github-file-update-path=/CHANGELOG.md
@@ -300,6 +306,7 @@ Options:
   -cpr, --compare-reverse                                When comparing commits, revers the order and compare start to end, instead end to start.
   -th, --theme=THEME                                     Theme of generated changelog: "keepachangelog", "classic" [default: "keepachangelog"]
   -v|vv|vvv, --verbose                                   Increase the verbosity of messages: 1 for normal output, 2 for more verbose output and 3 for debug
+  -cp, --cache-path=CACHE-PATH                           Path to root cache directory, taken from sys_get_tmp_dir() function or AEON_AUTOMATION_CACHE_DIR env variable [default: "/Users/automation/.automation"]
   -gt, --github-token=GITHUB-TOKEN                       Github personal access token, generated here: https://github.com/settings/tokens By default taken from AEON_AUTOMATION_GH_TOKEN env variable
   -geu, --github-enterprise-url=GITHUB-ENTERPRISE-URL    Github enterprise URL, by default taken from AEON_AUTOMATION_GH_ENTERPRISE_URL env variable
 
@@ -335,11 +342,44 @@ Options:
   -c, --configuration=CONFIGURATION                    Custom path to the automation.xml configuration file.
   -th, --theme=THEME                                   Theme of generated changelog: "keepachangelog", "classic" [default: "keepachangelog"]
   -v|vv|vvv, --verbose                                 Increase the verbosity of messages: 1 for normal output, 2 for more verbose output and 3 for debug
+  -cp, --cache-path=CACHE-PATH                         Path to root cache directory, taken from sys_get_tmp_dir() function or AEON_AUTOMATION_CACHE_DIR env variable [default: "/Users/automation/.automation"]
   -gt, --github-token=GITHUB-TOKEN                     Github personal access token, generated here: https://github.com/settings/tokens By default taken from AEON_AUTOMATION_GH_TOKEN env variable
   -geu, --github-enterprise-url=GITHUB-ENTERPRISE-URL  Github enterprise URL, by default taken from AEON_AUTOMATION_GH_ENTERPRISE_URL env variable
 
 Help:
   This command only manipulates the changelog file, it does not create new releases.
+```
+
+### changelog:get
+
+```bash
+Description:
+  Get project changelog.
+
+Usage:
+  changelog:get [options] [--] <project>
+
+Arguments:
+  project                                              project name, for example aeon-php/calendar
+
+Options:
+      --github-file-path=GITHUB-FILE-PATH              changelog file path [default: "CHANGELOG.md"]
+      --github-file-ref=GITHUB-FILE-REF                The name of the commit/branch/tag from which to take file for --github-file-path=CHANGELOG.md option. Default: the repository’s default branch.
+      --sha1-hash                                      Optional display only sha1 hash of the changelog file instead of file content
+  -h, --help                                           Display help for the given command. When no command is given display help for the list command
+  -q, --quiet                                          Do not output any message
+  -V, --version                                        Display this application version
+      --ansi                                           Force ANSI output
+      --no-ansi                                        Disable ANSI output
+  -n, --no-interaction                                 Do not ask any interactive question
+  -c, --configuration=CONFIGURATION                    Custom path to the automation.xml configuration file.
+  -v|vv|vvv, --verbose                                 Increase the verbosity of messages: 1 for normal output, 2 for more verbose output and 3 for debug
+  -cp, --cache-path=CACHE-PATH                         Path to root cache directory, taken from sys_get_tmp_dir() function or AEON_AUTOMATION_CACHE_DIR env variable [default: "/Users/automation/.automation"]
+  -gt, --github-token=GITHUB-TOKEN                     Github personal access token, generated here: https://github.com/settings/tokens By default taken from AEON_AUTOMATION_GH_TOKEN env variable
+  -geu, --github-enterprise-url=GITHUB-ENTERPRISE-URL  Github enterprise URL, by default taken from AEON_AUTOMATION_GH_ENTERPRISE_URL env variable
+
+Help:
+  When no parameters are provided, this command will generate Unreleased change log. Please be careful when using --github-release-update and --github-file-update-path since those options will do changes in project repository.
 ```
 
 ### tag:list
