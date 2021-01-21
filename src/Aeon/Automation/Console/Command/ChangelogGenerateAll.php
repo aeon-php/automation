@@ -36,6 +36,7 @@ final class ChangelogGenerateAll extends AbstractCommand
             ->addOption('tag-start', 'ts', InputOption::VALUE_REQUIRED, 'Generate changelog from given tag, if not provided it starts from the earliest tag')
             ->addOption('tag-end', 'te', InputOption::VALUE_REQUIRED, 'Generate changelog until given tag, if not provided it ends at the last tag')
             ->addOption('tag-skip', 'tsk', InputOption::VALUE_REQUIRED | InputOption::VALUE_IS_ARRAY, 'Skip specific tags')
+            ->addOption('tag-only-stable', null, InputOption::VALUE_NONE, 'Check SemVer stability of all tags and remove all unstable')
             ->addOption('skip-from', 'sf', InputOption::VALUE_REQUIRED | InputOption::VALUE_IS_ARRAY, 'Skip changes from given author|authors')
             ->addOption('only-commits', 'oc', InputOption::VALUE_NONE, 'Use only commits to generate changelog')
             ->addOption('only-pull-requests', 'opr', InputOption::VALUE_NONE, 'Use only pull requests to generate changelog')
@@ -55,10 +56,16 @@ final class ChangelogGenerateAll extends AbstractCommand
 
         $io->title('Changelog - Generate - All');
 
-        $tags = $this->githubClient()->tags($project)->semVerRsort();
+        $tags = $this->githubClient()->tags($project)->rsort();
         $tagStart = $input->getOption('tag-start');
         $tagEnd = $input->getOption('tag-end');
         $tagsSkip = (array) $input->getOption('tag-skip');
+
+        if ($input->getOption('tag-only-stable')) {
+            $io->note('Tag Only Stable: true');
+
+            $tags = $tags->onlyStable();
+        }
 
         if ($tagStart && $tags->exists($tagStart)) {
             $tags = $tags->since($tagStart);
@@ -99,6 +106,10 @@ final class ChangelogGenerateAll extends AbstractCommand
                     $changedBefore = null,
                     (array) $input->getOption('skip-from'),
                 );
+
+                if ($input->getOption('tag-only-stable')) {
+                    $options->tagOnlyStable();
+                }
 
                 $releaseService = new ReleaseService($this->configuration(), $options, $this->calendar(), $this->githubClient(), $project);
 

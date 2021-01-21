@@ -44,7 +44,7 @@ final class Tags
         return new self(...$tags);
     }
 
-    public function semVerRsort() : self
+    public function rsort() : self
     {
         $sortedNames = Semver::rsort(\array_map(fn (Tag $releaseData) : string => $releaseData->name(), $this->onlyValidSemVer()->all()));
         $tags = [];
@@ -60,7 +60,7 @@ final class Tags
         return new self(...$tags);
     }
 
-    public function semVerSort() : self
+    public function sort() : self
     {
         $sortedNames = Semver::sort(\array_map(fn (Tag $releaseData) : string => $releaseData->name(), $this->onlyValidSemVer()->all()));
         $tags = [];
@@ -83,6 +83,19 @@ final class Tags
         }
 
         return \current($this->tags);
+    }
+
+    public function onlyStable() : self
+    {
+        $tags = [];
+
+        foreach ($this->tags as $tag) {
+            if (VersionParser::parseStability($tag->name()) === 'stable') {
+                $tags[] = $tag;
+            }
+        }
+
+        return new self(...$tags);
     }
 
     public function last() : ?Tag
