@@ -195,7 +195,7 @@ Options:
   -n, --no-interaction                                 Do not ask any interactive question
   -c, --configuration=CONFIGURATION                    Custom path to the automation.xml configuration file.
   -v|vv|vvv, --verbose                                 Increase the verbosity of messages: 1 for normal output, 2 for more verbose output and 3 for debug
-  -cp, --cache-path=CACHE-PATH                         Path to root cache directory, taken from sys_get_tmp_dir() function or AEON_AUTOMATION_CACHE_DIR env variable [default: "/Users/norzechowicz/.automation"]
+  -cp, --cache-path=CACHE-PATH                         Path to root cache directory, taken from sys_get_tmp_dir() function or AEON_AUTOMATION_CACHE_DIR env variable [default: "/Users/automation/.automation"]
   -gt, --github-token=GITHUB-TOKEN                     Github personal access token, generated here: https://github.com/settings/tokens By default taken from AEON_AUTOMATION_GH_TOKEN env variable
   -geu, --github-enterprise-url=GITHUB-ENTERPRISE-URL  Github enterprise URL, by default taken from AEON_AUTOMATION_GH_ENTERPRISE_URL env variable
 
@@ -264,7 +264,7 @@ Options:
   -th, --theme=THEME                                     Theme of generated changelog: "keepachangelog", "classic" [default: "keepachangelog"]
   -sf, --skip-from=SKIP-FROM                             Skip changes from given author|authors (multiple values allowed)
   -v|vv|vvv, --verbose                                   Increase the verbosity of messages: 1 for normal output, 2 for more verbose output and 3 for debug
-  -cp, --cache-path=CACHE-PATH                           Path to root cache directory, taken from sys_get_tmp_dir() function or AEON_AUTOMATION_CACHE_DIR env variable [default: "/Users/norzechowicz/.automation"]
+  -cp, --cache-path=CACHE-PATH                           Path to root cache directory, taken from sys_get_tmp_dir() function or AEON_AUTOMATION_CACHE_DIR env variable [default: "/Users/automation/.automation"]
   -gt, --github-token=GITHUB-TOKEN                       Github personal access token, generated here: https://github.com/settings/tokens By default taken from AEON_AUTOMATION_GH_TOKEN env variable
   -geu, --github-enterprise-url=GITHUB-ENTERPRISE-URL    Github enterprise URL, by default taken from AEON_AUTOMATION_GH_ENTERPRISE_URL env variable
 
@@ -306,7 +306,7 @@ Options:
   -cpr, --compare-reverse                                When comparing commits, revers the order and compare start to end, instead end to start.
   -th, --theme=THEME                                     Theme of generated changelog: "keepachangelog", "classic" [default: "keepachangelog"]
   -v|vv|vvv, --verbose                                   Increase the verbosity of messages: 1 for normal output, 2 for more verbose output and 3 for debug
-  -cp, --cache-path=CACHE-PATH                           Path to root cache directory, taken from sys_get_tmp_dir() function or AEON_AUTOMATION_CACHE_DIR env variable [default: "/Users/norzechowicz/.automation"]
+  -cp, --cache-path=CACHE-PATH                           Path to root cache directory, taken from sys_get_tmp_dir() function or AEON_AUTOMATION_CACHE_DIR env variable [default: "/Users/automation/.automation"]
   -gt, --github-token=GITHUB-TOKEN                       Github personal access token, generated here: https://github.com/settings/tokens By default taken from AEON_AUTOMATION_GH_TOKEN env variable
   -geu, --github-enterprise-url=GITHUB-ENTERPRISE-URL    Github enterprise URL, by default taken from AEON_AUTOMATION_GH_ENTERPRISE_URL env variable
 
@@ -342,7 +342,7 @@ Options:
   -c, --configuration=CONFIGURATION                    Custom path to the automation.xml configuration file.
   -th, --theme=THEME                                   Theme of generated changelog: "keepachangelog", "classic" [default: "keepachangelog"]
   -v|vv|vvv, --verbose                                 Increase the verbosity of messages: 1 for normal output, 2 for more verbose output and 3 for debug
-  -cp, --cache-path=CACHE-PATH                         Path to root cache directory, taken from sys_get_tmp_dir() function or AEON_AUTOMATION_CACHE_DIR env variable [default: "/Users/norzechowicz/.automation"]
+  -cp, --cache-path=CACHE-PATH                         Path to root cache directory, taken from sys_get_tmp_dir() function or AEON_AUTOMATION_CACHE_DIR env variable [default: "/Users/automation/.automation"]
   -gt, --github-token=GITHUB-TOKEN                     Github personal access token, generated here: https://github.com/settings/tokens By default taken from AEON_AUTOMATION_GH_TOKEN env variable
   -geu, --github-enterprise-url=GITHUB-ENTERPRISE-URL  Github enterprise URL, by default taken from AEON_AUTOMATION_GH_ENTERPRISE_URL env variable
 
@@ -374,7 +374,7 @@ Options:
   -n, --no-interaction                                 Do not ask any interactive question
   -c, --configuration=CONFIGURATION                    Custom path to the automation.xml configuration file.
   -v|vv|vvv, --verbose                                 Increase the verbosity of messages: 1 for normal output, 2 for more verbose output and 3 for debug
-  -cp, --cache-path=CACHE-PATH                         Path to root cache directory, taken from sys_get_tmp_dir() function or AEON_AUTOMATION_CACHE_DIR env variable [default: "/Users/norzechowicz/.automation"]
+  -cp, --cache-path=CACHE-PATH                         Path to root cache directory, taken from sys_get_tmp_dir() function or AEON_AUTOMATION_CACHE_DIR env variable [default: "/Users/automation/.automation"]
   -gt, --github-token=GITHUB-TOKEN                     Github personal access token, generated here: https://github.com/settings/tokens By default taken from AEON_AUTOMATION_GH_TOKEN env variable
   -geu, --github-enterprise-url=GITHUB-ENTERPRISE-URL  Github enterprise URL, by default taken from AEON_AUTOMATION_GH_ENTERPRISE_URL env variable
 
