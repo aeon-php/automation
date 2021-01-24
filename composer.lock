@@ -4,20 +4,20 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "53a4f11000c7ebc4fe4185ff20cc71ab",
+    "content-hash": "b4855893ec62f9a5dcb6ba0660d76b35",
     "packages": [
         {
             "name": "aeon-php/calendar",
-            "version": "0.13.3",
+            "version": "0.14.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/aeon-php/calendar.git",
-                "reference": "aae10af449f10def5edda9f617760daf9d52cb6a"
+                "reference": "02b6981d89f53f24a25f13500a37c556cf80e24b"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/aeon-php/calendar/zipball/aae10af449f10def5edda9f617760daf9d52cb6a",
-                "reference": "aae10af449f10def5edda9f617760daf9d52cb6a",
+                "url": "https://api.github.com/repos/aeon-php/calendar/zipball/02b6981d89f53f24a25f13500a37c556cf80e24b",
+                "reference": "02b6981d89f53f24a25f13500a37c556cf80e24b",
                 "shasum": ""
             },
             "require": {
@@ -51,7 +51,7 @@
             ],
             "support": {
                 "issues": "https://github.com/aeon-php/calendar/issues",
-                "source": "https://github.com/aeon-php/calendar/tree/0.13.3"
+                "source": "https://github.com/aeon-php/calendar/tree/0.14.0"
             },
             "funding": [
                 {
@@ -59,7 +59,7 @@
                     "type": "github"
                 }
             ],
-            "time": "2021-01-04T11:33:33+00:00"
+            "time": "2021-01-21T01:40:38+00:00"
         },
         {
             "name": "captainhook/captainhook",
@@ -148,12 +148,12 @@
             "version": "v1.5.0",
             "source": {
                 "type": "git",
-                "url": "https://github.com/clue/php-stream-filter.git",
+                "url": "https://github.com/clue/stream-filter.git",
                 "reference": "aeb7d8ea49c7963d3b581378955dbf5bc49aa320"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/clue/php-stream-filter/zipball/aeb7d8ea49c7963d3b581378955dbf5bc49aa320",
+                "url": "https://api.github.com/repos/clue/stream-filter/zipball/aeb7d8ea49c7963d3b581378955dbf5bc49aa320",
                 "reference": "aeb7d8ea49c7963d3b581378955dbf5bc49aa320",
                 "shasum": ""
             },
@@ -194,8 +194,8 @@
                 "stream_filter_register"
             ],
             "support": {
-                "issues": "https://github.com/clue/php-stream-filter/issues",
-                "source": "https://github.com/clue/php-stream-filter/tree/v1.5.0"
+                "issues": "https://github.com/clue/stream-filter/issues",
+                "source": "https://github.com/clue/stream-filter/tree/v1.5.0"
             },
             "funding": [
                 {
@@ -4852,15 +4852,16 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/coduo/php-matcher.git",
-                "reference": "fd49031e7cc8f0e350884c3466a034b4d8eaa2ef"
+                "reference": "f1834cf07fbd9766b3f153f59b92138e800c42ff"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/coduo/php-matcher/zipball/fd49031e7cc8f0e350884c3466a034b4d8eaa2ef",
-                "reference": "fd49031e7cc8f0e350884c3466a034b4d8eaa2ef",
+                "url": "https://api.github.com/repos/coduo/php-matcher/zipball/f1834cf07fbd9766b3f153f59b92138e800c42ff",
+                "reference": "f1834cf07fbd9766b3f153f59b92138e800c42ff",
                 "shasum": ""
             },
             "require": {
+                "aeon-php/calendar": "^0.14.0",
                 "coduo/php-to-string": "^3",
                 "doctrine/lexer": "^1.0",
                 "ext-filter": "*",
@@ -4909,7 +4910,7 @@
                 "issues": "https://github.com/coduo/php-matcher/issues",
                 "source": "https://github.com/coduo/php-matcher/tree/6.x"
             },
-            "time": "2020-12-26T14:31:37+00:00"
+            "time": "2021-01-23T14:10:22+00:00"
         },
         {
             "name": "coduo/php-to-string",
