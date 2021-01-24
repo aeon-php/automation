@@ -1,4 +1,4 @@
-## [Unreleased] - 2021-01-21
+## [Unreleased] - 2021-01-24
 
 ### Added
   - [#42](https://github.com/aeon-php/automation/pull/42) - **--tag-only-stable option to changelog:generate and changelog:generate:all commands** - [@norberttech](https://github.com/norberttech)
@@ -47,6 +47,7 @@
   - [e5849d](https://github.com/aeon-php/automation/commit/e5849da3147caaf1394cfc149fdc405589d818ec) - **initial changelog** - [@norberttech](https://github.com/norberttech)
 
 ### Changed
+  - [f2dc9e](https://github.com/aeon-php/automation/commit/f2dc9e8622d4afda8fd08cec4eb3c73da6c4d89b) - **aeon-php/calendar dependency** - [@norberttech](https://github.com/norberttech)
   - [#38](https://github.com/aeon-php/automation/pull/38) - **current cache name into HTTP Cache** - [@norberttech](https://github.com/norberttech)
   - [#38](https://github.com/aeon-php/automation/pull/38) - **moved default cache directory to $HOME/.automation** - [@norberttech](https://github.com/norberttech)
   - [f164ec](https://github.com/aeon-php/automation/commit/f164ec7576b26597225f879504986e64a9cc8fdb) - **dependencies, added missing license to composer.json** - [@norberttech](https://github.com/norberttech)
