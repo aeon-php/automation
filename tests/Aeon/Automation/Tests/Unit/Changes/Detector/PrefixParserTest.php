@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Aeon\Automation\Tests\Unit\Changes\Detector;
 
+use Aeon\Automation\Changes\DescriptionPurifier;
 use Aeon\Automation\Changes\Detector\PrefixDetector;
 use Aeon\Automation\Changes\Type;
 use Aeon\Automation\Tests\Mother\Changes\ChangesSourceMother;
@@ -16,7 +17,7 @@ final class PrefixParserTest extends TestCase
      */
     public function test_support_for_invalid_format(string $message) : void
     {
-        $this->assertFalse((new PrefixDetector())->support(ChangesSourceMother::withTitle($message)));
+        $this->assertFalse((new PrefixDetector(new DescriptionPurifier()))->support(ChangesSourceMother::withTitle($message)));
     }
 
     public function messages_without_prefix() : \Generator
@@ -30,9 +31,9 @@ final class PrefixParserTest extends TestCase
      */
     public function test_getting_changes_by_prefix(string $message, Type $expectedType, string $expectedDescription) : void
     {
-        $this->assertTrue((new PrefixDetector())->support(ChangesSourceMother::withTitle($message)));
-        $this->assertEquals($expectedType, (new PrefixDetector())->detect(ChangesSourceMother::withTitle($message))->all()[0]->type());
-        $this->assertEquals($expectedDescription, (new PrefixDetector())->detect(ChangesSourceMother::withTitle($message))->all()[0]->description());
+        $this->assertTrue((new PrefixDetector(new DescriptionPurifier()))->support(ChangesSourceMother::withTitle($message)));
+        $this->assertEquals($expectedType, (new PrefixDetector(new DescriptionPurifier()))->detect(ChangesSourceMother::withTitle($message))->all()[0]->type());
+        $this->assertEquals($expectedDescription, (new PrefixDetector(new DescriptionPurifier()))->detect(ChangesSourceMother::withTitle($message))->all()[0]->description());
     }
 
     public function messages_with_prefix() : \Generator

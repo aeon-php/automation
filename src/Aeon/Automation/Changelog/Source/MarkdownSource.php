@@ -6,6 +6,7 @@ namespace Aeon\Automation\Changelog\Source;
 
 use Aeon\Automation\Changelog\Source;
 use Aeon\Automation\Releases;
+use League\CommonMark\CommonMarkConverter;
 
 final class MarkdownSource implements Source
 {
@@ -18,6 +19,10 @@ final class MarkdownSource implements Source
 
     public function releases() : Releases
     {
-        return (new HTMLSource((new \Parsedown())->parse($this->content)))->releases();
+        $converter = new CommonMarkConverter([
+            'enable_em' => false,
+        ]);
+
+        return (new HTMLSource($converter->convertToHtml(\str_replace('`', '\`', $this->content))))->releases();
     }
 }

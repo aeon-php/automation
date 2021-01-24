@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Aeon\Automation;
 
 use Aeon\Automation\Changes\ChangesDetector;
+use Aeon\Automation\Changes\DescriptionPurifier;
 use Aeon\Automation\Changes\Detector\ConventionalCommitDetector;
 use Aeon\Automation\Changes\Detector\DefaultDetector;
 use Aeon\Automation\Changes\Detector\HTMLChangesDetector;
@@ -47,13 +48,20 @@ final class Configuration
         return null;
     }
 
+    public function purifier() : DescriptionPurifier
+    {
+        return new DescriptionPurifier();
+    }
+
     public function changesDetector() : ChangesDetector
     {
+        $purifier = $this->purifier();
+
         return new PrioritizedDetector(
-            new HTMLChangesDetector(),
-            new ConventionalCommitDetector(),
-            new PrefixDetector(),
-            new DefaultDetector()
+            new HTMLChangesDetector($purifier),
+            new ConventionalCommitDetector($purifier),
+            new PrefixDetector($purifier),
+            new DefaultDetector($purifier)
         );
     }
 

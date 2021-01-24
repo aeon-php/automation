@@ -71,7 +71,7 @@ final class PullRequestDescriptionCheck extends AbstractCommand
             }
         }
 
-        $htmlChangeParser = new HTMLChangesDetector();
+        $htmlChangeParser = new HTMLChangesDetector($this->configuration()->purifier());
 
         $source = ChangesSource::fromPullRequest($pullRequest);
 

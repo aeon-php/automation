@@ -87,4 +87,13 @@ final class Changes
     {
         return new self(...\array_merge($this->changes, $changes->changes));
     }
+
+    /**
+     * @psalm-param callable(Change $change) : self $callable
+     * @psalm-return self
+     */
+    public function map(callable $callable) : self
+    {
+        return new self(...\array_map($callable, $this->changes));
+    }
 }

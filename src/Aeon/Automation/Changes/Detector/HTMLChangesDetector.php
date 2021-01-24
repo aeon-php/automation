@@ -8,11 +8,22 @@ use Aeon\Automation\Changes\Change;
 use Aeon\Automation\Changes\Changes;
 use Aeon\Automation\Changes\ChangesDetector;
 use Aeon\Automation\Changes\ChangesSource;
+use Aeon\Automation\Changes\DescriptionPurifier;
 use Aeon\Automation\Changes\Type;
 use Symfony\Component\DomCrawler\Crawler;
 
 final class HTMLChangesDetector implements ChangesDetector
 {
+    /**
+     * @var DescriptionPurifier
+     */
+    private DescriptionPurifier $purifier;
+
+    public function __construct(DescriptionPurifier $purifier)
+    {
+        $this->purifier = $purifier;
+    }
+
     public function support(ChangesSource $changesSource) : bool
     {
         if (\strip_tags($changesSource->description()) === $changesSource->description()) {
@@ -41,7 +52,7 @@ final class HTMLChangesDetector implements ChangesDetector
         foreach (Type::all() as $type) {
             if ($crawler->filter('ul#' . $type->name())->count()) {
                 foreach ($crawler->filter('ul#' . $type->name())->children('li') as $node) {
-                    $changes[] = new Change($changesSource, $type, $node->textContent);
+                    $changes[] = new Change($changesSource, $type, $this->purifier->purify($node->textContent));
                 }
             }
         }

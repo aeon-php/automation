@@ -28,7 +28,7 @@ final class HTMLSource implements Source
             throw new \InvalidArgumentException('HTML Changelog source requires valid html content');
         }
 
-        $this->content = $content;
+        $this->content = \htmlspecialchars_decode($content);
     }
 
     public function releases() : Releases
@@ -60,11 +60,11 @@ final class HTMLSource implements Source
             foreach ($changeNodes as $changeNode) {
                 $change += 1;
 
-                $changeNodeContent = (new Crawler($changeNode));
+                $changeNodeContent = new Crawler($changeNode);
 
-                $sourceNode = $changeNodeContent->filter('a:first-child');
-                $descriptionNode = $changeNodeContent->filter('strong');
-                $userNode = $changeNodeContent->filter('a:last-of-type');
+                $sourceNode = $changeNodeContent->filterXPath('.//a[1]');
+                $descriptionNode = $changeNodeContent->filterXPath('.//strong[1]');
+                $userNode = $changeNodeContent->filterXPath('.//a[last()]');
 
                 $changes = new Changes(
                     new Change(
@@ -72,14 +72,14 @@ final class HTMLSource implements Source
                             \strpos($sourceNode->text(), '#') === 0 ? ChangesSource::TYPE_PULL_REQUEST : ChangesSource::TYPE_COMMIT,
                             \strpos($sourceNode->text(), '#') === 0 ? \substr($sourceNode->text(), 1, \strlen($sourceNode->text()) - 1) : $sourceNode->text(),
                             $sourceNode->attr('href'),
-                            $descriptionNode->html(),
-                            $descriptionNode->html(),
+                            $descriptionNode->text(),
+                            $descriptionNode->text(),
                             $currentDate->sub(TimeUnit::seconds($change)),
                             \substr($userNode->text(), 1, \strlen($userNode->text()) - 1),
                             $userNode->attr('href')
                         ),
                         Type::fromString($changeTypeNode->nodeValue),
-                        $descriptionNode->html(),
+                        $descriptionNode->text(),
                     )
                 );
 
