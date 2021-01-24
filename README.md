@@ -412,5 +412,5 @@ Options:
 
 ## Integration Request
 
-If you would lik to integrate Automation with your project but not sure how, feel free to [Open Integration Request](https://github.com/aeon-php/automation/issues).  
+If you would lik to integrate Automation with your project but not sure how, feel free to [Open Integration Request](https://github.com/aeon-php/automation/issues/new/choose).  
 We will first test your project and if possible prepare an integration Pull Request. 
