@@ -12,6 +12,7 @@ Table of contents:
 * [Documentation](#documentation)
 * Integrations
   * [GitHub Actions](docs/github_actions.md)
+* [Integration Request](#integration-request)
 
 ## Why? 
 
@@ -408,3 +409,8 @@ Options:
   -v|vv|vvv, --verbose               Increase the verbosity of messages: 1 for normal output, 2 for more verbose output and 3 for debug
   -gt, --github-token=GITHUB-TOKEN   Github personal access token, generated here: https://github.com/settings/tokens By default taken from AEON_AUTOMATION_GH_TOKEN env variable
 ```
+
+## Integration Request
+
+If you would lik to integrate Automation with your project but not sure how, feel free to [Open Integration Request](https://github.com/aeon-php/automation/issues).  
+We will first test your project and if possible prepare an integration Pull Request. 
