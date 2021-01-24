@@ -8,6 +8,7 @@ use Aeon\Automation\Changes\Change;
 use Aeon\Automation\Changes\Changes;
 use Aeon\Automation\Changes\ChangesDetector;
 use Aeon\Automation\Changes\ChangesSource;
+use Aeon\Automation\Changes\DescriptionPurifier;
 use Aeon\Automation\Changes\Type;
 
 final class PrefixDetector implements ChangesDetector
@@ -20,6 +21,13 @@ final class PrefixDetector implements ChangesDetector
         'deprecated' => ['deprecated', 'dep'],
         'security' => ['security', 'sec'],
     ];
+
+    private DescriptionPurifier $purifier;
+
+    public function __construct(DescriptionPurifier $purifier)
+    {
+        $this->purifier = $purifier;
+    }
 
     public function support(ChangesSource $changesSource) : bool
     {
@@ -43,7 +51,7 @@ final class PrefixDetector implements ChangesDetector
                         new Change(
                             $changesSource,
                             Type::$type(),
-                            \substr($changesSource->title(), \strlen($prefix) + 1)
+                            $this->purifier->purify(\substr($changesSource->title(), \strlen($prefix) + 1))
                         )
                     );
                 }

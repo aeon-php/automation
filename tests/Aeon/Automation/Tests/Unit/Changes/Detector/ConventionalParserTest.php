@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Aeon\Automation\Tests\Unit\Changes\Detector;
 
+use Aeon\Automation\Changes\DescriptionPurifier;
 use Aeon\Automation\Changes\Detector\ConventionalCommitDetector;
 use Aeon\Automation\Changes\Type;
 use Aeon\Automation\Tests\Mother\Changes\ChangesSourceMother;
@@ -18,11 +19,11 @@ final class ConventionalParserTest extends TestCase
     {
         $this->assertEquals(
             $expectedType,
-            (new ConventionalCommitDetector())->detect(ChangesSourceMother::withDescription($message))->all()[0]->type()
+            (new ConventionalCommitDetector(new DescriptionPurifier()))->detect(ChangesSourceMother::withDescription($message))->all()[0]->type()
         );
         $this->assertEquals(
             $expectedDescription,
-            (new ConventionalCommitDetector())->detect(ChangesSourceMother::withDescription($message))->all()[0]->description()
+            (new ConventionalCommitDetector(new DescriptionPurifier()))->detect(ChangesSourceMother::withDescription($message))->all()[0]->description()
         );
     }
 

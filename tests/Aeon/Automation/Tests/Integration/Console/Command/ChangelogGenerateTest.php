@@ -89,8 +89,8 @@ final class ChangelogGenerateTest extends CommandTestCase
         $this->assertStringContainsString('! [NOTE] All commits analyzed, generating changelog:', $commandTester->getDisplay());
         $this->assertStringContainsString('## [Unreleased] - 2021-01-01', $commandTester->getDisplay());
         $this->assertStringContainsString('### Changed', $commandTester->getDisplay());
-        $this->assertStringContainsString(' - [#2](http://api.github.com) - **Pull Request 2 Title**', $commandTester->getDisplay());
-        $this->assertStringContainsString(' - [#1](http://api.github.com) - **Pull Request 1 Title**', $commandTester->getDisplay());
+        $this->assertStringContainsString('- [#2](http://api.github.com) - **Pull Request 2 Title**', $commandTester->getDisplay());
+        $this->assertStringContainsString('- [#1](http://api.github.com) - **Pull Request 1 Title**', $commandTester->getDisplay());
 
         $this->assertSame(0, $commandTester->getStatusCode());
     }
@@ -158,9 +158,9 @@ final class ChangelogGenerateTest extends CommandTestCase
         $this->assertStringContainsString('! [NOTE] All commits analyzed, generating changelog:', $commandTester->getDisplay());
         $this->assertStringContainsString('## [Unreleased] - 2021-01-01', $commandTester->getDisplay());
         $this->assertStringContainsString('### Changed', $commandTester->getDisplay());
-        $this->assertStringContainsString(' - [#3](http://api.github.com) - **Pull Request 3 Title**', $commandTester->getDisplay());
-        $this->assertStringContainsString(' - [#2](http://api.github.com) - **Pull Request 2 Title**', $commandTester->getDisplay());
-        $this->assertStringContainsString(' - [#1](http://api.github.com) - **Pull Request 1 Title**', $commandTester->getDisplay());
+        $this->assertStringContainsString('- [#3](http://api.github.com) - **Pull Request 3 Title**', $commandTester->getDisplay());
+        $this->assertStringContainsString('- [#2](http://api.github.com) - **Pull Request 2 Title**', $commandTester->getDisplay());
+        $this->assertStringContainsString('- [#1](http://api.github.com) - **Pull Request 1 Title**', $commandTester->getDisplay());
 
         $this->assertSame(0, $commandTester->getStatusCode());
     }
@@ -226,9 +226,9 @@ final class ChangelogGenerateTest extends CommandTestCase
         $this->assertStringContainsString('! [NOTE] All commits analyzed, generating changelog:', $commandTester->getDisplay());
         $this->assertStringContainsString('## [Unreleased] - 2021-01-01', $commandTester->getDisplay());
         $this->assertStringContainsString('### Changed', $commandTester->getDisplay());
-        $this->assertStringContainsString(' - [#3](http://api.github.com) - **Pull Request 3 Title**', $commandTester->getDisplay());
-        $this->assertStringContainsString(' - [#1](http://api.github.com) - **Pull Request 1 Title**', $commandTester->getDisplay());
-        $this->assertStringNotContainsString(' - [#2](http://api.github.com) - **Pull Request 2 Title**', $commandTester->getDisplay());
+        $this->assertStringContainsString('- [#3](http://api.github.com) - **Pull Request 3 Title**', $commandTester->getDisplay());
+        $this->assertStringContainsString('- [#1](http://api.github.com) - **Pull Request 1 Title**', $commandTester->getDisplay());
+        $this->assertStringNotContainsString('- [#2](http://api.github.com) - **Pull Request 2 Title**', $commandTester->getDisplay());
 
         $this->assertSame(0, $commandTester->getStatusCode());
     }
@@ -287,9 +287,9 @@ final class ChangelogGenerateTest extends CommandTestCase
         $this->assertStringContainsString('! [NOTE] All commits analyzed, generating changelog:', $commandTester->getDisplay());
         $this->assertStringContainsString('## [Unreleased] - 2021-01-01', $commandTester->getDisplay());
         $this->assertStringContainsString('### Changed', $commandTester->getDisplay());
-        $this->assertStringContainsString(' - [' . \substr($branchSHA, 0, 6) . '](http://api.github.com) - **Unreleased 3**', $commandTester->getDisplay());
-        $this->assertStringContainsString(' - [' . \substr($unreleased2, 0, 6) . '](http://api.github.com) - **Unreleased 2**', $commandTester->getDisplay());
-        $this->assertStringContainsString(' - [' . \substr($unreleased1, 0, 6) . '](http://api.github.com) - **Unreleased 1**', $commandTester->getDisplay());
+        $this->assertStringContainsString('- [' . \substr($branchSHA, 0, 6) . '](http://api.github.com) - **Unreleased 3**', $commandTester->getDisplay());
+        $this->assertStringContainsString('- [' . \substr($unreleased2, 0, 6) . '](http://api.github.com) - **Unreleased 2**', $commandTester->getDisplay());
+        $this->assertStringContainsString('- [' . \substr($unreleased1, 0, 6) . '](http://api.github.com) - **Unreleased 1**', $commandTester->getDisplay());
 
         $this->assertSame(0, $commandTester->getStatusCode());
     }
@@ -343,9 +343,9 @@ final class ChangelogGenerateTest extends CommandTestCase
 ## [1.1.0] - 2021-01-01
 
 ### Changed
-  - [#3](http://api.github.com) - **Release 1.1.0 Title - 3** - [@user_login](http//github.com/user_login)
-  - [#2](http://api.github.com) - **Release 1.1.0 Title - 2** - [@user_login](http//github.com/user_login)
-  - [#1](http://api.github.com) - **Release 1.1.0 Title - 1** - [@user_login](http//github.com/user_login)
+- [#3](http://api.github.com) - **Release 1.1.0 Title - 3** - [@user_login](http//github.com/user_login)
+- [#2](http://api.github.com) - **Release 1.1.0 Title - 2** - [@user_login](http//github.com/user_login)
+- [#1](http://api.github.com) - **Release 1.1.0 Title - 1** - [@user_login](http//github.com/user_login)
 
 Generated by [Automation](https://github.com/aeon-php/automation)
 CHANGELOG),
@@ -388,9 +388,9 @@ CHANGELOG),
         $this->assertStringContainsString('! [NOTE] All commits analyzed, generating changelog:', $commandTester->getDisplay());
         $this->assertStringContainsString('## [1.1.0] - 2021-01-01', $commandTester->getDisplay());
         $this->assertStringContainsString('### Changed', $commandTester->getDisplay());
-        $this->assertStringContainsString(' - [#3](http://api.github.com) - **Release 1.1.0 Title - 3**', $commandTester->getDisplay());
-        $this->assertStringContainsString(' - [#2](http://api.github.com) - **Release 1.1.0 Title - 2**', $commandTester->getDisplay());
-        $this->assertStringContainsString(' - [#1](http://api.github.com) - **Release 1.1.0 Title - 1**', $commandTester->getDisplay());
+        $this->assertStringContainsString('- [#3](http://api.github.com) - **Release 1.1.0 Title - 3**', $commandTester->getDisplay());
+        $this->assertStringContainsString('- [#2](http://api.github.com) - **Release 1.1.0 Title - 2**', $commandTester->getDisplay());
+        $this->assertStringContainsString('- [#1](http://api.github.com) - **Release 1.1.0 Title - 1**', $commandTester->getDisplay());
 
         $this->assertSame(0, $commandTester->getStatusCode());
     }
@@ -466,9 +466,9 @@ CHANGELOG),
         $this->assertStringContainsString('! [NOTE] All commits analyzed, generating changelog:', $commandTester->getDisplay());
         $this->assertStringContainsString('## [1.1.0] - 2021-01-01', $commandTester->getDisplay());
         $this->assertStringContainsString('### Changed', $commandTester->getDisplay());
-        $this->assertStringNotContainsString(' - [#3](http://api.github.com) - **Release 1.1.0 Title - 3**', $commandTester->getDisplay());
-        $this->assertStringNotContainsString(' - [#2](http://api.github.com) - **Release 1.1.0 Title - 2**', $commandTester->getDisplay());
-        $this->assertStringContainsString(' - [#1](http://api.github.com) - **Release 1.1.0 Title - 1**', $commandTester->getDisplay());
+        $this->assertStringNotContainsString('- [#3](http://api.github.com) - **Release 1.1.0 Title - 3**', $commandTester->getDisplay());
+        $this->assertStringNotContainsString('- [#2](http://api.github.com) - **Release 1.1.0 Title - 2**', $commandTester->getDisplay());
+        $this->assertStringContainsString('- [#1](http://api.github.com) - **Release 1.1.0 Title - 1**', $commandTester->getDisplay());
 
         $this->assertSame(0, $commandTester->getStatusCode());
     }
@@ -543,9 +543,9 @@ CHANGELOG),
         $this->assertStringContainsString('! [NOTE] All commits analyzed, generating changelog:', $commandTester->getDisplay());
         $this->assertStringContainsString('## [tag-1.1.0] - 2021-01-01', $commandTester->getDisplay());
         $this->assertStringContainsString('### Changed', $commandTester->getDisplay());
-        $this->assertStringContainsString(' - [#3](http://api.github.com) - **Release 1.1.0 Title - 3**', $commandTester->getDisplay());
-        $this->assertStringContainsString(' - [#2](http://api.github.com) - **Release 1.1.0 Title - 2**', $commandTester->getDisplay());
-        $this->assertStringContainsString(' - [#1](http://api.github.com) - **Release 1.1.0 Title - 1**', $commandTester->getDisplay());
+        $this->assertStringContainsString('- [#3](http://api.github.com) - **Release 1.1.0 Title - 3**', $commandTester->getDisplay());
+        $this->assertStringContainsString('- [#2](http://api.github.com) - **Release 1.1.0 Title - 2**', $commandTester->getDisplay());
+        $this->assertStringContainsString('- [#1](http://api.github.com) - **Release 1.1.0 Title - 1**', $commandTester->getDisplay());
 
         $this->assertSame(0, $commandTester->getStatusCode());
     }
@@ -621,9 +621,9 @@ CHANGELOG),
         $this->assertStringContainsString('! [NOTE] All commits analyzed, generating changelog:', $commandTester->getDisplay());
         $this->assertStringContainsString('## [tag-1.1.0] - 2021-01-01', $commandTester->getDisplay());
         $this->assertStringContainsString('### Changed', $commandTester->getDisplay());
-        $this->assertStringContainsString(' - [#3](http://api.github.com) - **Release 1.1.0 Title - 3**', $commandTester->getDisplay());
-        $this->assertStringContainsString(' - [#2](http://api.github.com) - **Release 1.1.0 Title - 2**', $commandTester->getDisplay());
-        $this->assertStringContainsString(' - [#1](http://api.github.com) - **Release 1.1.0 Title - 1**', $commandTester->getDisplay());
+        $this->assertStringContainsString('- [#3](http://api.github.com) - **Release 1.1.0 Title - 3**', $commandTester->getDisplay());
+        $this->assertStringContainsString('- [#2](http://api.github.com) - **Release 1.1.0 Title - 2**', $commandTester->getDisplay());
+        $this->assertStringContainsString('- [#1](http://api.github.com) - **Release 1.1.0 Title - 1**', $commandTester->getDisplay());
 
         $this->assertSame(0, $commandTester->getStatusCode());
     }
