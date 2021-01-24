@@ -48,6 +48,7 @@
 - [e5849d](https://github.com/aeon-php/automation/commit/e5849da3147caaf1394cfc149fdc405589d818ec) - **initial changelog** - [@norberttech](https://github.com/norberttech)
 
 ### Changed
+- [4e38f3](https://github.com/aeon-php/automation/commit/4e38f358953ddec8e52665c1b467c4e1fa3070b8) - **Update README.md** - [@norberttech](https://github.com/norberttech)
 - [f2dc9e](https://github.com/aeon-php/automation/commit/f2dc9e8622d4afda8fd08cec4eb3c73da6c4d89b) - **aeon-php/calendar dependency** - [@norberttech](https://github.com/norberttech)
 - [#38](https://github.com/aeon-php/automation/pull/38) - **current cache name into HTTP Cache** - [@norberttech](https://github.com/norberttech)
 - [#38](https://github.com/aeon-php/automation/pull/38) - **moved default cache directory to $HOME/.automation** - [@norberttech](https://github.com/norberttech)
