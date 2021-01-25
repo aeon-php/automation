@@ -42,7 +42,7 @@
         "league/commonmark": "^1.5"
     },
     "require-dev": {
-        "coduo/php-matcher": "6.x@dev"
+        "coduo/php-matcher": "^6.0.0"
     },
     "scripts": {
         "build": [

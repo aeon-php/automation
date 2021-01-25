@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "68029dbdb93cc3f5aa142d068e67b72e",
+    "content-hash": "82f74a6b1b88f20f410b266abcd04a6d",
     "packages": [
         {
             "name": "aeon-php/calendar",
@@ -4899,16 +4899,16 @@
     "packages-dev": [
         {
             "name": "coduo/php-matcher",
-            "version": "6.x-dev",
+            "version": "6.0.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/coduo/php-matcher.git",
-                "reference": "f1834cf07fbd9766b3f153f59b92138e800c42ff"
+                "reference": "648d7fac2573806d8129c51662def78119ec10e5"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/coduo/php-matcher/zipball/f1834cf07fbd9766b3f153f59b92138e800c42ff",
-                "reference": "f1834cf07fbd9766b3f153f59b92138e800c42ff",
+                "url": "https://api.github.com/repos/coduo/php-matcher/zipball/648d7fac2573806d8129c51662def78119ec10e5",
+                "reference": "648d7fac2573806d8129c51662def78119ec10e5",
                 "shasum": ""
             },
             "require": {
@@ -4929,7 +4929,6 @@
                 "openlss/lib-array2xml": "In order ot use Coduo\\PHPMatcher\\Matcher\\XmlMatcher",
                 "symfony/expression-language": "In order to use Coduo\\PHPMatcher\\Matcher\\ExpressionMatcher"
             },
-            "default-branch": true,
             "type": "library",
             "autoload": {
                 "psr-4": {
@@ -4959,9 +4958,9 @@
             ],
             "support": {
                 "issues": "https://github.com/coduo/php-matcher/issues",
-                "source": "https://github.com/coduo/php-matcher/tree/6.x"
+                "source": "https://github.com/coduo/php-matcher/tree/6.0.0"
             },
-            "time": "2021-01-23T14:10:22+00:00"
+            "time": "2021-01-24T12:56:52+00:00"
         },
         {
             "name": "coduo/php-to-string",
@@ -5280,9 +5279,7 @@
     ],
     "aliases": [],
     "minimum-stability": "stable",
-    "stability-flags": {
-        "coduo/php-matcher": 20
-    },
+    "stability-flags": [],
     "prefer-stable": false,
     "prefer-lowest": false,
     "platform": {
