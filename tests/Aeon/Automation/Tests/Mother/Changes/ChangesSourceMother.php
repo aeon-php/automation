@@ -42,7 +42,7 @@ final class ChangesSourceMother
         return new ChangesSource(
             ChangesSource::TYPE_PULL_REQUEST,
             (string) $number,
-            'https://github.com/aeon-php/automation/pull/1',
+            'https://github.com/aeon-php/automation/pull/' . (string) $number,
             'Pull Request Title',
             'Pull Request description',
             DateTime::fromString('2021-01-01'),
@@ -56,7 +56,7 @@ final class ChangesSourceMother
         return new ChangesSource(
             ChangesSource::TYPE_COMMIT,
             $sha,
-            'https://github.com/aeon-php/automation/pull/1',
+            'https://github.com/aeon-php/commit/sha/' . $sha,
             'Commit Message',
             'Commit Description',
             DateTime::fromString('2021-01-01'),

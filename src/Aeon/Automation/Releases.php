@@ -93,7 +93,9 @@ final class Releases
         $releases = [];
 
         foreach ($this->releases as $existingRelease) {
-            $releases[] = (\strtolower($existingRelease->name()) === \strtolower($release->name())) ? $release : $existingRelease;
+            $releases[] = (\strtolower($existingRelease->name()) === \strtolower($release->name()))
+                ? $release->isEqual($existingRelease) ? $existingRelease : $release
+                : $existingRelease;
         }
 
         return new self(...$releases);
