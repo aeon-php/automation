@@ -23,6 +23,11 @@ final class Change
         $this->description = $description;
     }
 
+    public function id() : string
+    {
+        return \sha1(\strtolower($this->source->id() . '-' . $this->type->name() . '-' . $this->description()));
+    }
+
     public function source() : ChangesSource
     {
         return $this->source;

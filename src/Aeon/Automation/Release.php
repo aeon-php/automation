@@ -178,6 +178,27 @@ final class Release
         $this->changes = $newChanges;
     }
 
+    public function isEqual(self $release) : bool
+    {
+        if (\count($this->all()) !== \count($release->all())) {
+            return false;
+        }
+
+        $changeIds = [];
+
+        foreach ($this->all() as $change) {
+            $changeIds[] = $change->id();
+        }
+
+        foreach ($release->all() as $releaseChange) {
+            if (!\in_array($releaseChange->id(), $changeIds, true)) {
+                return false;
+            }
+        }
+
+        return true;
+    }
+
     /**
      * @return Change[]
      */
