@@ -82,6 +82,7 @@
 - [72564b](https://github.com/aeon-php/automation/commit/72564ba0991f280a74428d10fc1dee9b02659b02) - **Initial commit** - [@norberttech](https://github.com/norberttech)
 
 ### Fixed
+- [#50](https://github.com/aeon-php/automation/pull/50) - **Fixed bug that was updating Unreleased section date even when nothing new was added** - [@norberttech](https://github.com/norberttech)
 - [#43](https://github.com/aeon-php/automation/pull/43) - **markdown -> html conversion issues in Changelog Manipulator** - [@norberttech](https://github.com/norberttech)
 - [0197d2](https://github.com/aeon-php/automation/commit/0197d2cce8bcef8aabfe3086331439dd9d3c085b) - **github actions cache usage in changelog-update workflow** - [@norberttech](https://github.com/norberttech)
 - [#39](https://github.com/aeon-php/automation/pull/39) - **automation workflow target branch** - [@norberttech](https://github.com/norberttech)
