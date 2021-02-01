@@ -1,4 +1,4 @@
-## [Unreleased] - 2021-01-29
+## [Unreleased] - 2021-02-01
 
 ### Added
 - [a3fd3e](https://github.com/aeon-php/automation/commit/a3fd3eba1d84cbe197a85668ac5c08f1aede2c97) - **integration request section to the documentation** - [@norberttech](https://github.com/norberttech)
@@ -48,6 +48,7 @@
 - [e5849d](https://github.com/aeon-php/automation/commit/e5849da3147caaf1394cfc149fdc405589d818ec) - **initial changelog** - [@norberttech](https://github.com/norberttech)
 
 ### Changed
+- [#52](https://github.com/aeon-php/automation/pull/52) - **drop all options shortcuts** - [@norberttech](https://github.com/norberttech)
 - [#44](https://github.com/aeon-php/automation/pull/44) - **updated coduo/php-matcher dependency to latest stable version** - [@norberttech](https://github.com/norberttech)
 - [4e38f3](https://github.com/aeon-php/automation/commit/4e38f358953ddec8e52665c1b467c4e1fa3070b8) - **Update README.md** - [@norberttech](https://github.com/norberttech)
 - [f2dc9e](https://github.com/aeon-php/automation/commit/f2dc9e8622d4afda8fd08cec4eb3c73da6c4d89b) - **aeon-php/calendar dependency** - [@norberttech](https://github.com/norberttech)
