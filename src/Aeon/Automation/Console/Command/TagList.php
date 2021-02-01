@@ -24,9 +24,9 @@ final class TagList extends AbstractCommand
         $this
             ->setDescription('Display all tags following SemVer convention sorted from the latest to oldest')
             ->addArgument('project', InputArgument::REQUIRED, 'project name')
-            ->addOption('with-date', 'wd', InputOption::VALUE_NONE, 'display date when tag was committed')
-            ->addOption('with-commit', 'wc', InputOption::VALUE_NONE, 'display commit SHA of tag')
-            ->addOption('limit', 'l', InputOption::VALUE_REQUIRED, 'Maximum number of tags to get');
+            ->addOption('with-date', null, InputOption::VALUE_NONE, 'display date when tag was committed')
+            ->addOption('with-commit', null, InputOption::VALUE_NONE, 'display commit SHA of tag')
+            ->addOption('limit', null, InputOption::VALUE_REQUIRED, 'Maximum number of tags to get');
     }
 
     protected function execute(InputInterface $input, OutputInterface $output) : int

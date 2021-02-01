@@ -29,8 +29,8 @@ final class PullRequestDescriptionCheck extends AbstractCommand
             ->setHelp('Expected format can be taken from <fg=yellow>pull-request:template:show</> command')
             ->addArgument('project', InputArgument::REQUIRED, 'project name')
             ->addArgument('number', InputArgument::REQUIRED, 'pull request number')
-            ->addOption('skip-changes-count', 'scf', InputOption::VALUE_OPTIONAL, 'Skip check if the changes count is greater than 0, syntax is still checked')
-            ->addOption('skip-from', 'sf', InputOption::VALUE_REQUIRED | InputOption::VALUE_IS_ARRAY, 'Skip check when pull request comes from author|authors');
+            ->addOption('skip-changes-count', null, InputOption::VALUE_OPTIONAL, 'Skip check if the changes count is greater than 0, syntax is still checked')
+            ->addOption('skip-from', null, InputOption::VALUE_REQUIRED | InputOption::VALUE_IS_ARRAY, 'Skip check when pull request comes from author|authors');
     }
 
     protected function execute(InputInterface $input, OutputInterface $output) : int

@@ -23,10 +23,10 @@ final class PullRequestsList extends AbstractCommand
 
         $this
             ->addArgument('project', InputArgument::REQUIRED, 'project name')
-            ->addOption('status', 's', InputOption::VALUE_REQUIRED, 'One of the given states: open, merged', 'open')
-            ->addOption('branch', 'b', InputOption::VALUE_REQUIRED, 'Get the the branch used instead of tag-start option when it\'s not provided. If empty, default repository branch is taken.')
-            ->addOption('check-milestone', 'cm', InputOption::VALUE_NONE, 'Check also if the pull request is missing a milestone')
-            ->addOption('limit', 'l', InputOption::VALUE_REQUIRED, 'Limit of pull requests to display', 100);
+            ->addOption('status', null, InputOption::VALUE_REQUIRED, 'One of the given states: open, merged', 'open')
+            ->addOption('branch', null, InputOption::VALUE_REQUIRED, 'Get the the branch used instead of tag-start option when it\'s not provided. If empty, default repository branch is taken.')
+            ->addOption('check-milestone', null, InputOption::VALUE_NONE, 'Check also if the pull request is missing a milestone')
+            ->addOption('limit', null, InputOption::VALUE_REQUIRED, 'Limit of pull requests to display', 100);
     }
 
     protected function execute(InputInterface $input, OutputInterface $output) : int

@@ -24,7 +24,7 @@ final class ReleaseList extends AbstractCommand
         $this
             ->setDescription('List all project releases')
             ->addArgument('project', InputArgument::REQUIRED, 'project name')
-            ->addOption('create-missing', 'cm', InputOption::VALUE_NONE, 'Create missing milestones for existing releases');
+            ->addOption('create-missing', null, InputOption::VALUE_NONE, 'Create missing milestones for existing releases');
     }
 
     protected function execute(InputInterface $input, OutputInterface $output) : int
