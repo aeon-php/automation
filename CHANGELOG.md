@@ -48,6 +48,7 @@
 - [e5849d](https://github.com/aeon-php/automation/commit/e5849da3147caaf1394cfc149fdc405589d818ec) - **initial changelog** - [@norberttech](https://github.com/norberttech)
 
 ### Changed
+- [c9a240](https://github.com/aeon-php/automation/commit/c9a2403170bf47a70dfb37e2470c6162e5446e77) - **dependencies** - [@norberttech](https://github.com/norberttech)
 - [#52](https://github.com/aeon-php/automation/pull/52) - **drop all options shortcuts** - [@norberttech](https://github.com/norberttech)
 - [#44](https://github.com/aeon-php/automation/pull/44) - **updated coduo/php-matcher dependency to latest stable version** - [@norberttech](https://github.com/norberttech)
 - [4e38f3](https://github.com/aeon-php/automation/commit/4e38f358953ddec8e52665c1b467c4e1fa3070b8) - **Update README.md** - [@norberttech](https://github.com/norberttech)
