@@ -10,6 +10,4 @@ interface Formatter
     public function formatRelease(Release $release) : string;
 
     public function formatReleases(Releases $releases) : string;
-
-    public function formatFooter() : string;
 }

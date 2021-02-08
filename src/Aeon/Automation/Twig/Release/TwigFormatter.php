@@ -68,18 +68,4 @@ final class TwigFormatter implements Formatter
                 throw new \RuntimeException('Unknown format ' . $this->format);
         }
     }
-
-    public function formatFooter() : string
-    {
-        switch ($this->format) {
-            case 'markdown':
-                return $this->twig->render('footer.md.twig');
-            case 'html':
-                return $this->twig->render('footer.html.twig');
-
-            default:
-
-                throw new \RuntimeException('Unknown format ' . $this->format);
-        }
-    }
 }

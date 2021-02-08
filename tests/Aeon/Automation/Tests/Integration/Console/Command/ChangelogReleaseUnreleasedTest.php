@@ -46,12 +46,9 @@ CHANGELOG),
             new HttpRequestStub('PUT', '/repos/aeon-php/automation/contents/CHANGELOG.md', ResponseMother::jsonSuccess([]))
         ));
 
-        $calendar = new GregorianCalendarStub(TimeZone::UTC());
-        $calendar->setNow(DateTime::fromString('2021-01-15'));
-
         $command = new ChangelogReleaseUnreleased(\getenv('AUTOMATION_ROOT_DIR'));
         $command->setGithub($client);
-        $command->setCalendar($calendar);
+        $command->setCalendar(new GregorianCalendarStub(TimeZone::UTC(), DateTime::fromString('2021-01-15')));
         $command->setHttpCache(new ArrayAdapter());
         $command->setGitHubCache(new ArrayAdapter());
 
