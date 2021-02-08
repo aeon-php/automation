@@ -8,16 +8,16 @@
     "packages": [
         {
             "name": "aeon-php/calendar",
-            "version": "0.14.0",
+            "version": "0.15.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/aeon-php/calendar.git",
-                "reference": "02b6981d89f53f24a25f13500a37c556cf80e24b"
+                "reference": "d4fe56303100e404e0071ea5ab2e91f9b5c7befb"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/aeon-php/calendar/zipball/02b6981d89f53f24a25f13500a37c556cf80e24b",
-                "reference": "02b6981d89f53f24a25f13500a37c556cf80e24b",
+                "url": "https://api.github.com/repos/aeon-php/calendar/zipball/d4fe56303100e404e0071ea5ab2e91f9b5c7befb",
+                "reference": "d4fe56303100e404e0071ea5ab2e91f9b5c7befb",
                 "shasum": ""
             },
             "require": {
@@ -51,7 +51,7 @@
             ],
             "support": {
                 "issues": "https://github.com/aeon-php/calendar/issues",
-                "source": "https://github.com/aeon-php/calendar/tree/0.14.0"
+                "source": "https://github.com/aeon-php/calendar/tree/0.15.0"
             },
             "funding": [
                 {
@@ -59,7 +59,7 @@
                     "type": "github"
                 }
             ],
-            "time": "2021-01-21T01:40:38+00:00"
+            "time": "2021-02-01T23:15:31+00:00"
         },
         {
             "name": "captainhook/captainhook",
@@ -4899,20 +4899,20 @@
     "packages-dev": [
         {
             "name": "coduo/php-matcher",
-            "version": "6.0.0",
+            "version": "6.0.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/coduo/php-matcher.git",
-                "reference": "648d7fac2573806d8129c51662def78119ec10e5"
+                "reference": "34ace91e87b3c16379a391de61e25b7ef917d704"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/coduo/php-matcher/zipball/648d7fac2573806d8129c51662def78119ec10e5",
-                "reference": "648d7fac2573806d8129c51662def78119ec10e5",
+                "url": "https://api.github.com/repos/coduo/php-matcher/zipball/34ace91e87b3c16379a391de61e25b7ef917d704",
+                "reference": "34ace91e87b3c16379a391de61e25b7ef917d704",
                 "shasum": ""
             },
             "require": {
-                "aeon-php/calendar": "^0.14.0",
+                "aeon-php/calendar": "^0.14.0 || ^0.15.0",
                 "coduo/php-to-string": "^3",
                 "doctrine/lexer": "^1.0",
                 "ext-filter": "*",
@@ -4958,9 +4958,9 @@
             ],
             "support": {
                 "issues": "https://github.com/coduo/php-matcher/issues",
-                "source": "https://github.com/coduo/php-matcher/tree/6.0.0"
+                "source": "https://github.com/coduo/php-matcher/tree/6.0.1"
             },
-            "time": "2021-01-24T12:56:52+00:00"
+            "time": "2021-02-05T21:07:20+00:00"
         },
         {
             "name": "coduo/php-to-string",
