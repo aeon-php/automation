@@ -1,6 +1,7 @@
-## [Unreleased] - 2021-02-08
+## [Unreleased] - 2021-02-21
 
 ### Added
+- [#61](https://github.com/aeon-php/automation/pull/61) - **docker usages examples to README.md** - [@norberttech](https://github.com/norberttech)
 - [#60](https://github.com/aeon-php/automation/pull/60) - **missing test for unchanged changelog in changeloge:generate** - [@norberttech](https://github.com/norberttech)
 - [#60](https://github.com/aeon-php/automation/pull/60) - **missing test for pull request template show and cache clear commands** - [@norberttech](https://github.com/norberttech)
 - [a3fd3e](https://github.com/aeon-php/automation/commit/a3fd3eba1d84cbe197a85668ac5c08f1aede2c97) - **integration request section to the documentation** - [@norberttech](https://github.com/norberttech)
@@ -87,6 +88,7 @@
 - [72564b](https://github.com/aeon-php/automation/commit/72564ba0991f280a74428d10fc1dee9b02659b02) - **Initial commit** - [@norberttech](https://github.com/norberttech)
 
 ### Fixed
+- [#61](https://github.com/aeon-php/automation/pull/61) - **generating changelog for empty CHANGELOG.md file** - [@norberttech](https://github.com/norberttech)
 - [#50](https://github.com/aeon-php/automation/pull/50) - **Fixed bug that was updating Unreleased section date even when nothing new was added** - [@norberttech](https://github.com/norberttech)
 - [#43](https://github.com/aeon-php/automation/pull/43) - **markdown -> html conversion issues in Changelog Manipulator** - [@norberttech](https://github.com/norberttech)
 - [0197d2](https://github.com/aeon-php/automation/commit/0197d2cce8bcef8aabfe3086331439dd9d3c085b) - **github actions cache usage in changelog-update workflow** - [@norberttech](https://github.com/norberttech)
