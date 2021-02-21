@@ -24,7 +24,7 @@ final class HTMLSource implements Source
 
     public function __construct(string $content)
     {
-        if (\strlen($content) === \strlen(\strip_tags($content))) {
+        if (\strlen($content) === \strlen(\strip_tags($content)) && !empty($this->content)) {
             throw new \InvalidArgumentException('HTML Changelog source requires valid html content');
         }
 

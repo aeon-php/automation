@@ -64,6 +64,32 @@ When working on a project that is released multiple times every day and does not
 
 ## How? 
 
+Examples: 
+
+Generate full changelog for repository
+
+```
+docker run -t -e AEON_AUTOMATION_GH_TOKEN --rm aeonphp/automation changelog:generate:all aeon-php/calendar --skip-from="dependabot[bot]" --skip-from="aeon-automation"
+```
+
+Generate full changelog for repository ⚠️ **update CHANGELOG.md file and all releases** ⚠️
+
+```
+docker run -t -e AEON_AUTOMATION_GH_TOKEN --rm aeonphp/automation changelog:generate:all aeon-php/calendar --github-release-update --github-file-update-path=CHANGELOG.md --skip-from="dependabot[bot]" --skip-from="aeon-automation"
+```
+
+Generate unreleased changes for repository
+
+```
+docker run -t -e AEON_AUTOMATION_GH_TOKEN --rm aeonphp/automation changelog:generate aeon-php/calendar --skip-from="dependabot[bot]" --skip-from="aeon-automation"
+```
+
+Generate changelog for specific tag
+
+```
+docker run -t -e AEON_AUTOMATION_GH_TOKEN --rm aeonphp/automation changelog:generate aeon-php/calendar --tag=0.15.0 --skip-from="dependabot[bot]" --skip-from="aeon-automation"
+```
+
 In order to generate a changelog Automation takes 4 steps. 
 
 > Currently, Automation takes the whole project history directly from GitHub but more sources are coming. 
