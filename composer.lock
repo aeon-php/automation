@@ -8,16 +8,16 @@
     "packages": [
         {
             "name": "aeon-php/calendar",
-            "version": "0.16.2",
+            "version": "0.16.3",
             "source": {
                 "type": "git",
                 "url": "https://github.com/aeon-php/calendar.git",
-                "reference": "63a0d915665d4e4166d03b5852625debb2059df4"
+                "reference": "75494a02ab1b25ce20e07c0da8f4912d2533d53c"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/aeon-php/calendar/zipball/63a0d915665d4e4166d03b5852625debb2059df4",
-                "reference": "63a0d915665d4e4166d03b5852625debb2059df4",
+                "url": "https://api.github.com/repos/aeon-php/calendar/zipball/75494a02ab1b25ce20e07c0da8f4912d2533d53c",
+                "reference": "75494a02ab1b25ce20e07c0da8f4912d2533d53c",
                 "shasum": ""
             },
             "require": {
@@ -51,7 +51,7 @@
             ],
             "support": {
                 "issues": "https://github.com/aeon-php/calendar/issues",
-                "source": "https://github.com/aeon-php/calendar/tree/0.16.2"
+                "source": "https://github.com/aeon-php/calendar/tree/0.16.3"
             },
             "funding": [
                 {
@@ -59,7 +59,7 @@
                     "type": "github"
                 }
             ],
-            "time": "2021-03-21T14:13:22+00:00"
+            "time": "2021-03-22T20:14:32+00:00"
         },
         {
             "name": "captainhook/captainhook",
