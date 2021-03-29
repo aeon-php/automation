@@ -32,7 +32,7 @@ jobs:
         uses: "docker://aeonphp/automation:latest"
         env:
           AEON_AUTOMATION_GH_TOKEN: "${{ secrets.GITHUB_TOKEN }}"
-          EON_AUTOMATION_CACHE_DIR: "/github/workspace/cache"
+          AEON_AUTOMATION_CACHE_DIR: "/github/workspace/cache"
         with:
           entrypoint: "/composer/vendor/bin/automation"
           args: "changelog:generate ${{ github.repository }} --github-file-update-path=CHANGELOG.md --skip-from=\"dependabot[bot]\" --skip-from=\"aeon-automation\""
