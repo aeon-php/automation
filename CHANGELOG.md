@@ -51,6 +51,7 @@
 - [e5849d](https://github.com/aeon-php/automation/commit/e5849da3147caaf1394cfc149fdc405589d818ec) - **initial changelog** - [@norberttech](https://github.com/norberttech)
 
 ### Changed
+- [3271ee](https://github.com/aeon-php/automation/commit/3271ee24584796aca0e2ccd811ad969312cf1132) - **workflow env var** - [@norberttech](https://github.com/norberttech)
 - [#60](https://github.com/aeon-php/automation/pull/60) - **updated dependencies** - [@norberttech](https://github.com/norberttech)
 - [c9a240](https://github.com/aeon-php/automation/commit/c9a2403170bf47a70dfb37e2470c6162e5446e77) - **dependencies** - [@norberttech](https://github.com/norberttech)
 - [#52](https://github.com/aeon-php/automation/pull/52) - **drop all options shortcuts** - [@norberttech](https://github.com/norberttech)
