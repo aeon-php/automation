@@ -2,7 +2,7 @@
 *.phpt text eol=lf
 /composer.lock export-ignore
 /.github/ export-ignore
-/.phive/ export-ignore
+/tools/ export-ignore
 /docs export-ignore
 /tests export-ignore
 /.gitattributes export-ignore

@@ -6,7 +6,7 @@ namespace Aeon\Automation\Tests\Mother\GitHub;
 
 use Aeon\Calendar\Gregorian\DateTime;
 use Aeon\Calendar\Gregorian\GregorianCalendar;
-use PHPUnit\Webmozart\Assert\Assert;
+use Webmozart\Assert\Assert;
 
 final class GitHubResponseMother
 {
