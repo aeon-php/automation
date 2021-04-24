@@ -1,4 +1,4 @@
-## [Unreleased] - 2021-04-05
+## [Unreleased] - 2021-04-24
 
 ### Added
 - [#61](https://github.com/aeon-php/automation/pull/61) - **docker usages examples to README.md** - [@norberttech](https://github.com/norberttech)
@@ -51,6 +51,7 @@
 - [e5849d](https://github.com/aeon-php/automation/commit/e5849da3147caaf1394cfc149fdc405589d818ec) - **initial changelog** - [@norberttech](https://github.com/norberttech)
 
 ### Changed
+- [#83](https://github.com/aeon-php/automation/pull/83) - **Moved tools to additional composer.json file** - [@norberttech](https://github.com/norberttech)
 - [3271ee](https://github.com/aeon-php/automation/commit/3271ee24584796aca0e2ccd811ad969312cf1132) - **workflow env var** - [@norberttech](https://github.com/norberttech)
 - [#60](https://github.com/aeon-php/automation/pull/60) - **updated dependencies** - [@norberttech](https://github.com/norberttech)
 - [c9a240](https://github.com/aeon-php/automation/commit/c9a2403170bf47a70dfb37e2470c6162e5446e77) - **dependencies** - [@norberttech](https://github.com/norberttech)
@@ -58,8 +59,8 @@
 - [#44](https://github.com/aeon-php/automation/pull/44) - **updated coduo/php-matcher dependency to latest stable version** - [@norberttech](https://github.com/norberttech)
 - [4e38f3](https://github.com/aeon-php/automation/commit/4e38f358953ddec8e52665c1b467c4e1fa3070b8) - **Update README.md** - [@norberttech](https://github.com/norberttech)
 - [f2dc9e](https://github.com/aeon-php/automation/commit/f2dc9e8622d4afda8fd08cec4eb3c73da6c4d89b) - **aeon-php/calendar dependency** - [@norberttech](https://github.com/norberttech)
-- [#38](https://github.com/aeon-php/automation/pull/38) - **current cache name into HTTP Cache** - [@norberttech](https://github.com/norberttech)
 - [#38](https://github.com/aeon-php/automation/pull/38) - **moved default cache directory to $HOME/.automation** - [@norberttech](https://github.com/norberttech)
+- [#38](https://github.com/aeon-php/automation/pull/38) - **current cache name into HTTP Cache** - [@norberttech](https://github.com/norberttech)
 - [f164ec](https://github.com/aeon-php/automation/commit/f164ec7576b26597225f879504986e64a9cc8fdb) - **dependencies, added missing license to composer.json** - [@norberttech](https://github.com/norberttech)
 - [#35](https://github.com/aeon-php/automation/pull/35) - **fetch tags instead of releases when checking if the release exists in changelog:release:unreleased command** - [@norberttech](https://github.com/norberttech)
 - [#28](https://github.com/aeon-php/automation/pull/28) - **Default user-agent header to aeon-php/automation** - [@norberttech](https://github.com/norberttech)
@@ -107,6 +108,7 @@
 - [#2](https://github.com/aeon-php/automation/pull/2) - **Tests failing at PHP 8** - [@norberttech](https://github.com/norberttech)
 
 ### Removed
+- [#83](https://github.com/aeon-php/automation/pull/83) - **phive** - [@norberttech](https://github.com/norberttech)
 - [#60](https://github.com/aeon-php/automation/pull/60) - **redundant formatter method** - [@norberttech](https://github.com/norberttech)
 - [#43](https://github.com/aeon-php/automation/pull/43) - **markdown list 2 space indention in markdown formatter** - [@norberttech](https://github.com/norberttech)
 - [#22](https://github.com/aeon-php/automation/pull/22) - **Redundant Help command** - [@norberttech](https://github.com/norberttech)
