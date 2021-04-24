@@ -1,0 +1,11 @@
+{
+    "name": "aeon-php/calendar-tools",
+    "description": "Aeon PHP Calendar - Tools",
+    "prefer-stable": true,
+    "minimum-stability": "dev",
+    "require-dev": {
+        "phpunit/phpunit": "^9.5",
+        "humbug/box": "^3.12",
+        "friendsofphp/php-cs-fixer": "^2.18"
+    }
+}

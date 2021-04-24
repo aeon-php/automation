@@ -1,5 +1,6 @@
 {
     "name": "aeon-php/automation",
+    "description": "Automatically update project changelog after commit/tag/release/pull request in \"keep a changelog\" format (or not)",
     "authors": [
         {
             "name": "Norbert Orzechowicz",
@@ -50,11 +51,18 @@
             "@static:analyze"
         ],
         "test": [
-            "tools/phpunit.phar"
+            "tools/vendor/bin/phpunit"
         ],
         "static:analyze": [
-            "tools/php-cs-fixer fix --dry-run"
+            "tools/vendor/bin/php-cs-fixer fix --dry-run"
         ],
-        "cs:php:fix": "tools/php-cs-fixer fix"
+        "cs:php:fix": "tools/vendor/bin/php-cs-fixer fix",
+        "tools:install": "composer install --working-dir=./tools",
+        "post-install-cmd": [
+            "@tools:install"
+        ],
+        "post-update-cmd": [
+            "@tools:install"
+        ]
     }
 }

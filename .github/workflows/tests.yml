@@ -34,7 +34,7 @@ jobs:
         uses: "shivammathur/setup-php@v2"
         with:
           coverage: pcov
-          tools: phive, composer:v2
+          tools: composer:v2
           php-version: "${{ matrix.php-version }}"
           ini-values: memory_limit=-1
 
@@ -73,9 +73,6 @@ jobs:
       - name: "Install locked dependencies"
         if: ${{ matrix.dependencies == 'locked' }}
         run: "composer install --no-interaction --no-progress --no-suggest"
-
-      - name: "Install tools"
-        run: "phive install --trust-gpg-keys E82B2FB314E9906E,4AA394086372C20A --force-accept-unsigned"
 
       - name: "Test"
         run: "composer test"
