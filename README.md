@@ -438,6 +438,36 @@ Options:
   -v|vv|vvv, --verbose                               Increase the verbosity of messages: 1 for normal output, 2 for more verbose output and 3 for debug
 ```
 
+### workflow:timing:list
+
+```
+Description:
+  List project Github actions workflows billable minutes usage in current billing cycle
+
+Usage:
+  workflow:timing:list [options] [--] <project>
+
+Arguments:
+  project                                            project name
+
+Options:
+      --os=OS                                        Show billable minutes for operating systems [default: ["ubuntu","macos","windows"]] (multiple values allowed)
+  -h, --help                                         Display help for the given command. When no command is given display help for the list command
+  -q, --quiet                                        Do not output any message
+  -V, --version                                      Display this application version
+      --ansi                                         Force ANSI output
+      --no-ansi                                      Disable ANSI output
+  -n, --no-interaction                               Do not ask any interactive question
+      --configuration=CONFIGURATION                  Custom path to the automation.xml configuration file.
+      --cache-path=CACHE-PATH                        Path to root cache directory, taken from sys_get_tmp_dir() function or AEON_AUTOMATION_CACHE_DIR env variable [default: "/Users/norzechowicz/.automation"]
+      --github-token=GITHUB-TOKEN                    Github personal access token, generated here: https://github.com/settings/tokens By default taken from AEON_AUTOMATION_GH_TOKEN env variable
+      --github-enterprise-url=GITHUB-ENTERPRISE-URL  Github enterprise URL, by default taken from AEON_AUTOMATION_GH_ENTERPRISE_URL env variable
+  -v|vv|vvv, --verbose                               Increase the verbosity of messages: 1 for normal output, 2 for more verbose output and 3 for debug
+
+Help:
+  Billable minutes only apply to workflows in private repositories that use GitHub-hosted runners.
+```
+
 ## Integration Request
 
 If you would lik to integrate Automation with your project but not sure how, feel free to [Open Integration Request](https://github.com/aeon-php/automation/issues/new/choose).  

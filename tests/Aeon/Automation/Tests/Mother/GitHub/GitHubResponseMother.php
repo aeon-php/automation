@@ -91,6 +91,7 @@ final class GitHubResponseMother
         return [
             'id' => $id ? $id : \random_int(100000, 1000000),
             'name' => $name,
+            'state' => 'active',
         ];
     }
 

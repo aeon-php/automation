@@ -35,7 +35,7 @@ final class WorkflowJobList extends AbstractCommand
 
         $workflows = $this->githubClient()->workflows($project);
 
-        $tableHeaders = ['Workflow', 'Job', 'Status', 'Completed At'];
+        $tableHeaders = ['Workflow', 'Job', 'State', 'Status', 'Completed At'];
 
         $tableBody = [];
 
@@ -61,6 +61,7 @@ final class WorkflowJobList extends AbstractCommand
                     $tableBody[] = [
                         $workflow->name(),
                         $job->name(),
+                        $workflow->state(),
                         $status,
                         $job->isCompleted() ? $job->completedAt()->format('Y-m-d H:i:s P') : 'N/A',
                     ];

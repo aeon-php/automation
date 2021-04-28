@@ -339,6 +339,18 @@ final class GitHubClient implements GitHub
         return new WorkflowRunJobs(...\array_map(fn (array $jobData) : WorkflowRunJob => new WorkflowRunJob($jobData), $jobsData['jobs']));
     }
 
+    public function workflowTiming(Project $project, Workflow $workflow) : WorkflowTiming
+    {
+        $timingData = ResponseMediator::getContent(
+            $this->client->getHttpClient()->get(
+                '/repos/' . \rawurlencode($project->organization()) . '/' . \rawurlencode($project->name()) . '/actions/workflows/' . $workflow->id() . '/timing',
+                ['Accept' => 'application/vnd.github.v3+json']
+            )
+        );
+
+        return new WorkflowTiming($timingData);
+    }
+
     public function file(Project $project, string $path, ?string $fileRef) : File
     {
         return new File($this->client->repo()->contents()->show($project->organization(), $project->name(), $path, $fileRef));
