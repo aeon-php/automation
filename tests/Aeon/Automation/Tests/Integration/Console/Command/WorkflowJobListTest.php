@@ -54,14 +54,14 @@ final class WorkflowJobListTest extends CommandTestCase
             ['project' => 'aeon-php/automation'],
             ['verbosity' => ConsoleOutput::VERBOSITY_VERBOSE]
         );
-
         $this->assertStringContainsString('Workflow - Job - List', $commandTester->getDisplay());
-        $this->assertStringContainsString('---------------- ---------------- --------- ----------------------------', $commandTester->getDisplay());
-        $this->assertStringContainsString(' Workflow         Job              Status    Completed At               ', $commandTester->getDisplay());
-        $this->assertStringContainsString('---------------- ---------------- --------- ----------------------------', $commandTester->getDisplay());
-        $this->assertStringContainsString(' Tests            tests            success   2020-01-01 00:00:00 +00:00 ', $commandTester->getDisplay());
-        $this->assertStringContainsString(' Static Analyze   static analyze   success   2020-01-01 00:00:00 +00:00 ', $commandTester->getDisplay());
-        $this->assertStringContainsString('---------------- ---------------- --------- ----------------------------', $commandTester->getDisplay());
+
+        $this->assertStringContainsString('---------------- ---------------- -------- --------- ----------------------------', $commandTester->getDisplay());
+        $this->assertStringContainsString('Workflow         Job              State    Status    Completed At                ', $commandTester->getDisplay());
+        $this->assertStringContainsString('---------------- ---------------- -------- --------- ----------------------------', $commandTester->getDisplay());
+        $this->assertStringContainsString('Tests            tests            active   success   2020-01-01 00:00:00 +00:00  ', $commandTester->getDisplay());
+        $this->assertStringContainsString('Static Analyze   static analyze   active   success   2020-01-01 00:00:00 +00:00  ', $commandTester->getDisplay());
+        $this->assertStringContainsString('---------------- ---------------- -------- --------- ----------------------------', $commandTester->getDisplay());
 
         $this->assertSame(0, $commandTester->getStatusCode());
     }

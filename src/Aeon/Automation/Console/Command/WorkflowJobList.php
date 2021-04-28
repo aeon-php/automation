@@ -40,7 +40,6 @@ final class WorkflowJobList extends AbstractCommand
         $tableBody = [];
 
         foreach ($workflows->all() as $workflow) {
-
             $run = $this->githubClient()->workflowLatestRun($project, $workflow);
 
             if ($run) {
