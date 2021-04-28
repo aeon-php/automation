@@ -1,6 +1,7 @@
-## [Unreleased] - 2021-04-24
+## [Unreleased] - 2021-04-28
 
 ### Added
+- [#84](https://github.com/aeon-php/automation/pull/84) - **workflow:timing:list - to  display project workflows billable minutes usage** - [@norberttech](https://github.com/norberttech)
 - [#61](https://github.com/aeon-php/automation/pull/61) - **docker usages examples to README.md** - [@norberttech](https://github.com/norberttech)
 - [#60](https://github.com/aeon-php/automation/pull/60) - **missing test for unchanged changelog in changeloge:generate** - [@norberttech](https://github.com/norberttech)
 - [#60](https://github.com/aeon-php/automation/pull/60) - **missing test for pull request template show and cache clear commands** - [@norberttech](https://github.com/norberttech)
