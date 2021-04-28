@@ -16,6 +16,7 @@ use Aeon\Automation\Console\Command\PullRequestsList;
 use Aeon\Automation\Console\Command\PullRequestsTemplateShow;
 use Aeon\Automation\Console\Command\ReleaseList;
 use Aeon\Automation\Console\Command\TagList;
+use Aeon\Automation\Console\Command\WorkflowTimingList;
 use Symfony\Component\Console\Input\ArgvInput;
 use Symfony\Component\Console\Output\ConsoleOutput;
 
@@ -69,6 +70,7 @@ use Symfony\Component\Console\Output\ConsoleOutput;
     $application->add(new BranchList($rootDir, $defaultConfigPaths));
     $application->add(new TagList($rootDir, $defaultConfigPaths));
     $application->add(new WorkflowJobList($rootDir, $defaultConfigPaths));
+    $application->add(new WorkflowTimingList($rootDir, $defaultConfigPaths));
     $application->add(new CacheClear($rootDir, $defaultConfigPaths));
     $application->run($input, $output);
 })();

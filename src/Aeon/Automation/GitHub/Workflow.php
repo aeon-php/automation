@@ -22,4 +22,9 @@ final class Workflow
     {
         return $this->data['name'];
     }
+
+    public function path() : string
+    {
+        return $this->data['path'];
+    }
 }
