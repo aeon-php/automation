@@ -27,4 +27,14 @@ final class Workflow
     {
         return $this->data['path'];
     }
+
+    public function state() : string
+    {
+        return $this->data['state'];
+    }
+
+    public function isActive() : bool
+    {
+        return $this->data['state'] === 'active';
+    }
 }

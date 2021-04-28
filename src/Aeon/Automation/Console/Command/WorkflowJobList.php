@@ -35,11 +35,12 @@ final class WorkflowJobList extends AbstractCommand
 
         $workflows = $this->githubClient()->workflows($project);
 
-        $tableHeaders = ['Workflow', 'Job', 'Status', 'Completed At'];
+        $tableHeaders = ['Workflow', 'Job', 'State', 'Status', 'Completed At'];
 
         $tableBody = [];
 
         foreach ($workflows->all() as $workflow) {
+
             $run = $this->githubClient()->workflowLatestRun($project, $workflow);
 
             if ($run) {
@@ -61,6 +62,7 @@ final class WorkflowJobList extends AbstractCommand
                     $tableBody[] = [
                         $workflow->name(),
                         $job->name(),
+                        $workflow->state(),
                         $status,
                         $job->isCompleted() ? $job->completedAt()->format('Y-m-d H:i:s P') : 'N/A',
                     ];
