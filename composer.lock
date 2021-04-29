@@ -869,16 +869,16 @@
         },
         {
             "name": "knplabs/github-api",
-            "version": "v3.1.0",
+            "version": "v3.2.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/KnpLabs/php-github-api.git",
-                "reference": "95a5ced277a62e9a1253b12b9435e637603a2cbf"
+                "reference": "1dce0d33292eb2c4d33e2f9354b4043caf14588e"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/KnpLabs/php-github-api/zipball/95a5ced277a62e9a1253b12b9435e637603a2cbf",
-                "reference": "95a5ced277a62e9a1253b12b9435e637603a2cbf",
+                "url": "https://api.github.com/repos/KnpLabs/php-github-api/zipball/1dce0d33292eb2c4d33e2f9354b4043caf14588e",
+                "reference": "1dce0d33292eb2c4d33e2f9354b4043caf14588e",
                 "shasum": ""
             },
             "require": {
@@ -893,6 +893,7 @@
                 "psr/http-client-implementation": "^1.0",
                 "psr/http-factory-implementation": "^1.0",
                 "psr/http-message": "^1.0",
+                "symfony/deprecation-contracts": "^2.2",
                 "symfony/polyfill-php80": "^1.17"
             },
             "require-dev": {
@@ -904,13 +905,14 @@
                 "phpstan/phpstan": "^0.12.57",
                 "phpstan/phpstan-deprecation-rules": "^0.12.5",
                 "phpunit/phpunit": "^8.5 || ^9.4",
-                "symfony/cache": "^5.1.8"
+                "symfony/cache": "^5.1.8",
+                "symfony/phpunit-bridge": "^5.2"
             },
             "type": "library",
             "extra": {
                 "branch-alias": {
-                    "dev-2.x": "2.19.x-dev",
-                    "dev-master": "3.0.x-dev"
+                    "dev-2.x": "2.20.x-dev",
+                    "dev-master": "3.2.x-dev"
                 }
             },
             "autoload": {
@@ -943,7 +945,7 @@
             ],
             "support": {
                 "issues": "https://github.com/KnpLabs/php-github-api/issues",
-                "source": "https://github.com/KnpLabs/php-github-api/tree/v3.1.0"
+                "source": "https://github.com/KnpLabs/php-github-api/tree/v3.2.0"
             },
             "funding": [
                 {
@@ -951,7 +953,7 @@
                     "type": "github"
                 }
             ],
-            "time": "2021-03-11T20:13:37+00:00"
+            "time": "2021-04-28T18:12:19+00:00"
         },
         {
             "name": "league/commonmark",
