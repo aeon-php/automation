@@ -4894,20 +4894,20 @@
     "packages-dev": [
         {
             "name": "coduo/php-matcher",
-            "version": "6.0.4",
+            "version": "6.0.5",
             "source": {
                 "type": "git",
                 "url": "https://github.com/coduo/php-matcher.git",
-                "reference": "b8f52e736165966c4e467e292349ecd88aa401cc"
+                "reference": "1272f1a879917f5ea4798ec9d915886335c836a9"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/coduo/php-matcher/zipball/b8f52e736165966c4e467e292349ecd88aa401cc",
-                "reference": "b8f52e736165966c4e467e292349ecd88aa401cc",
+                "url": "https://api.github.com/repos/coduo/php-matcher/zipball/1272f1a879917f5ea4798ec9d915886335c836a9",
+                "reference": "1272f1a879917f5ea4798ec9d915886335c836a9",
                 "shasum": ""
             },
             "require": {
-                "aeon-php/calendar": "^0.14.0 || ^0.15.0 || ^0.16.0",
+                "aeon-php/calendar": "^0.14.0 || ^0.15.0 || ^0.16.0 || ^0.17.0 || ^0.18.0",
                 "coduo/php-to-string": "^3",
                 "doctrine/lexer": "^1.0",
                 "ext-filter": "*",
@@ -4953,9 +4953,9 @@
             ],
             "support": {
                 "issues": "https://github.com/coduo/php-matcher/issues",
-                "source": "https://github.com/coduo/php-matcher/tree/6.0.4"
+                "source": "https://github.com/coduo/php-matcher/tree/6.0.5"
             },
-            "time": "2021-03-01T14:44:45+00:00"
+            "time": "2021-05-03T08:16:31+00:00"
         },
         {
             "name": "coduo/php-to-string",
