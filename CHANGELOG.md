@@ -1,4 +1,4 @@
-## [Unreleased] - 2021-06-28
+## [Unreleased] - 2021-07-01
 
 ### Added
 - [#84](https://github.com/aeon-php/automation/pull/84) - **workflow:timing:list - to  display project workflows billable minutes usage** - [@norberttech](https://github.com/norberttech)
