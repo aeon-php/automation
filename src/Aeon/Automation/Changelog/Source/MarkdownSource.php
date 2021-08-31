@@ -22,7 +22,7 @@ final class MarkdownSource implements Source
         $converter = new CommonMarkConverter([
             'commonmark' => [
                 'enable_em' => false,
-            ]
+            ],
         ]);
 
         return (new HTMLSource($converter->convertToHtml(\str_replace('`', '\`', $this->content))->getContent()))->releases();
