@@ -92,6 +92,7 @@
 - [72564b](https://github.com/aeon-php/automation/commit/72564ba0991f280a74428d10fc1dee9b02659b02) - **Initial commit** - [@norberttech](https://github.com/norberttech)
 
 ### Fixed
+- [#158](https://github.com/aeon-php/automation/pull/158) - **Use pagination in commits compare endpoint** - [@norberttech](https://github.com/norberttech)
 - [#61](https://github.com/aeon-php/automation/pull/61) - **generating changelog for empty CHANGELOG.md file** - [@norberttech](https://github.com/norberttech)
 - [#50](https://github.com/aeon-php/automation/pull/50) - **Fixed bug that was updating Unreleased section date even when nothing new was added** - [@norberttech](https://github.com/norberttech)
 - [#43](https://github.com/aeon-php/automation/pull/43) - **markdown -> html conversion issues in Changelog Manipulator** - [@norberttech](https://github.com/norberttech)
