@@ -45,4 +45,9 @@ final class Commits
 
         return new self(...\array_slice($this->commits, $commits, $this->count() -1));
     }
+
+    public function reverse() : self
+    {
+        return new self(...\array_reverse($this->all()));
+    }
 }
