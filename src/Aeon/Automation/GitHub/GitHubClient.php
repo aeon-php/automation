@@ -62,24 +62,20 @@ final class GitHubClient implements GitHub
         $commitsPaginator = new ResultPager($this->client);
         $commitsData = $commitsPaginator->fetch($this->client->repo()->commits(), 'compare', [$project->organization(), $project->name(), $untilCommit->sha(), $fromCommit->sha()]);
 
-        $totalCommits = $commitsData['total_commits'];
         $commitsData = $commitsData['commits'];
 
-        $remainingCommitsCount = $totalCommits - \count($commitsData);
+        $commits = new Commits();
 
-        $commits = new Commits(
-            ...\array_map(
-                fn (array $commitData) : Commit => new Commit($commitData),
-                \array_reverse($commitsData)
-            )
-        );
+        while (true) {
+            foreach ($commitsData as $commitData) {
+                $commits = $commits->merge(new Commits(new Commit($commitData)));
+            }
 
-        // compare API has limit to return maximum 250 commits in the chronological order
-        // in order to get more commits we need to start from the first one (it's the last on in the history)
-        // and use commits list API (skipping first one to avoid duplicates) to get remaining commits.
-        if ($remainingCommitsCount > 0) {
-            $remainingCommits = $this->commits($project, \current($commitsData)['sha'], $changedAfter, $changedBefore, $remainingCommitsCount + 1);
-            $commits = $commits->merge($remainingCommits->skip(1));
+            if ($commitsPaginator->hasNext()) {
+                $commitsData = $commitsPaginator->fetchNext()['commits'];
+            } else {
+                break;
+            }
         }
 
         return $commits;
