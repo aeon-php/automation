@@ -199,7 +199,6 @@ automation changelog:generate organization/name -v
 Looking for a way to contribute? Awesome ❤️ Below you can find few places to start with:
 
 * [Contributing & Development](https://github.com/aeon-php/.github/blob/master/CONTRIBUTING.md)
-* [Forum](https://forum.aeon-php.org/)
 
 You are also more than welcome to open an [issue](https://github.com/aeon-php/automation/issues) if anything about this project bothers you.
 
