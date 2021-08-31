@@ -20,9 +20,11 @@ final class MarkdownSource implements Source
     public function releases() : Releases
     {
         $converter = new CommonMarkConverter([
-            'enable_em' => false,
+            'commonmark' => [
+                'enable_em' => false,
+            ]
         ]);
 
-        return (new HTMLSource($converter->convertToHtml(\str_replace('`', '\`', $this->content))))->releases();
+        return (new HTMLSource($converter->convertToHtml(\str_replace('`', '\`', $this->content))->getContent()))->releases();
     }
 }
