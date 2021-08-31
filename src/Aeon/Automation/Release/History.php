@@ -55,7 +55,7 @@ final class History
         }
 
         if ($this->scope->commitStart() !== null && $this->scope->commitEnd() !== null) {
-            $this->commits = $this->github->commitsCompare($this->project, $this->scope->commitStart(), $this->scope->commitEnd(), $this->changedAfter, $this->changedBefore);
+            $this->commits = $this->github->commitsCompare($this->project, $this->scope->commitStart(), $this->scope->commitEnd(), $this->changedAfter, $this->changedBefore)->reverse();
         } else {
             $this->commits = $this->github->commits($this->project, $this->scope->commitStart()->sha(), $this->changedAfter, $this->changedBefore);
         }
