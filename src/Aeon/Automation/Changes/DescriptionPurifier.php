@@ -26,7 +26,7 @@ final class DescriptionPurifier
                             '\*',
                             \str_replace('`', '\`', $description)
                         )
-                    )
+                    )->getContent()
                 )
             )
         );
