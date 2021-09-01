@@ -1,7 +1,7 @@
-## [Unreleased] - 2021-09-01
+## [1.0.0] - 2021-09-01
 
 ### Added
-- [#84](https://github.com/aeon-php/automation/pull/84) - **workflow:timing:list - to  display project workflows billable minutes usage** - [@norberttech](https://github.com/norberttech)
+- [#84](https://github.com/aeon-php/automation/pull/84) - **workflow:timing:list - to display project workflows billable minutes usage** - [@norberttech](https://github.com/norberttech)
 - [#61](https://github.com/aeon-php/automation/pull/61) - **docker usages examples to README.md** - [@norberttech](https://github.com/norberttech)
 - [#60](https://github.com/aeon-php/automation/pull/60) - **missing test for unchanged changelog in changeloge:generate** - [@norberttech](https://github.com/norberttech)
 - [#60](https://github.com/aeon-php/automation/pull/60) - **missing test for pull request template show and cache clear commands** - [@norberttech](https://github.com/norberttech)
@@ -40,7 +40,7 @@
 - [#6](https://github.com/aeon-php/automation/pull/6) - **twig template for changelog generation** - [@norberttech](https://github.com/norberttech)
 - [#6](https://github.com/aeon-php/automation/pull/6) - **support for generating changelogs from tags that are diverged** - [@norberttech](https://github.com/norberttech)
 - [#5](https://github.com/aeon-php/automation/pull/5) - **PrefixParser to detect change type from change title prefix** - [@norberttech](https://github.com/norberttech)
-- [#5](https://github.com/aeon-php/automation/pull/5) - **`Change::name() : string` and `Change::all() : array`  methods** - [@norberttech](https://github.com/norberttech)
+- [#5](https://github.com/aeon-php/automation/pull/5) - **`Change::name() : string` and `Change::all() : array` methods** - [@norberttech](https://github.com/norberttech)
 - [#4](https://github.com/aeon-php/automation/pull/4) - **Make first character of change title uppercase** - [@norberttech](https://github.com/norberttech)
 - [#3](https://github.com/aeon-php/automation/pull/3) - **support for conventional commit format** - [@norberttech](https://github.com/norberttech)
 - [#3](https://github.com/aeon-php/automation/pull/3) - **Change object that holds Type and description** - [@norberttech](https://github.com/norberttech)
