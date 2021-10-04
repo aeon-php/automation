@@ -33,5 +33,6 @@ final class ConventionalParserTest extends TestCase
         yield ['add: added something', Type::added(), 'added something'];
         yield ['AddeD: added something', Type::added(), 'added something'];
         yield ['rm: removed something', Type::removed(), 'removed something'];
+        yield ['updated: updated something', Type::updated(), 'updated something'];
     }
 }
