@@ -15,7 +15,8 @@ final class PrefixDetector implements ChangesDetector
 {
     private const PREFIXES = [
         'added' => ['add', 'added', 'adding'],
-        'changed' => ['change', 'changed', 'updated', 'replaced', 'bump'],
+        'changed' => ['change', 'changed', 'replaced'],
+        'updated' => ['updated', 'update', 'bump', 'bumped'],
         'fixed' => ['fix', 'fixed', 'fixing'],
         'removed' => ['rm', 'removed', 'rem', 'drop', 'dropped'],
         'deprecated' => ['deprecated', 'dep'],

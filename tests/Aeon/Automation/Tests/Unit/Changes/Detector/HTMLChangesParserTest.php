@@ -35,7 +35,10 @@ final class HTMLChangesParserTest extends TestCase
         </ul>
     <ul id="fixed">
         <li>fixed</li>
-        </ul>
+    </ul>
+    <ul id="updated">
+        <li>updated</li>
+    </ul>
     <ul id="removed">
         <li>removed</li>
     </ul>
@@ -53,6 +56,7 @@ HTML;
         $this->assertEquals([new Change($source, Type::added(), 'added')], $changes->withType(Type::added()));
         $this->assertEquals([new Change($source, Type::changed(), 'changed')], $changes->withType(Type::changed()));
         $this->assertEquals([new Change($source, Type::fixed(), 'fixed')], $changes->withType(Type::fixed()));
+        $this->assertEquals([new Change($source, Type::updated(), 'updated')], $changes->withType(Type::updated()));
         $this->assertEquals([new Change($source, Type::removed(), 'removed')], $changes->withType(Type::removed()));
         $this->assertEquals([new Change($source, Type::deprecated(), 'deprecated')], $changes->withType(Type::deprecated()));
         $this->assertEquals([new Change($source, Type::security(), 'security')], $changes->withType(Type::security()));

@@ -18,6 +18,8 @@ final class Type
 
     private const TYPE_SECURITY = 6;
 
+    private const TYPE_UPDATED = 7;
+
     private int $type;
 
     private function __construct(int $type)
@@ -40,6 +42,8 @@ final class Type
                 return self::deprecated();
             case 'security':
                 return self::security();
+            case 'updated':
+                return self::updated();
 
             default:
                 throw new \InvalidArgumentException('Unknown change type: ' . $type);
@@ -76,6 +80,11 @@ final class Type
         return new self(self::TYPE_SECURITY);
     }
 
+    public static function updated() : self
+    {
+        return new self(self::TYPE_UPDATED);
+    }
+
     /**
      * @return Type[];
      */
@@ -88,6 +97,7 @@ final class Type
             self::removed(),
             self::deprecated(),
             self::security(),
+            self::updated(),
         ];
     }
 
@@ -121,6 +131,11 @@ final class Type
         return $this->type === self::TYPE_SECURITY;
     }
 
+    public function isUpdated() : bool
+    {
+        return $this->type === self::TYPE_UPDATED;
+    }
+
     public function name() : string
     {
         switch ($this->type) {
@@ -136,6 +151,8 @@ final class Type
                 return 'deprecated';
             case self::TYPE_SECURITY:
                 return 'security';
+            case self::TYPE_UPDATED:
+                return 'updated';
         }
 
         throw new \RuntimeException('Missing type name definition');

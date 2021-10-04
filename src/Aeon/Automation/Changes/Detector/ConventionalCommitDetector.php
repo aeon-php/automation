@@ -61,7 +61,12 @@ final class ConventionalCommitDetector implements ChangesDetector
                 return new Changes(
                     new Change($changesSource, Type::added(), $description),
                 );
+            case 'update':
+            case 'up':
             case 'updated':
+                return new Changes(
+                    new Change($changesSource, Type::updated(), $description)
+                );
             case 'changed':
             case 'change':
                 return new Changes(

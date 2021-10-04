@@ -39,6 +39,7 @@ final class PrefixParserTest extends TestCase
     public function messages_with_prefix() : \Generator
     {
         yield ['added something cool', Type::added(), 'something cool'];
+        yield ['updated something cool', Type::updated(), 'something cool'];
         yield ['AddEd something cool', Type::added(), 'something cool'];
         yield ['adding something cool', Type::added(), 'something cool'];
         yield ['changed so many different things', Type::changed(), 'so many different things'];

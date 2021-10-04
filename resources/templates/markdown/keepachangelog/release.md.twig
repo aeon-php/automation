@@ -3,6 +3,7 @@
 {% include 'changelog/changes.md.twig' with {changes : release.added, type: 'added'} %}
 {% include 'changelog/changes.md.twig' with {changes : release.changed, type: 'changed'} %}
 {% include 'changelog/changes.md.twig' with {changes : release.fixed, type: 'fixed'} %}
+{% include 'changelog/changes.md.twig' with {changes : release.updated, type: 'updated'} %}
 {% include 'changelog/changes.md.twig' with {changes : release.removed, type: 'removed'} %}
 {% include 'changelog/changes.md.twig' with {changes : release.deprecated, type: 'deprecated'} %}
 {% include 'changelog/changes.md.twig' with {changes : release.security, type: 'security'} %}
