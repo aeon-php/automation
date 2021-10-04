@@ -1,9 +1,14 @@
 ## [Unreleased] - 2021-10-04
 
+## [1.0.1] - 2021-10-04
+
+### Added
+- [#167](https://github.com/aeon-php/automation/pull/167) - **new change type: Changed** - [@norberttech](https://github.com/norberttech)
+
 ## [1.0.0] - 2021-09-01
 
 ### Added
-- [#84](https://github.com/aeon-php/automation/pull/84) - **workflow:timing:list - to display project workflows billable minutes usage** - [@norberttech](https://github.com/norberttech)
+- [#84](https://github.com/aeon-php/automation/pull/84) - **workflow:timing:list - to  display project workflows billable minutes usage** - [@norberttech](https://github.com/norberttech)
 - [#61](https://github.com/aeon-php/automation/pull/61) - **docker usages examples to README.md** - [@norberttech](https://github.com/norberttech)
 - [#60](https://github.com/aeon-php/automation/pull/60) - **missing test for unchanged changelog in changeloge:generate** - [@norberttech](https://github.com/norberttech)
 - [#60](https://github.com/aeon-php/automation/pull/60) - **missing test for pull request template show and cache clear commands** - [@norberttech](https://github.com/norberttech)
@@ -42,7 +47,7 @@
 - [#6](https://github.com/aeon-php/automation/pull/6) - **twig template for changelog generation** - [@norberttech](https://github.com/norberttech)
 - [#6](https://github.com/aeon-php/automation/pull/6) - **support for generating changelogs from tags that are diverged** - [@norberttech](https://github.com/norberttech)
 - [#5](https://github.com/aeon-php/automation/pull/5) - **PrefixParser to detect change type from change title prefix** - [@norberttech](https://github.com/norberttech)
-- [#5](https://github.com/aeon-php/automation/pull/5) - **`Change::name() : string` and `Change::all() : array` methods** - [@norberttech](https://github.com/norberttech)
+- [#5](https://github.com/aeon-php/automation/pull/5) - **`Change::name() : string` and `Change::all() : array`  methods** - [@norberttech](https://github.com/norberttech)
 - [#4](https://github.com/aeon-php/automation/pull/4) - **Make first character of change title uppercase** - [@norberttech](https://github.com/norberttech)
 - [#3](https://github.com/aeon-php/automation/pull/3) - **support for conventional commit format** - [@norberttech](https://github.com/norberttech)
 - [#3](https://github.com/aeon-php/automation/pull/3) - **Change object that holds Type and description** - [@norberttech](https://github.com/norberttech)
@@ -56,36 +61,23 @@
 ### Changed
 - [#157](https://github.com/aeon-php/automation/pull/157) - **Updated dependencies** - [@norberttech](https://github.com/norberttech)
 - [#83](https://github.com/aeon-php/automation/pull/83) - **Moved tools to additional composer.json file** - [@norberttech](https://github.com/norberttech)
-- [3271ee](https://github.com/aeon-php/automation/commit/3271ee24584796aca0e2ccd811ad969312cf1132) - **workflow env var** - [@norberttech](https://github.com/norberttech)
 - [#60](https://github.com/aeon-php/automation/pull/60) - **updated dependencies** - [@norberttech](https://github.com/norberttech)
-- [c9a240](https://github.com/aeon-php/automation/commit/c9a2403170bf47a70dfb37e2470c6162e5446e77) - **dependencies** - [@norberttech](https://github.com/norberttech)
 - [#52](https://github.com/aeon-php/automation/pull/52) - **drop all options shortcuts** - [@norberttech](https://github.com/norberttech)
 - [#44](https://github.com/aeon-php/automation/pull/44) - **updated coduo/php-matcher dependency to latest stable version** - [@norberttech](https://github.com/norberttech)
-- [4e38f3](https://github.com/aeon-php/automation/commit/4e38f358953ddec8e52665c1b467c4e1fa3070b8) - **Update README.md** - [@norberttech](https://github.com/norberttech)
-- [f2dc9e](https://github.com/aeon-php/automation/commit/f2dc9e8622d4afda8fd08cec4eb3c73da6c4d89b) - **aeon-php/calendar dependency** - [@norberttech](https://github.com/norberttech)
 - [#38](https://github.com/aeon-php/automation/pull/38) - **current cache name into HTTP Cache** - [@norberttech](https://github.com/norberttech)
 - [#38](https://github.com/aeon-php/automation/pull/38) - **moved default cache directory to $HOME/.automation** - [@norberttech](https://github.com/norberttech)
-- [f164ec](https://github.com/aeon-php/automation/commit/f164ec7576b26597225f879504986e64a9cc8fdb) - **dependencies, added missing license to composer.json** - [@norberttech](https://github.com/norberttech)
 - [#35](https://github.com/aeon-php/automation/pull/35) - **fetch tags instead of releases when checking if the release exists in changelog:release:unreleased command** - [@norberttech](https://github.com/norberttech)
 - [#28](https://github.com/aeon-php/automation/pull/28) - **Default user-agent header to aeon-php/automation** - [@norberttech](https://github.com/norberttech)
 - [#23](https://github.com/aeon-php/automation/pull/23) - **Detached GitHub client from Data model** - [@norberttech](https://github.com/norberttech)
 - [#22](https://github.com/aeon-php/automation/pull/22) - **Project structure, core things are now organized under GitHub, Release and Changes namespaces** - [@norberttech](https://github.com/norberttech)
 - [#22](https://github.com/aeon-php/automation/pull/22) - **Decoupled changelog generation logic from IO** - [@norberttech](https://github.com/norberttech)
 - [#19](https://github.com/aeon-php/automation/pull/19) - **ChangelogGenerate command refactoring** - [@norberttech](https://github.com/norberttech)
-- [6c2011](https://github.com/aeon-php/automation/commit/6c2011feedad4fdd20bae0802eb320f82fa759e0) - **Update README.md** - [@norberttech](https://github.com/norberttech)
-- [f35b74](https://github.com/aeon-php/automation/commit/f35b7451486951efd214d2352cfadfe69e8c69c9) - **Update README.md** - [@norberttech](https://github.com/norberttech)
-- [f47a3e](https://github.com/aeon-php/automation/commit/f47a3e4602247b85cb401dd24ff1a7838d7eb74f) - **Update README.md** - [@norberttech](https://github.com/norberttech)
-- [38ffae](https://github.com/aeon-php/automation/commit/38ffaeb0dd3bf9b21045d5dc3d36448fd5730795) - **README** - [@norberttech](https://github.com/norberttech)
 - [#10](https://github.com/aeon-php/automation/pull/10) - **Increased verbosity of changelog:generate command** - [@norberttech](https://github.com/norberttech)
-- [5307f9](https://github.com/aeon-php/automation/commit/5307f96c3544ed46fcbe2b596538b02df7f99361) - **CHANGELOG.md** - [@norberttech](https://github.com/norberttech)
 - [#6](https://github.com/aeon-php/automation/pull/6) - **change-log:get command into changelog:generate** - [@norberttech](https://github.com/norberttech)
 - [#6](https://github.com/aeon-php/automation/pull/6) - **--tag-start & --tag-end into --tag in changelog:generate commad** - [@norberttech](https://github.com/norberttech)
-- [ede6eb](https://github.com/aeon-php/automation/commit/ede6eb897f8bd0ba77ceedb3fc3ccb44590124a2) - **Update CHANGELOG.md** - [@norberttech](https://github.com/norberttech)
 - [#5](https://github.com/aeon-php/automation/pull/5) - **Replaced redundant methods in Changes collection with more generic ones** - [@norberttech](https://github.com/norberttech)
 - [#3](https://github.com/aeon-php/automation/pull/3) - **changes are now parsed by ChangesParser object, not directly in PullRequest/Commit** - [@norberttech](https://github.com/norberttech)
 - [#1](https://github.com/aeon-php/automation/pull/1) - **the way to access pull requests related to the commit, those are now taken from the `Commit` object** - [@norberttech](https://github.com/norberttech)
-- [6ea7ef](https://github.com/aeon-php/automation/commit/6ea7ef4eca73bccbaaab23f26a365f83b3586613) - **automation readme** - [@norberttech](https://github.com/norberttech)
-- [61b146](https://github.com/aeon-php/automation/commit/61b146ba1360436136c7dc9e57d7658b3d6da810) - **automation xsd** - [@norberttech](https://github.com/norberttech)
 - [ea9540](https://github.com/aeon-php/automation/commit/ea9540a5f4399ee4a70e8e2f4df8ef0467fbe42e) - **Improved command descriptions** - [@norberttech](https://github.com/norberttech)
 - [885e50](https://github.com/aeon-php/automation/commit/885e50c5c4e5e0a757c247d65cf4b4576ce168e3) - **Take format from option in change-log:get command** - [@norberttech](https://github.com/norberttech)
 - [933675](https://github.com/aeon-php/automation/commit/93367510905d645a23dc2d86cc2ab9bf4e203e9c) - **Improved support for -v|-vv|-vvv** - [@norberttech](https://github.com/norberttech)
