@@ -133,6 +133,14 @@ final class Release
     /**
      * @return Change[]
      */
+    public function updated() : array
+    {
+        return $this->sortChanges(Type::updated());
+    }
+
+    /**
+     * @return Change[]
+     */
     public function fixed() : array
     {
         return $this->sortChanges(Type::fixed());

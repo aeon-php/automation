@@ -56,4 +56,24 @@ final class ReleaseTest extends TestCase
         $this->assertFalse($release1->isEqual($release2));
         $this->assertFalse($release2->isEqual($release1));
     }
+
+    public function test_detecting_all_changes() : void
+    {
+        $release = new Release('Unreleased', Day::fromString('2021-01-09'));
+
+        $release->add(new Changes(ChangeMother::commitChanged(SHAMother::random(), 'changed 1', 'user')));
+        $release->add(new Changes(ChangeMother::commitAdded(SHAMother::random(), 'added 1', 'user')));
+        $release->add(new Changes(ChangeMother::commitFixed(SHAMother::random(), 'fixed 1', 'user')));
+        $release->add(new Changes(ChangeMother::commitRemoved(SHAMother::random(), 'removed 1', 'user')));
+        $release->add(new Changes(ChangeMother::commitSecurity(SHAMother::random(), 'security 1', 'user')));
+        $release->add(new Changes(ChangeMother::commitUpdated(SHAMother::random(), 'updated 1', 'user')));
+
+        $this->assertCount(6, $release->changes());
+        $this->assertCount(1, $release->added());
+        $this->assertCount(1, $release->fixed());
+        $this->assertCount(1, $release->changed());
+        $this->assertCount(1, $release->security());
+        $this->assertCount(1, $release->removed());
+        $this->assertCount(1, $release->updated());
+    }
 }

@@ -62,4 +62,31 @@ final class ChangeMother
             $description
         );
     }
+
+    public static function commitRemoved(string $sha, string $description, string $user) : Change
+    {
+        return new Change(
+            ChangesSourceMother::commit($sha, $user),
+            Type::removed(),
+            $description
+        );
+    }
+
+    public static function commitUpdated(string $sha, string $description, string $user) : Change
+    {
+        return new Change(
+            ChangesSourceMother::commit($sha, $user),
+            Type::updated(),
+            $description
+        );
+    }
+
+    public static function commitSecurity(string $sha, string $description, string $user) : Change
+    {
+        return new Change(
+            ChangesSourceMother::commit($sha, $user),
+            Type::security(),
+            $description
+        );
+    }
 }
