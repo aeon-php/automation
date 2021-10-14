@@ -1,4 +1,4 @@
-## [Unreleased] - 2021-10-14
+## [1.0.2] - 2021-10-14
 
 ### Fixed
 - [#170](https://github.com/aeon-php/automation/pull/170) - **skipping updated type in changelog formatter** - [@norberttech](https://github.com/norberttech)
