@@ -1,6 +1,7 @@
-## [Unreleased] - 2021-12-05
+## [Unreleased] - 2021-12-12
 
 ### Updated
+- [6d0486](https://github.com/aeon-php/automation/commit/6d04861f4f978383e9d8cf93646d1c4e5eb4ec94) - **dependencies** - [@norberttech](https://github.com/norberttech)
 - [6aa658](https://github.com/aeon-php/automation/commit/6aa658c4c65b5670cb75f9e199e75955f34ab733) - **dependencies** - [@norberttech](https://github.com/norberttech)
 
 ## [1.0.2] - 2021-10-14
