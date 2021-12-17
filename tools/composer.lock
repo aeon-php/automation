@@ -1153,16 +1153,16 @@
         },
         {
             "name": "humbug/box",
-            "version": "3.13.0",
+            "version": "3.14.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/box-project/box.git",
-                "reference": "275b09154c2871240e5dad16782b16b107c975e9"
+                "reference": "78b88c4897973f897913c0501778fd08017039ec"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/box-project/box/zipball/275b09154c2871240e5dad16782b16b107c975e9",
-                "reference": "275b09154c2871240e5dad16782b16b107c975e9",
+                "url": "https://api.github.com/repos/box-project/box/zipball/78b88c4897973f897913c0501778fd08017039ec",
+                "reference": "78b88c4897973f897913c0501778fd08017039ec",
                 "shasum": ""
             },
             "require": {
@@ -1246,7 +1246,7 @@
             ],
             "support": {
                 "issues": "https://github.com/box-project/box/issues",
-                "source": "https://github.com/box-project/box/tree/3.13.0"
+                "source": "https://github.com/box-project/box/tree/3.14.0"
             },
             "funding": [
                 {
@@ -1254,7 +1254,7 @@
                     "type": "github"
                 }
             ],
-            "time": "2021-05-15T19:10:03+00:00"
+            "time": "2021-10-29T05:31:09+00:00"
         },
         {
             "name": "humbug/php-scoper",
@@ -1346,12 +1346,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/JetBrains/phpstorm-stubs.git",
-                "reference": "392d5f406789aae66469e2967507aba5ebaf3ada"
+                "reference": "5c8fa734665045bd71b86547b9c6dda602227e4f"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/JetBrains/phpstorm-stubs/zipball/392d5f406789aae66469e2967507aba5ebaf3ada",
-                "reference": "392d5f406789aae66469e2967507aba5ebaf3ada",
+                "url": "https://api.github.com/repos/JetBrains/phpstorm-stubs/zipball/5c8fa734665045bd71b86547b9c6dda602227e4f",
+                "reference": "5c8fa734665045bd71b86547b9c6dda602227e4f",
                 "shasum": ""
             },
             "require-dev": {
@@ -1387,7 +1387,7 @@
             "support": {
                 "source": "https://github.com/JetBrains/phpstorm-stubs/tree/master"
             },
-            "time": "2021-12-09T20:47:25+00:00"
+            "time": "2021-12-15T14:53:09+00:00"
         },
         {
             "name": "justinrainbow/json-schema",
