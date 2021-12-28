@@ -16,11 +16,8 @@ final class SourceFactory
             case 'markdown':
                 return new MarkdownSource($file->content());
 
-                break;
             case 'html':
                 return new HTMLSource($file->content());
-
-                break;
 
             default:
                 throw new \RuntimeException('Unknown format ' . $format);

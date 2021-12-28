@@ -79,7 +79,7 @@ final class ChangelogGenerate extends AbstractCommand
                 $options->tagOnlyStable();
             }
 
-            $releaseService = new ReleaseService($this->configuration(), $options, $this->calendar(), $this->githubClient(), $project);
+            $releaseService = new ReleaseService($this->configuration(), $options, $this->calendar(), $this->githubClient($project));
 
             $history = $releaseService->fetch();
         } catch (\Exception $e) {
@@ -152,7 +152,7 @@ final class ChangelogGenerate extends AbstractCommand
             $io->write($formatter->formatRelease($release));
 
             if ($input->getOption('github-release-update') && !$release->isUnreleased()) {
-                $remoteReleases = $this->githubClient()->releases($project);
+                $remoteReleases = $this->githubClient($project)->releases();
 
                 if (!$remoteReleases->exists($release->name())) {
                     $io->error('Release ' . $release->name() . ' not found');
@@ -162,7 +162,7 @@ final class ChangelogGenerate extends AbstractCommand
 
                 $io->note('Updating release description...');
 
-                $this->githubClient()->updateRelease($project, $remoteReleases->get($release->name())->id(), $formatter->formatRelease($release));
+                $this->githubClient($project)->updateRelease($remoteReleases->get($release->name())->id(), $formatter->formatRelease($release));
 
                 $io->note('Release description updated');
             }
@@ -176,7 +176,7 @@ final class ChangelogGenerate extends AbstractCommand
                 $io->note('Changelog file ref: ' . ($fileRef ? $fileRef : 'N/A'));
 
                 try {
-                    $file = $this->githubClient()->file($project, $filePath, $fileRef);
+                    $file = $this->githubClient($project)->file($filePath, $fileRef);
                     $source = (new SourceFactory())->create($input->getOption('format'), $file);
                 } catch (\Exception $e) {
                     $io->note("File \"{$filePath}\" does not exists, it will be created.");
@@ -193,8 +193,7 @@ final class ChangelogGenerate extends AbstractCommand
                 $io->note("Updating file {$filePath} content...");
 
                 if ($file === null || ($file instanceof File && $file->hasDifferentContent($fileContent))) {
-                    $this->githubClient()->putFile(
-                        $project,
+                    $this->githubClient($project)->putFile(
                         $filePath,
                         'Updated ' . \ltrim($filePath, '/'),
                         $this->configuration()->commiterName(),

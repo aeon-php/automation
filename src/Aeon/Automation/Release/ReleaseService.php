@@ -6,7 +6,6 @@ namespace Aeon\Automation\Release;
 
 use Aeon\Automation\Configuration;
 use Aeon\Automation\GitHub\GitHub;
-use Aeon\Automation\Project;
 use Aeon\Automation\Release;
 use Aeon\Calendar\Gregorian\Calendar;
 
@@ -20,20 +19,17 @@ final class ReleaseService
 
     private GitHub $github;
 
-    private Project $project;
-
-    public function __construct(Configuration $configuration, Options $changelogOptions, Calendar $calendar, GitHub $github, Project $project)
+    public function __construct(Configuration $configuration, Options $changelogOptions, Calendar $calendar, GitHub $github)
     {
         $this->configuration = $configuration;
         $this->options = $changelogOptions;
         $this->github = $github;
-        $this->project = $project;
         $this->calendar = $calendar;
     }
 
     public function fetch() : History
     {
-        $scopeDetector = new ScopeDetector($this->github, $this->project, $this->options->isTagOnlyStable());
+        $scopeDetector = new ScopeDetector($this->github, $this->options->isTagOnlyStable());
 
         $scope = $scopeDetector->default(
             $scopeDetector->fromTags($this->options->tagStart(), $this->options->tagEnd())
@@ -44,14 +40,13 @@ final class ReleaseService
             $scope = $scope->reverse();
         }
 
-        return new History($this->github, $this->project, $scope, $this->options->changedAfter(), $this->options->changedBefore());
+        return new History($this->github, $scope, $this->options->changedAfter(), $this->options->changedBefore());
     }
 
     public function analyze(History $history, callable $onProgress) : Release
     {
         $transformer = new HistoryTransformer(
             $this->github,
-            $this->project,
             $this->options
         );
 

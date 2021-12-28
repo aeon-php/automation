@@ -37,7 +37,7 @@ final class TagList extends AbstractCommand
 
         $io->title('Tag - List');
 
-        $tags = $this->githubClient()->tags($project)->rsort();
+        $tags = $this->githubClient($project)->tags()->rsort();
 
         if ($input->getOption('limit')) {
             $tags = $tags->limit((int) $input->getOption('limit'));
@@ -48,13 +48,13 @@ final class TagList extends AbstractCommand
             $commit = null;
 
             if ($input->getOption('with-date')) {
-                $commit = $this->githubClient()->tagCommit($project, $tag);
+                $commit = $this->githubClient($project)->tagCommit($tag);
                 $tagOutput .= ' - ' . $commit->date()->day()->toString();
             }
 
             if ($input->getOption('with-commit')) {
                 if ($commit === null) {
-                    $commit = $this->githubClient()->tagCommit($project, $tag);
+                    $commit = $this->githubClient($project)->tagCommit($tag);
                 }
 
                 $tagOutput .= ' - <fg=yellow>' . $commit->sha() . '</>';

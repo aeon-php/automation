@@ -44,7 +44,7 @@ final class ChangelogGet extends AbstractCommand
             $io->note('File Path: ' . $filePath);
             $io->note('File Ref: ' . $fileRef);
 
-            $file = $this->githubClient()->file($project, $filePath, $fileRef);
+            $file = $this->githubClient($project)->file($filePath, $fileRef);
 
             if ($input->getOption('sha1-hash')) {
                 $io->write(\sha1($file->content()));

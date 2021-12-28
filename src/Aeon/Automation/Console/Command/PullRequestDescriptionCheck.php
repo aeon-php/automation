@@ -52,7 +52,7 @@ final class PullRequestDescriptionCheck extends AbstractCommand
         }
 
         try {
-            $pullRequest = $this->githubClient()->pullRequest($project, $number);
+            $pullRequest = $this->githubClient($project)->pullRequest($number);
         } catch (RuntimeException $exception) {
             $io->error("Pull request #{$number} not found.");
 

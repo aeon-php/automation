@@ -37,7 +37,7 @@ final class PullRequestsList extends AbstractCommand
 
         $io->title('Pull Request - List');
 
-        $repository = $this->githubClient()->repository($project);
+        $repository = $this->githubClient($project)->repository();
         $branchName = $input->getOption('branch') !== null ? $input->getOption('branch') : $repository->defaultBranch();
         $status = $input->getOption('status');
 
@@ -51,7 +51,7 @@ final class PullRequestsList extends AbstractCommand
         }
 
         try {
-            $this->githubClient()->branch($project, $branchName);
+            $this->githubClient($project)->branch($branchName);
         } catch (\Exception $e) {
             $io->error('Branch "heads/' . $branchName . '" does not exists: ' . $e->getMessage());
 
@@ -59,8 +59,8 @@ final class PullRequestsList extends AbstractCommand
         }
 
         $pullRequests = $status === 'open'
-            ? $this->githubClient()->pullRequestsOpen($project, $branchName, (int) $input->getOption('limit'))
-            : $this->githubClient()->pullRequestsClosed($project, $branchName, (int) $input->getOption('limit'))->onlyMerged();
+            ? $this->githubClient($project)->pullRequestsOpen($branchName, (int) $input->getOption('limit'))
+            : $this->githubClient($project)->pullRequestsClosed($branchName, (int) $input->getOption('limit'))->onlyMerged();
 
         foreach ($pullRequests->all() as $pullRequest) {
             $pullRequestOutput = '#' . $pullRequest->number() . ' - ' . $pullRequest->description();

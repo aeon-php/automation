@@ -2,56 +2,55 @@
 
 namespace Aeon\Automation\GitHub;
 
-use Aeon\Automation\Project;
 use Aeon\Calendar\Gregorian\DateTime;
 
 interface GitHub
 {
-    public function branch(Project $project, string $name) : Branch;
+    public function branch(string $name) : Branch;
 
-    public function branches(Project $project) : Branches;
+    public function branches() : Branches;
 
-    public function commitPullRequests(Project $project, Commit $commit) : PullRequests;
+    public function commitPullRequests(Commit $commit) : PullRequests;
 
-    public function commitsCompare(Project $project, Commit $fromCommit, Commit $untilCommit, ?DateTime $changedAfter = null, ?DateTime $changedBefore = null) : Commits;
+    public function commitsCompare(Commit $fromCommit, Commit $untilCommit, ?DateTime $changedAfter = null, ?DateTime $changedBefore = null) : Commits;
 
-    public function commits(Project $project, string $sha, ?DateTime $changedAfter = null, ?DateTime $changedBefore = null, ?int $limit = null) : Commits;
+    public function commits(string $sha, ?DateTime $changedAfter = null, ?DateTime $changedBefore = null, ?int $limit = null) : Commits;
 
-    public function pullRequest(Project $project, int $number) : PullRequest;
+    public function pullRequest(int $number) : PullRequest;
 
-    public function pullRequestsClosed(Project $project, string $branch, int $limit) : PullRequests;
+    public function pullRequestsClosed(string $branch, int $limit) : PullRequests;
 
-    public function pullRequestsOpen(Project $project, string $branch, int $limit) : PullRequests;
+    public function pullRequestsOpen(string $branch, int $limit) : PullRequests;
 
-    public function pullRequests(Project $project, string $branch, string $state, int $limit) : PullRequests;
+    public function pullRequests(string $branch, string $state, int $limit) : PullRequests;
 
-    public function referenceTag(Project $project, string $name) : Reference;
+    public function referenceTag(string $name) : Reference;
 
-    public function referenceCommit(Project $project, Reference $reference) : Commit;
+    public function referenceCommit(Reference $reference) : Commit;
 
-    public function repository(Project $project) : Repository;
+    public function repository() : Repository;
 
-    public function milestones(Project $project) : Milestones;
+    public function milestones() : Milestones;
 
-    public function createMilestone(Project $project, string $title) : void;
+    public function createMilestone(string $title) : void;
 
-    public function releases(Project $project) : Releases;
+    public function releases() : Releases;
 
-    public function release(Project $project, int $id) : Release;
+    public function release(int $id) : Release;
 
-    public function updateRelease(Project $project, int $id, ?string $body = null) : Release;
+    public function updateRelease(int $id, ?string $body = null) : Release;
 
-    public function tags(Project $project) : Tags;
+    public function tags() : Tags;
 
-    public function tagCommit(Project $project, Tag $tag) : Commit;
+    public function tagCommit(Tag $tag) : Commit;
 
-    public function workflows(Project $project) : Workflows;
+    public function workflows() : Workflows;
 
-    public function workflowLatestRun(Project $project, Workflow $workflow) : ?WorkflowRun;
+    public function workflowLatestRun(Workflow $workflow) : ?WorkflowRun;
 
-    public function workflowRunJobs(Project $project, WorkflowRun $workflowRun) : WorkflowRunJobs;
+    public function workflowRunJobs(WorkflowRun $workflowRun) : WorkflowRunJobs;
 
-    public function file(Project $project, string $path, ?string $fileRef) : File;
+    public function file(string $path, ?string $fileRef) : File;
 
-    public function putFile(Project $project, string $path, string $commitMessage, string $commiterName, string $commiterEmail, string $content, ?string $fileSHA) : void;
+    public function putFile(string $path, string $commitMessage, string $commiterName, string $commiterEmail, string $content, ?string $fileSHA) : void;
 }

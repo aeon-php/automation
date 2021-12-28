@@ -6,6 +6,7 @@ namespace Aeon\Automation\Console;
 
 use Aeon\Automation\Configuration;
 use Aeon\Automation\GitHub\GitHubClient;
+use Aeon\Automation\Project;
 use Aeon\Calendar\Gregorian\Calendar;
 use Aeon\Calendar\Gregorian\GregorianCalendar;
 use Github\Client;
@@ -58,9 +59,9 @@ abstract class AbstractCommand extends Command
         $this->logger = null;
     }
 
-    public function githubClient() : GitHubClient
+    public function githubClient(Project $project) : GitHubClient
     {
-        return new GitHubClient($this->github(), $this->githubCache());
+        return new GitHubClient($project, $this->github(), $this->githubCache());
     }
 
     public function setGithub(Client $client) : void

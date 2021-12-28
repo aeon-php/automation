@@ -53,7 +53,7 @@ final class WorkflowTimingList extends AbstractCommand
             }
         }
 
-        $workflows = $this->githubClient()->workflows($project);
+        $workflows = $this->githubClient($project)->workflows();
 
         $tableHeaders = ['Name', 'Path', 'Operating System', 'Minutes'];
 
@@ -62,7 +62,7 @@ final class WorkflowTimingList extends AbstractCommand
         $total = TimeUnit::seconds(0);
 
         foreach ($workflows->all() as $workflow) {
-            $workflowTiming = $this->githubClient()->workflowTiming($project, $workflow);
+            $workflowTiming = $this->githubClient($project)->workflowTiming($workflow);
 
             if ($workflowTiming->isEmpty()) {
                 continue;

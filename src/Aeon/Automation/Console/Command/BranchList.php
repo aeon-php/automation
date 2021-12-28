@@ -33,8 +33,8 @@ final class BranchList extends AbstractCommand
 
         $io->title('Branch - List');
 
-        $branches = $this->githubClient()->branches($project);
-        $repository = $this->githubClient()->repository($project);
+        $branches = $this->githubClient($project)->branches();
+        $repository = $this->githubClient($project)->repository();
 
         foreach ($branches->all() as $branch) {
             if ($branch->isDefault($repository)) {

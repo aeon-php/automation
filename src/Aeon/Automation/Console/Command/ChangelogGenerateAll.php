@@ -56,7 +56,7 @@ final class ChangelogGenerateAll extends AbstractCommand
 
         $io->title('Changelog - Generate - All');
 
-        $tags = $this->githubClient()->tags($project)->rsort();
+        $tags = $this->githubClient($project)->tags()->rsort();
         $tagStart = $input->getOption('tag-start');
         $tagEnd = $input->getOption('tag-end');
         $tagsSkip = (array) $input->getOption('tag-skip');
@@ -111,7 +111,7 @@ final class ChangelogGenerateAll extends AbstractCommand
                     $options->tagOnlyStable();
                 }
 
-                $releaseService = new ReleaseService($this->configuration(), $options, $this->calendar(), $this->githubClient(), $project);
+                $releaseService = new ReleaseService($this->configuration(), $options, $this->calendar(), $this->githubClient($project));
 
                 $history = $releaseService->fetch();
 
@@ -135,7 +135,7 @@ final class ChangelogGenerateAll extends AbstractCommand
                 $releases = $releases->add($release);
 
                 if ($input->getOption('github-release-update') && !$release->isUnreleased()) {
-                    $githubReleases = $this->githubClient()->releases($project);
+                    $githubReleases = $this->githubClient($project)->releases();
 
                     if (!$githubReleases->exists($release->name())) {
                         $io->error('Release ' . $release->name() . ' not found');
@@ -145,7 +145,7 @@ final class ChangelogGenerateAll extends AbstractCommand
 
                     $io->note('Updating release description...');
 
-                    $this->githubClient()->updateRelease($project, $githubReleases->get($release->name())->id(), $formatter->formatRelease($release));
+                    $this->githubClient($project)->updateRelease($githubReleases->get($release->name())->id(), $formatter->formatRelease($release));
 
                     $io->note('Release description updated');
                 }
@@ -167,7 +167,7 @@ final class ChangelogGenerateAll extends AbstractCommand
             $io->note('Changelog file ref: ' . ($fileRef ? $fileRef : 'N/A'));
 
             try {
-                $file = $this->githubClient()->file($project, $filePath, $fileRef);
+                $file = $this->githubClient($project)->file($filePath, $fileRef);
                 $source = (new SourceFactory())->create($input->getOption('format'), $file);
             } catch (\Exception $e) {
                 $io->note("File \"{$filePath}\" does not exists, it will be created.");
@@ -184,8 +184,7 @@ final class ChangelogGenerateAll extends AbstractCommand
             $io->note("Updating file {$filePath} content...");
 
             if ($file === null || ($file instanceof File && $file->hasDifferentContent($fileContent))) {
-                $this->githubClient()->putFile(
-                    $project,
+                $this->githubClient($project)->putFile(
                     $filePath,
                     'Updated ' . \ltrim($filePath, '/'),
                     'aeon-automation',

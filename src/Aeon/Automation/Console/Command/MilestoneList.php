@@ -30,8 +30,8 @@ final class MilestoneList extends AbstractCommand
 
         $project = new Project($input->getArgument('project'));
 
-        $milestones = $this->githubClient()->milestones($project)->semVerRsort();
-        $releases = $this->githubClient()->releases($project)->semVerRsort();
+        $milestones = $this->githubClient($project)->milestones()->semVerRsort();
+        $releases = $this->githubClient($project)->releases()->semVerRsort();
 
         $io->title('Milestone - List');
 

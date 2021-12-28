@@ -33,8 +33,8 @@ final class ReleaseList extends AbstractCommand
 
         $project = new Project($input->getArgument('project'));
 
-        $milestones = $this->githubClient()->milestones($project)->semVerRsort();
-        $releases = $this->githubClient()->releases($project)->semVerRsort();
+        $milestones = $this->githubClient($project)->milestones()->semVerRsort();
+        $releases = $this->githubClient($project)->releases()->semVerRsort();
 
         $io->title('Release - List');
 
@@ -48,7 +48,7 @@ final class ReleaseList extends AbstractCommand
             if (!$milestones->exists($release->name())) {
                 if ($input->getOption('create-missing') === true) {
                     $io->note('Creating milestone: ' . $release->name());
-                    $this->githubClient()->createMilestone($project, $release->name());
+                    $this->githubClient($project)->createMilestone($release->name());
                 } else {
                     $releaseOutput .= ' - <fg=yellow>missing milestone</>';
                     $missingMilestones[] = $release;

@@ -33,17 +33,17 @@ final class WorkflowJobList extends AbstractCommand
 
         $io->title('Workflow - Job - List');
 
-        $workflows = $this->githubClient()->workflows($project);
+        $workflows = $this->githubClient($project)->workflows();
 
         $tableHeaders = ['Workflow', 'Job', 'State', 'Status', 'Completed At'];
 
         $tableBody = [];
 
         foreach ($workflows->all() as $workflow) {
-            $run = $this->githubClient()->workflowLatestRun($project, $workflow);
+            $run = $this->githubClient($project)->workflowLatestRun($workflow);
 
             if ($run) {
-                foreach ($this->githubClient()->workflowRunJobs($project, $run)->all() as $job) {
+                foreach ($this->githubClient($project)->workflowRunJobs($run)->all() as $job) {
                     $status = null;
 
                     if ($job->isSuccessful()) {

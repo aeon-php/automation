@@ -35,7 +35,7 @@ final class MilestoneCreate extends AbstractCommand
 
         $io->title('Milestone - Create');
 
-        $milestones = $this->githubClient()->milestones($project)->semVerSort();
+        $milestones = $this->githubClient($project)->milestones()->semVerSort();
 
         $io->title($project->name());
 
@@ -57,7 +57,7 @@ final class MilestoneCreate extends AbstractCommand
             return Command::FAILURE;
         }
 
-        $this->githubClient()->createMilestone($project, $newMilestone);
+        $this->githubClient($project)->createMilestone($newMilestone);
 
         $io->success('Milestone created');
 

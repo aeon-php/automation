@@ -46,13 +46,13 @@ final class ChangelogReleaseUnreleased extends AbstractCommand
 
         $io->title('Changelog - Release Unreleased');
 
-        $tags = $this->githubClient()->tags($project);
+        $tags = $this->githubClient($project)->tags();
         $releaseName = $input->getArgument('release-name');
         $fileRef = $input->getOption('github-file-update-ref');
         $filePath = $input->getArgument('changelog-file-path');
 
         try {
-            $file = $this->githubClient()->file($project, $filePath, $fileRef);
+            $file = $this->githubClient($project)->file($filePath, $fileRef);
             $source = (new SourceFactory())->create($input->getOption('format'), $file);
         } catch (\Exception $e) {
             $io->error("File \"{$filePath}\" does not exists in repository.");
@@ -86,7 +86,7 @@ final class ChangelogReleaseUnreleased extends AbstractCommand
         $io->write($fileContent);
 
         if ($input->getOption('github-release-update')) {
-            $remoteReleases = $this->githubClient()->releases($project);
+            $remoteReleases = $this->githubClient($project)->releases();
 
             if (!$remoteReleases->exists($releaseName)) {
                 $io->error('Release ' . $releaseName . ' not found, please release new version before moving forward.');
@@ -94,11 +94,11 @@ final class ChangelogReleaseUnreleased extends AbstractCommand
                 return Command::FAILURE;
             }
 
-            $remoteReleases = $this->githubClient()->releases($project);
+            $remoteReleases = $this->githubClient($project)->releases();
 
             $io->note('Updating release description...');
 
-            $this->githubClient()->updateRelease($project, $remoteReleases->get($releaseName)->id(), $formatter->formatRelease($changelogReleases->get($releaseName)));
+            $this->githubClient($project)->updateRelease($remoteReleases->get($releaseName)->id(), $formatter->formatRelease($changelogReleases->get($releaseName)));
 
             $io->note('Release description updated');
         }
@@ -107,8 +107,7 @@ final class ChangelogReleaseUnreleased extends AbstractCommand
             $io->note("Updating file {$filePath} content...");
 
             if ($file instanceof File && $file->hasDifferentContent($fileContent)) {
-                $this->githubClient()->putFile(
-                    $project,
+                $this->githubClient($project)->putFile(
                     $filePath,
                     'Updated ' . \ltrim($filePath, '/'),
                     $this->configuration()->commiterName(),
