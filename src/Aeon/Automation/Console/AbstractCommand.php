@@ -67,19 +67,6 @@ abstract class AbstractCommand extends Command
         return new GitHubClient($project, $this->github(), $this->githubCache());
     }
 
-    public function gitAdapter(string $uri, string $name) : Git
-    {
-        switch (\strtolower($name)) {
-            case 'git-shell' :
-                return $this->gitShell(new RepositoryLocation($uri));
-            case 'github' :
-                return $this->githubClient(new Project($uri));
-
-            default:
-                throw new \InvalidArgumentException("Unknown adapter \"{$name}\", expected one of: git-shell, github");
-        }
-    }
-
     public function gitShell(RepositoryLocation $location) : GitShell
     {
         return new GitShell($location);

@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Aeon\Automation\Git;
 
 use Aeon\Calendar\Gregorian\DateTime;
+use Gitonomy\Git\Repository;
 
 final class GitShell implements Git
 {
@@ -20,23 +21,34 @@ final class GitShell implements Git
 
     public function tags() : Tags
     {
-        // TODO: Implement tags() method.
+        throw new \RuntimeException("Not implemented yet");
     }
 
     public function branch(string $name) : Branch
     {
-        // TODO: Implement branch() method.
+        $repository = new Repository($this->location->toString());
+        $branch = $repository->getReferences()->getBranch($name);
+
+        return new Branch(
+            [
+                'name' => $branch,
+                'commit' => [
+                    'sha' => $branch->getCommitHash(),
+                ],
+            ]
+        );
     }
 
     public function currentBranch() : Branch
     {
-        $repository = new \Gitonomy\Git\Repository($this->location->toString());
+        $repository = new Repository($this->location->toString());
+        $branch = $repository->getHead();
 
         return new Branch(
             [
-                'name' => $repository->getHead()->getName(),
+                'name' => $branch->getName(),
                 'commit' => [
-                    'sha' => $repository->getHead()->getCommitHash(),
+                    'sha' => $branch->getCommitHash(),
                 ],
             ]
         );
@@ -44,27 +56,27 @@ final class GitShell implements Git
 
     public function putFile(string $path, string $commitMessage, string $commiterName, string $commiterEmail, string $content, ?string $fileSHA) : void
     {
-        // TODO: Implement putFile() method.
+        throw new \RuntimeException("Not implemented yet");
     }
 
     public function commitsCompare(Commit $fromCommit, Commit $untilCommit, ?DateTime $changedAfter = null, ?DateTime $changedBefore = null) : Commits
     {
-        // TODO: Implement commitsCompare() method.
+        throw new \RuntimeException("Not implemented yet");
     }
 
     public function commits(string $sha, ?DateTime $changedAfter = null, ?DateTime $changedBefore = null, ?int $limit = null) : Commits
     {
-        // TODO: Implement commits() method.
+        throw new \RuntimeException("Not implemented yet");
     }
 
     public function file(string $path, ?string $fileRef) : File
     {
-        // TODO: Implement file() method.
+        throw new \RuntimeException("Not implemented yet");
     }
 
     public function branches() : Branches
     {
-        $repository = new \Gitonomy\Git\Repository($this->location->toString());
+        $repository = new Repository($this->location->toString());
 
         $branches = [];
 
@@ -82,16 +94,16 @@ final class GitShell implements Git
 
     public function tagCommit(Tag $tag) : Commit
     {
-        // TODO: Implement tagCommit() method.
+        throw new \RuntimeException("Not implemented yet");
     }
 
     public function referenceCommit(Reference $reference) : Commit
     {
-        // TODO: Implement referenceCommit() method.
+        throw new \RuntimeException("Not implemented yet");
     }
 
     public function referenceTag(string $name) : Reference
     {
-        // TODO: Implement referenceTag() method.
+        throw new \RuntimeException("Not implemented yet");
     }
 }
