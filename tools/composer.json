@@ -7,5 +7,10 @@
         "phpunit/phpunit": "^9.5",
         "humbug/box": "^3.12",
         "friendsofphp/php-cs-fixer": "^3.1"
+    },
+    "config": {
+        "allow-plugins": {
+            "composer/package-versions-deprecated": true
+        }
     }
 }
