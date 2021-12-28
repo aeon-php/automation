@@ -2,21 +2,9 @@
 <?php
 
 use Aeon\Automation\Console\AeonApplication;
-use Aeon\Automation\Console\Command\GitHub\BranchList;
+use Aeon\Automation\Console\Command\GitHub;
+use Aeon\Automation\Console\Command\Git;
 use Aeon\Automation\Console\Command\CacheClear;
-use Aeon\Automation\Console\Command\GitHub\ChangelogGenerate;
-use Aeon\Automation\Console\Command\GitHub\ChangelogGet;
-use Aeon\Automation\Console\Command\GitHub\ChangelogReleaseUnreleased;
-use Aeon\Automation\Console\Command\GitHub\ChangelogGenerateAll;
-use Aeon\Automation\Console\Command\GitHub\WorkflowJobList;
-use Aeon\Automation\Console\Command\GitHub\MilestoneCreate;
-use Aeon\Automation\Console\Command\GitHub\MilestoneList;
-use Aeon\Automation\Console\Command\GitHub\PullRequestDescriptionCheck;
-use Aeon\Automation\Console\Command\GitHub\PullRequestsList;
-use Aeon\Automation\Console\Command\GitHub\PullRequestsTemplateShow;
-use Aeon\Automation\Console\Command\GitHub\ReleaseList;
-use Aeon\Automation\Console\Command\GitHub\TagList;
-use Aeon\Automation\Console\Command\GitHub\WorkflowTimingList;
 use Symfony\Component\Console\Input\ArgvInput;
 use Symfony\Component\Console\Output\ConsoleOutput;
 
@@ -57,20 +45,27 @@ use Symfony\Component\Console\Output\ConsoleOutput;
         getcwd()
     ];
 
-    $application->add(new MilestoneCreate($rootDir, $defaultConfigPaths));
-    $application->add(new MilestoneList($rootDir, $defaultConfigPaths));
-    $application->add(new ReleaseList($rootDir, $defaultConfigPaths));
-    $application->add(new PullRequestsList($rootDir, $defaultConfigPaths));
-    $application->add(new PullRequestsTemplateShow($rootDir, $defaultConfigPaths));
-    $application->add(new PullRequestDescriptionCheck($rootDir, $defaultConfigPaths));
-    $application->add(new ChangelogGet($rootDir, $defaultConfigPaths));
-    $application->add(new ChangelogGenerate($rootDir, $defaultConfigPaths));
-    $application->add(new ChangelogGenerateAll($rootDir, $defaultConfigPaths));
-    $application->add(new ChangelogReleaseUnreleased($rootDir, $defaultConfigPaths));
-    $application->add(new BranchList($rootDir, $defaultConfigPaths));
-    $application->add(new TagList($rootDir, $defaultConfigPaths));
-    $application->add(new WorkflowJobList($rootDir, $defaultConfigPaths));
-    $application->add(new WorkflowTimingList($rootDir, $defaultConfigPaths));
+    // generic
     $application->add(new CacheClear($rootDir, $defaultConfigPaths));
+
+    // gh:
+    $application->add(new GitHub\MilestoneCreate($rootDir, $defaultConfigPaths));
+    $application->add(new GitHub\MilestoneList($rootDir, $defaultConfigPaths));
+    $application->add(new GitHub\ReleaseList($rootDir, $defaultConfigPaths));
+    $application->add(new GitHub\PullRequestsList($rootDir, $defaultConfigPaths));
+    $application->add(new GitHub\PullRequestsTemplateShow($rootDir, $defaultConfigPaths));
+    $application->add(new GitHub\PullRequestDescriptionCheck($rootDir, $defaultConfigPaths));
+    $application->add(new GitHub\ChangelogGet($rootDir, $defaultConfigPaths));
+    $application->add(new GitHub\ChangelogGenerate($rootDir, $defaultConfigPaths));
+    $application->add(new GitHub\ChangelogGenerateAll($rootDir, $defaultConfigPaths));
+    $application->add(new GitHub\ChangelogReleaseUnreleased($rootDir, $defaultConfigPaths));
+    $application->add(new GitHub\BranchList($rootDir, $defaultConfigPaths));
+    $application->add(new GitHub\TagList($rootDir, $defaultConfigPaths));
+    $application->add(new GitHub\WorkflowJobList($rootDir, $defaultConfigPaths));
+    $application->add(new GitHub\WorkflowTimingList($rootDir, $defaultConfigPaths));
+
+    // git:
+    $application->add(new Git\BranchList($rootDir, $defaultConfigPaths));
+
     $application->run($input, $output);
 })();

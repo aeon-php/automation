@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Aeon\Automation\Console;
 
 use Aeon\Automation\Configuration;
-use Aeon\Automation\Git\Git;
 use Aeon\Automation\Git\GitShell;
 use Aeon\Automation\Git\RepositoryLocation;
 use Aeon\Automation\GitHub\GitHubClient;
@@ -67,7 +66,7 @@ abstract class AbstractCommand extends Command
         return new GitHubClient($project, $this->github(), $this->githubCache());
     }
 
-    public function gitShell(RepositoryLocation $location) : GitShell
+    public function git(RepositoryLocation $location) : GitShell
     {
         return new GitShell($location);
     }
@@ -126,13 +125,6 @@ abstract class AbstractCommand extends Command
         }
 
         return $this->githubCache;
-    }
-
-    protected function interact(InputInterface $input, OutputInterface $output) : void
-    {
-        if ($input->hasArgument('project') && $input->getArgument('project') === null && $this->configuration()->project()) {
-            $input->setArgument('project', $this->configuration()->project()->fullName());
-        }
     }
 
     protected function initialize(InputInterface $input, OutputInterface $output) : void
