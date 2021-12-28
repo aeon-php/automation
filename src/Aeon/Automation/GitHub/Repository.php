@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Aeon\Automation\Git;
+namespace Aeon\Automation\GitHub;
 
 final class Repository
 {

@@ -7,6 +7,8 @@ use Aeon\Automation\Git\Git;
 
 interface GitHub extends Git
 {
+    public function repository() : Repository;
+
     public function commitPullRequests(Commit $commit) : PullRequests;
 
     public function pullRequest(int $number) : PullRequest;

@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace Aeon\Automation\Git;
 
+use Aeon\Automation\GitHub\Project;
 use Aeon\Automation\GitHub\PullRequest;
 use Aeon\Automation\GitHub\PullRequests;
-use Aeon\Automation\Project;
 use Aeon\Calendar\Gregorian\DateTime;
 use Github\Client;
 use Github\HttpClient\Message\ResponseMediator;

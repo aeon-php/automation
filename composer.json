@@ -40,7 +40,8 @@
         "symfony/cache": "^5.2",
         "ramsey/conventional-commits": "^1.1",
         "twig/twig": "^3.1",
-        "league/commonmark": "^2.0"
+        "league/commonmark": "^2.0",
+        "gitonomy/gitlib": "^1.3"
     },
     "require-dev": {
         "coduo/php-matcher": "^6.0.0"

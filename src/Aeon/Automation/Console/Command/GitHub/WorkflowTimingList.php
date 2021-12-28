@@ -2,11 +2,11 @@
 
 declare(strict_types=1);
 
-namespace Aeon\Automation\Console\Command;
+namespace Aeon\Automation\Console\Command\GitHub;
 
 use Aeon\Automation\Console\AbstractCommand;
 use Aeon\Automation\Console\AeonStyle;
-use Aeon\Automation\Project;
+use Aeon\Automation\GitHub\Project;
 use Aeon\Calendar\TimeUnit;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
@@ -16,14 +16,14 @@ use Symfony\Component\Console\Output\OutputInterface;
 
 final class WorkflowTimingList extends AbstractCommand
 {
-    protected static $defaultName = 'workflow:timing:list';
+    protected static $defaultName = 'gh:workflow:timing:list';
 
     protected function configure() : void
     {
         parent::configure();
 
         $this
-            ->setDescription('List project Github actions workflows billable minutes usage in current billing cycle')
+            ->setDescription('List GitHub project actions workflows billable minutes usage in current billing cycle')
             ->setHelp('Billable minutes only apply to workflows in private repositories that use GitHub-hosted runners.')
             ->addArgument('project', InputArgument::REQUIRED, 'project name')
             ->addOption('os', null, InputOption::VALUE_REQUIRED | InputOption::VALUE_IS_ARRAY, 'Show billable minutes for operating systems', ['ubuntu', 'macos', 'windows']);

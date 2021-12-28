@@ -2,26 +2,26 @@
 
 declare(strict_types=1);
 
-namespace Aeon\Automation\Console\Command;
+namespace Aeon\Automation\Console\Command\GitHub;
 
 use Aeon\Automation\Console\AbstractCommand;
 use Aeon\Automation\Console\AeonStyle;
-use Aeon\Automation\Project;
+use Aeon\Automation\GitHub\Project;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
-final class BranchList extends AbstractCommand
+final class MilestoneList extends AbstractCommand
 {
-    protected static $defaultName = 'branch:list';
+    protected static $defaultName = 'gh:milestone:list';
 
     protected function configure() : void
     {
         parent::configure();
 
         $this
-            ->setDescription('List project branches')
+            ->setDescription('Show GitHub project milestones')
             ->addArgument('project', InputArgument::REQUIRED, 'project name');
     }
 
@@ -31,17 +31,21 @@ final class BranchList extends AbstractCommand
 
         $project = new Project($input->getArgument('project'));
 
-        $io->title('Branch - List');
+        $milestones = $this->githubClient($project)->milestones()->semVerRsort();
+        $releases = $this->githubClient($project)->releases()->semVerRsort();
 
-        $branches = $this->githubClient($project)->branches();
-        $repository = $this->githubClient($project)->repository();
+        $io->title('Milestone - List');
 
-        foreach ($branches->all() as $branch) {
-            if ($branch->isDefault($repository)) {
-                $io->writeln('* <fg=green;options=bold>' . $branch->name() . '</>');
-            } else {
-                $io->writeln('  ' . $branch->name());
+        $io->note('Milestones:');
+
+        foreach ($milestones->all() as $milestone) {
+            $milestoneOutput = $milestone->title();
+
+            if (!$releases->exists($milestone->title())) {
+                $milestoneOutput .= ' - <fg=yellow>unreleased</>';
             }
+
+            $io->writeln($milestoneOutput);
         }
 
         return Command::SUCCESS;

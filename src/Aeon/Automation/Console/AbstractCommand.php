@@ -5,8 +5,11 @@ declare(strict_types=1);
 namespace Aeon\Automation\Console;
 
 use Aeon\Automation\Configuration;
+use Aeon\Automation\Git\Git;
+use Aeon\Automation\Git\GitShell;
+use Aeon\Automation\Git\RepositoryLocation;
 use Aeon\Automation\GitHub\GitHubClient;
-use Aeon\Automation\Project;
+use Aeon\Automation\GitHub\Project;
 use Aeon\Calendar\Gregorian\Calendar;
 use Aeon\Calendar\Gregorian\GregorianCalendar;
 use Github\Client;
@@ -62,6 +65,24 @@ abstract class AbstractCommand extends Command
     public function githubClient(Project $project) : GitHubClient
     {
         return new GitHubClient($project, $this->github(), $this->githubCache());
+    }
+
+    public function gitAdapter(string $uri, string $name) : Git
+    {
+        switch (\strtolower($name)) {
+            case 'git-shell' :
+                return $this->gitShell(new RepositoryLocation($uri));
+            case 'github' :
+                return $this->githubClient(new Project($uri));
+
+            default:
+                throw new \InvalidArgumentException("Unknown adapter \"{$name}\", expected one of: git-shell, github");
+        }
+    }
+
+    public function gitShell(RepositoryLocation $location) : GitShell
+    {
+        return new GitShell($location);
     }
 
     public function setGithub(Client $client) : void

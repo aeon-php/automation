@@ -22,4 +22,4 @@ jobs:
           AEON_AUTOMATION_GH_TOKEN: "${{ secrets.GITHUB_TOKEN }}"
         with:
           entrypoint: "/composer/vendor/bin/automation"
-          args: "changelog:generate ${{ github.repository }} --tag=${{ github.event.release.tag_name }} --github-release-update --skip-from=\"dependabot[bot]\" --skip-from=\"aeon-automation\""
+          args: "gh:changelog:generate ${{ github.repository }} --tag=${{ github.event.release.tag_name }} --github-release-update --skip-from=\"dependabot[bot]\" --skip-from=\"aeon-automation\""

@@ -23,8 +23,8 @@ final class Branch
         return $this->data['commit']['sha'];
     }
 
-    public function isDefault(Repository $repository) : bool
+    public function isEqual(self $branch) : bool
     {
-        return $this->name() === $repository->defaultBranch();
+        return $this->sha() === $branch->sha();
     }
 }

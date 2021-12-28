@@ -2,11 +2,11 @@
 
 declare(strict_types=1);
 
-namespace Aeon\Automation\Console\Command;
+namespace Aeon\Automation\Console\Command\GitHub;
 
 use Aeon\Automation\Console\AbstractCommand;
 use Aeon\Automation\Console\AeonStyle;
-use Aeon\Automation\Project;
+use Aeon\Automation\GitHub\Project;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
@@ -15,13 +15,14 @@ use Symfony\Component\Console\Output\OutputInterface;
 
 final class PullRequestsList extends AbstractCommand
 {
-    protected static $defaultName = 'pull-request:list';
+    protected static $defaultName = 'gh:pull-request:list';
 
     protected function configure() : void
     {
         parent::configure();
 
         $this
+            ->setDescription('Show GitHub project pull requests.')
             ->addArgument('project', InputArgument::REQUIRED, 'project name')
             ->addOption('status', null, InputOption::VALUE_REQUIRED, 'One of the given states: open, merged', 'open')
             ->addOption('branch', null, InputOption::VALUE_REQUIRED, 'Get the the branch used instead of tag-start option when it\'s not provided. If empty, default repository branch is taken.')

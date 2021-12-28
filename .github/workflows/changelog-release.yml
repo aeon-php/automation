@@ -26,4 +26,4 @@ jobs:
           AEON_AUTOMATION_GH_TOKEN: "${{ secrets.AUTOMATION_BOT_TOKEN }}"
         with:
           entrypoint: "/composer/vendor/bin/automation"
-          args: "changelog:release:unreleased ${{ github.repository }} CHANGELOG.md ${{ steps.tag-name.outputs.tag }} --github-file-changelog-update"
+          args: "gh:changelog:release:unreleased ${{ github.repository }} CHANGELOG.md ${{ steps.tag-name.outputs.tag }} --github-file-changelog-update"

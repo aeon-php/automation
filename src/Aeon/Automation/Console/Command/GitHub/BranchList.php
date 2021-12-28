@@ -2,25 +2,26 @@
 
 declare(strict_types=1);
 
-namespace Aeon\Automation\Console\Command;
+namespace Aeon\Automation\Console\Command\GitHub;
 
 use Aeon\Automation\Console\AbstractCommand;
 use Aeon\Automation\Console\AeonStyle;
-use Aeon\Automation\Project;
+use Aeon\Automation\GitHub\Project;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
-final class MilestoneList extends AbstractCommand
+final class BranchList extends AbstractCommand
 {
-    protected static $defaultName = 'milestone:list';
+    protected static $defaultName = 'gh:branch:list';
 
     protected function configure() : void
     {
         parent::configure();
 
         $this
+            ->setDescription('List GitHub project branches, marked branch is default one.')
             ->addArgument('project', InputArgument::REQUIRED, 'project name');
     }
 
@@ -30,21 +31,17 @@ final class MilestoneList extends AbstractCommand
 
         $project = new Project($input->getArgument('project'));
 
-        $milestones = $this->githubClient($project)->milestones()->semVerRsort();
-        $releases = $this->githubClient($project)->releases()->semVerRsort();
+        $io->title('Branch - List');
 
-        $io->title('Milestone - List');
+        $branches = $this->githubClient($project)->branches();
+        $currentBranch = $this->githubClient($project)->currentBranch();
 
-        $io->note('Milestones:');
-
-        foreach ($milestones->all() as $milestone) {
-            $milestoneOutput = $milestone->title();
-
-            if (!$releases->exists($milestone->title())) {
-                $milestoneOutput .= ' - <fg=yellow>unreleased</>';
+        foreach ($branches->all() as $branch) {
+            if ($branch->isEqual($currentBranch)) {
+                $io->writeln('* <fg=green;options=bold>' . $branch->name() . '</>');
+            } else {
+                $io->writeln('  ' . $branch->name());
             }
-
-            $io->writeln($milestoneOutput);
         }
 
         return Command::SUCCESS;

@@ -2,13 +2,13 @@
 
 declare(strict_types=1);
 
-namespace Aeon\Automation\Console\Command;
+namespace Aeon\Automation\Console\Command\GitHub;
 
 use Aeon\Automation\Changes\ChangesSource;
 use Aeon\Automation\Changes\Detector\HTMLChangesDetector;
 use Aeon\Automation\Console\AbstractCommand;
 use Aeon\Automation\Console\AeonStyle;
-use Aeon\Automation\Project;
+use Aeon\Automation\GitHub\Project;
 use Github\Exception\RuntimeException;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
@@ -18,14 +18,14 @@ use Symfony\Component\Console\Output\OutputInterface;
 
 final class PullRequestDescriptionCheck extends AbstractCommand
 {
-    protected static $defaultName = 'pull-request:description:check';
+    protected static $defaultName = 'gh:pull-request:description:check';
 
     protected function configure() : void
     {
         parent::configure();
 
         $this
-            ->setDescription('Check if pull request has changes in expected by Automation format.')
+            ->setDescription('Check if GitHub project pull request has changes in expected by Automation format.')
             ->setHelp('Expected format can be taken from <fg=yellow>pull-request:template:show</> command')
             ->addArgument('project', InputArgument::REQUIRED, 'project name')
             ->addArgument('number', InputArgument::REQUIRED, 'pull request number')

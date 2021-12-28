@@ -2,11 +2,11 @@
 
 declare(strict_types=1);
 
-namespace Aeon\Automation\Console\Command;
+namespace Aeon\Automation\Console\Command\GitHub;
 
 use Aeon\Automation\Console\AbstractCommand;
 use Aeon\Automation\Console\AeonStyle;
-use Aeon\Automation\Project;
+use Aeon\Automation\GitHub\Project;
 use Composer\Semver\VersionParser;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
@@ -15,14 +15,14 @@ use Symfony\Component\Console\Output\OutputInterface;
 
 final class MilestoneCreate extends AbstractCommand
 {
-    protected static $defaultName = 'milestone:create';
+    protected static $defaultName = 'gh:milestone:create';
 
     protected function configure() : void
     {
         parent::configure();
 
         $this
-            ->setDescription('Create new milestone for project')
+            ->setDescription('Create new GitHub project milestone')
             ->addArgument('project', InputArgument::REQUIRED, 'project name')
             ->addArgument('milestone', InputArgument::REQUIRED, 'new milestone version');
     }

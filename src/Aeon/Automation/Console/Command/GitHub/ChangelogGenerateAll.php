@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Aeon\Automation\Console\Command;
+namespace Aeon\Automation\Console\Command\GitHub;
 
 use Aeon\Automation\Changelog\Manipulator;
 use Aeon\Automation\Changelog\Source\EmptySource;
@@ -10,7 +10,7 @@ use Aeon\Automation\Changelog\SourceFactory;
 use Aeon\Automation\Console\AbstractCommand;
 use Aeon\Automation\Console\AeonStyle;
 use Aeon\Automation\Git\File;
-use Aeon\Automation\Project;
+use Aeon\Automation\GitHub\Project;
 use Aeon\Automation\Release\FormatterFactory;
 use Aeon\Automation\Release\Options;
 use Aeon\Automation\Release\ReleaseService;
@@ -23,14 +23,14 @@ use Symfony\Component\Console\Output\OutputInterface;
 
 final class ChangelogGenerateAll extends AbstractCommand
 {
-    protected static $defaultName = 'changelog:generate:all';
+    protected static $defaultName = 'gh:changelog:generate:all';
 
     protected function configure() : void
     {
         parent::configure();
 
         $this
-            ->setDescription('Generate change log for all tags.')
+            ->setDescription('Generate GitHub project change log for all tags.')
             ->setHelp('When no parameters are provided, this command will generate changelog for each commit that follows semver semantic.')
             ->addArgument('project', InputArgument::REQUIRED, 'project name, for example aeon-php/calendar')
             ->addOption('tag-start', null, InputOption::VALUE_REQUIRED, 'Generate changelog from given tag, if not provided it starts from the earliest tag')

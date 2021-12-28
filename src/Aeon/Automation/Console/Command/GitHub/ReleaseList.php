@@ -2,11 +2,11 @@
 
 declare(strict_types=1);
 
-namespace Aeon\Automation\Console\Command;
+namespace Aeon\Automation\Console\Command\GitHub;
 
 use Aeon\Automation\Console\AbstractCommand;
 use Aeon\Automation\Console\AeonStyle;
-use Aeon\Automation\Project;
+use Aeon\Automation\GitHub\Project;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
@@ -15,14 +15,14 @@ use Symfony\Component\Console\Output\OutputInterface;
 
 final class ReleaseList extends AbstractCommand
 {
-    protected static $defaultName = 'release:list';
+    protected static $defaultName = 'gh:release:list';
 
     protected function configure() : void
     {
         parent::configure();
 
         $this
-            ->setDescription('List all project releases')
+            ->setDescription('List GitHub project all project releases')
             ->addArgument('project', InputArgument::REQUIRED, 'project name')
             ->addOption('create-missing', null, InputOption::VALUE_NONE, 'Create missing milestones for existing releases');
     }

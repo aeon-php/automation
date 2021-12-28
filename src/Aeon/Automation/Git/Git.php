@@ -10,7 +10,7 @@ interface Git
 
     public function branch(string $name) : Branch;
 
-    public function repository() : Repository;
+    public function currentBranch() : Branch;
 
     public function putFile(string $path, string $commitMessage, string $commiterName, string $commiterEmail, string $content, ?string $fileSHA) : void;
 
@@ -24,7 +24,7 @@ interface Git
 
     public function tagCommit(Tag $tag) : Commit;
 
-    public function referenceCommit(Reference $reference): Commit;
+    public function referenceCommit(Reference $reference) : Commit;
 
-    public function referenceTag(string $name): Reference;
+    public function referenceTag(string $name) : Reference;
 }

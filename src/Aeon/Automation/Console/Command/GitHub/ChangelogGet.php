@@ -2,11 +2,11 @@
 
 declare(strict_types=1);
 
-namespace Aeon\Automation\Console\Command;
+namespace Aeon\Automation\Console\Command\GitHub;
 
 use Aeon\Automation\Console\AbstractCommand;
 use Aeon\Automation\Console\AeonStyle;
-use Aeon\Automation\Project;
+use Aeon\Automation\GitHub\Project;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
@@ -15,14 +15,14 @@ use Symfony\Component\Console\Output\OutputInterface;
 
 final class ChangelogGet extends AbstractCommand
 {
-    protected static $defaultName = 'changelog:get';
+    protected static $defaultName = 'gh:changelog:get';
 
     protected function configure() : void
     {
         parent::configure();
 
         $this
-            ->setDescription('Get project changelog.')
+            ->setDescription('Get GitHub project changelog.')
             ->setHelp('When no parameters are provided, this command will generate Unreleased change log. Please be careful when using --github-release-update and --github-file-update-path since those options will do changes in project repository.')
             ->addArgument('project', InputArgument::REQUIRED, 'project name, for example aeon-php/calendar')
             ->addOption('github-file-path', null, InputOption::VALUE_REQUIRED, 'changelog file path', 'CHANGELOG.md')

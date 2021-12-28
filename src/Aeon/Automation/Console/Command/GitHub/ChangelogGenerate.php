@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Aeon\Automation\Console\Command;
+namespace Aeon\Automation\Console\Command\GitHub;
 
 use Aeon\Automation\Changelog\Manipulator;
 use Aeon\Automation\Changelog\Source\EmptySource;
@@ -10,7 +10,7 @@ use Aeon\Automation\Changelog\SourceFactory;
 use Aeon\Automation\Console\AbstractCommand;
 use Aeon\Automation\Console\AeonStyle;
 use Aeon\Automation\Git\File;
-use Aeon\Automation\Project;
+use Aeon\Automation\GitHub\Project;
 use Aeon\Automation\Release\FormatterFactory;
 use Aeon\Automation\Release\Options;
 use Aeon\Automation\Release\ReleaseService;
@@ -23,14 +23,14 @@ use Symfony\Component\Console\Output\OutputInterface;
 
 final class ChangelogGenerate extends AbstractCommand
 {
-    protected static $defaultName = 'changelog:generate';
+    protected static $defaultName = 'gh:changelog:generate';
 
     protected function configure() : void
     {
         parent::configure();
 
         $this
-            ->setDescription('Generate change log for a release.')
+            ->setDescription('Generate GitHub project change log for a release.')
             ->setHelp('When no parameters are provided, this command will generate Unreleased change log. Please be careful when using --github-release-update and --github-file-update-path since those options will do changes in project repository.')
             ->addArgument('project', InputArgument::REQUIRED, 'project name, for example aeon-php/calendar')
             ->addOption('commit-start', null, InputOption::VALUE_REQUIRED, 'Optional commit sha from which changelog is generated . When not provided, default branch latest commit is taken')

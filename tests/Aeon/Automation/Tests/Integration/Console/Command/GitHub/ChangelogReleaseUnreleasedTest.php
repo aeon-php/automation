@@ -2,10 +2,10 @@
 
 declare(strict_types=1);
 
-namespace Aeon\Automation\Tests\Integration\Console\Command;
+namespace Aeon\Automation\Tests\Integration\Console\Command\GitHub;
 
 use Aeon\Automation\Console\AeonApplication;
-use Aeon\Automation\Console\Command\ChangelogReleaseUnreleased;
+use Aeon\Automation\Console\Command\GitHub\ChangelogReleaseUnreleased;
 use Aeon\Automation\Tests\Double\HttpRequestStub;
 use Aeon\Automation\Tests\Integration\Console\CommandTestCase;
 use Aeon\Automation\Tests\Mother\GitHub\GitHubResponseMother;

@@ -2,14 +2,14 @@
 
 declare(strict_types=1);
 
-namespace Aeon\Automation\Console\Command;
+namespace Aeon\Automation\Console\Command\GitHub;
 
 use Aeon\Automation\Changelog\Manipulator;
 use Aeon\Automation\Changelog\SourceFactory;
 use Aeon\Automation\Console\AbstractCommand;
 use Aeon\Automation\Console\AeonStyle;
 use Aeon\Automation\Git\File;
-use Aeon\Automation\Project;
+use Aeon\Automation\GitHub\Project;
 use Aeon\Automation\Release\FormatterFactory;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
@@ -19,14 +19,14 @@ use Symfony\Component\Console\Output\OutputInterface;
 
 final class ChangelogReleaseUnreleased extends AbstractCommand
 {
-    protected static $defaultName = 'changelog:release:unreleased';
+    protected static $defaultName = 'gh:changelog:release:unreleased';
 
     protected function configure() : void
     {
         parent::configure();
 
         $this
-            ->setDescription('Update changelog file by turning Unreleased section into the next release')
+            ->setDescription('Update GitHub project changelog file by turning Unreleased section into the next release')
             ->setHelp('This command only manipulates the changelog file, it does not create new releases.')
             ->addArgument('project', InputArgument::REQUIRED, 'project name, for example aeon-php/calendar')
             ->addArgument('changelog-file-path', InputArgument::REQUIRED, 'Path to the changelog file from repository root. For example: <fg=yellow>CHANGELOG.md</>')

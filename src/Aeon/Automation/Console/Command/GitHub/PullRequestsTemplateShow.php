@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Aeon\Automation\Console\Command;
+namespace Aeon\Automation\Console\Command\GitHub;
 
 use Aeon\Automation\Console\AbstractCommand;
 use Aeon\Automation\Console\AeonStyle;
@@ -12,13 +12,13 @@ use Symfony\Component\Console\Output\OutputInterface;
 
 final class PullRequestsTemplateShow extends AbstractCommand
 {
-    protected static $defaultName = 'pull-request:template:show';
+    protected static $defaultName = 'gh:pull-request:template:show';
 
     protected function configure() : void
     {
         parent::configure();
 
-        $this->setDescription('Display pull request template required by this tool to properly parse keepachangelog format');
+        $this->setDescription('Display GitHub project pull request template required by this tool to properly parse keepachangelog format');
     }
 
     protected function execute(InputInterface $input, OutputInterface $output) : int

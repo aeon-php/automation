@@ -2,11 +2,11 @@
 
 declare(strict_types=1);
 
-namespace Aeon\Automation\Console\Command;
+namespace Aeon\Automation\Console\Command\GitHub;
 
 use Aeon\Automation\Console\AbstractCommand;
 use Aeon\Automation\Console\AeonStyle;
-use Aeon\Automation\Project;
+use Aeon\Automation\GitHub\Project;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
@@ -14,14 +14,14 @@ use Symfony\Component\Console\Output\OutputInterface;
 
 final class WorkflowJobList extends AbstractCommand
 {
-    protected static $defaultName = 'workflow:job:list';
+    protected static $defaultName = 'gh:workflow:job:list';
 
     protected function configure() : void
     {
         parent::configure();
 
         $this
-            ->setDescription('List project Github actions jobs status from the latest workflow run')
+            ->setDescription('List GitHub project actions jobs status from the latest workflow run')
             ->addArgument('project', InputArgument::REQUIRED, 'project name');
     }
 

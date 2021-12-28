@@ -6,8 +6,8 @@ namespace Aeon\Automation\Release;
 
 use Aeon\Automation\Git\Branch;
 use Aeon\Automation\Git\Commit;
-use Aeon\Automation\GitHub\GitHub;
 use Aeon\Automation\Git\Reference;
+use Aeon\Automation\GitHub\GitHub;
 use Github\Exception\RuntimeException;
 
 final class Scope

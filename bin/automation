@@ -2,21 +2,21 @@
 <?php
 
 use Aeon\Automation\Console\AeonApplication;
-use Aeon\Automation\Console\Command\BranchList;
+use Aeon\Automation\Console\Command\GitHub\BranchList;
 use Aeon\Automation\Console\Command\CacheClear;
-use Aeon\Automation\Console\Command\ChangelogGenerate;
-use Aeon\Automation\Console\Command\ChangelogGet;
-use Aeon\Automation\Console\Command\ChangelogReleaseUnreleased;
-use Aeon\Automation\Console\Command\ChangelogGenerateAll;
-use Aeon\Automation\Console\Command\WorkflowJobList;
-use Aeon\Automation\Console\Command\MilestoneCreate;
-use Aeon\Automation\Console\Command\MilestoneList;
-use Aeon\Automation\Console\Command\PullRequestDescriptionCheck;
-use Aeon\Automation\Console\Command\PullRequestsList;
-use Aeon\Automation\Console\Command\PullRequestsTemplateShow;
-use Aeon\Automation\Console\Command\ReleaseList;
-use Aeon\Automation\Console\Command\TagList;
-use Aeon\Automation\Console\Command\WorkflowTimingList;
+use Aeon\Automation\Console\Command\GitHub\ChangelogGenerate;
+use Aeon\Automation\Console\Command\GitHub\ChangelogGet;
+use Aeon\Automation\Console\Command\GitHub\ChangelogReleaseUnreleased;
+use Aeon\Automation\Console\Command\GitHub\ChangelogGenerateAll;
+use Aeon\Automation\Console\Command\GitHub\WorkflowJobList;
+use Aeon\Automation\Console\Command\GitHub\MilestoneCreate;
+use Aeon\Automation\Console\Command\GitHub\MilestoneList;
+use Aeon\Automation\Console\Command\GitHub\PullRequestDescriptionCheck;
+use Aeon\Automation\Console\Command\GitHub\PullRequestsList;
+use Aeon\Automation\Console\Command\GitHub\PullRequestsTemplateShow;
+use Aeon\Automation\Console\Command\GitHub\ReleaseList;
+use Aeon\Automation\Console\Command\GitHub\TagList;
+use Aeon\Automation\Console\Command\GitHub\WorkflowTimingList;
 use Symfony\Component\Console\Input\ArgvInput;
 use Symfony\Component\Console\Output\ConsoleOutput;
 

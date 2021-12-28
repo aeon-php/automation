@@ -2,10 +2,10 @@
 
 declare(strict_types=1);
 
-namespace Aeon\Automation\Tests\Integration\Console\Command;
+namespace Aeon\Automation\Tests\Integration\Console\Command\GitHub;
 
 use Aeon\Automation\Console\AeonApplication;
-use Aeon\Automation\Console\Command\PullRequestsTemplateShow;
+use Aeon\Automation\Console\Command\GitHub\PullRequestsTemplateShow;
 use Aeon\Automation\Tests\Integration\Console\CommandTestCase;
 use Symfony\Component\Cache\Adapter\ArrayAdapter;
 use Symfony\Component\Console\Output\ConsoleOutput;

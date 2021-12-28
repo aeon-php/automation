@@ -10,10 +10,8 @@ use Aeon\Automation\Git\Commit;
 use Aeon\Automation\Git\Commits;
 use Aeon\Automation\Git\File;
 use Aeon\Automation\Git\Reference;
-use Aeon\Automation\Git\Repository;
 use Aeon\Automation\Git\Tag;
 use Aeon\Automation\Git\Tags;
-use Aeon\Automation\Project;
 use Aeon\Calendar\Gregorian\DateTime;
 use Github\Client;
 use Github\HttpClient\Message\ResponseMediator;
@@ -38,6 +36,11 @@ final class GitHubClient implements GitHub
     public function branch(string $name) : Branch
     {
         return new Branch($this->client->repo()->branches($this->project->organization(), $this->project->name(), $name));
+    }
+
+    public function currentBranch() : Branch
+    {
+        return new Branch($this->client->repo()->branches($this->project->organization(), $this->project->name(), $this->repository()->defaultBranch()));
     }
 
     public function branches() : Branches
@@ -153,12 +156,12 @@ final class GitHubClient implements GitHub
 
     public function pullRequestsClosed(string $branch, int $limit) : PullRequests
     {
-        return $this->pullRequests($project, $branch, 'closed', $limit);
+        return $this->pullRequests($branch, 'closed', $limit);
     }
 
     public function pullRequestsOpen(string $branch, int $limit) : PullRequests
     {
-        return $this->pullRequests($project, $branch, 'open', $limit);
+        return $this->pullRequests($branch, 'open', $limit);
     }
 
     public function pullRequests(string $branch, string $state, int $limit) : PullRequests

@@ -69,25 +69,25 @@ Examples:
 Generate full changelog for repository
 
 ```
-docker run -t -e AEON_AUTOMATION_GH_TOKEN --rm aeonphp/automation changelog:generate:all aeon-php/calendar --skip-from="dependabot[bot]" --skip-from="aeon-automation"
+docker run -t -e AEON_AUTOMATION_GH_TOKEN --rm aeonphp/automation gh:changelog:generate:all aeon-php/calendar --skip-from="dependabot[bot]" --skip-from="aeon-automation"
 ```
 
 Generate full changelog for repository ⚠️ **update CHANGELOG.md file and all releases** ⚠️
 
 ```
-docker run -t -e AEON_AUTOMATION_GH_TOKEN --rm aeonphp/automation changelog:generate:all aeon-php/calendar --github-release-update --github-file-update-path=CHANGELOG.md --skip-from="dependabot[bot]" --skip-from="aeon-automation"
+docker run -t -e AEON_AUTOMATION_GH_TOKEN --rm aeonphp/automation gh:changelog:generate:all aeon-php/calendar --github-release-update --github-file-update-path=CHANGELOG.md --skip-from="dependabot[bot]" --skip-from="aeon-automation"
 ```
 
 Generate unreleased changes for repository
 
 ```
-docker run -t -e AEON_AUTOMATION_GH_TOKEN --rm aeonphp/automation changelog:generate aeon-php/calendar --skip-from="dependabot[bot]" --skip-from="aeon-automation"
+docker run -t -e AEON_AUTOMATION_GH_TOKEN --rm aeonphp/automation gh:changelog:generate aeon-php/calendar --skip-from="dependabot[bot]" --skip-from="aeon-automation"
 ```
 
 Generate changelog for specific tag
 
 ```
-docker run -t -e AEON_AUTOMATION_GH_TOKEN --rm aeonphp/automation changelog:generate aeon-php/calendar --tag=0.15.0 --skip-from="dependabot[bot]" --skip-from="aeon-automation"
+docker run -t -e AEON_AUTOMATION_GH_TOKEN --rm aeonphp/automation gh:changelog:generate aeon-php/calendar --tag=0.15.0 --skip-from="dependabot[bot]" --skip-from="aeon-automation"
 ```
 
 In order to generate a changelog Automation takes 4 steps. 
@@ -191,7 +191,7 @@ TODO: Coming soon
 Because Automation is using GitHub API to grab project history you can use it against any popular github projects. 
 
 ```
-automation changelog:generate organization/name -v
+automation gh:changelog:generate organization/name -v
 ```
 
 ## Contributing 
@@ -226,33 +226,29 @@ Options:
   -v|vv|vvv, --verbose                               Increase the verbosity of messages: 1 for normal output, 2 for more verbose output and 3 for debug
 
 Available commands:
-  help                            Displays help for a command
-  list                            Lists commands
- branch
-  branch:list                     List project branches
+  completion                         Dump the shell completion script
+  help                               Display help for a command
+  list                               List commands
  cache
-  cache:clear                     Clears all or specific caches.
- changelog
-  changelog:generate              Generate change log for a release.
-  changelog:generate:all          Generate change log for all tags.
-  changelog:get                   Get project changelog.
-  changelog:release:unreleased    Update changelog file by turning Unreleased section into the next release
- milestone
-  milestone:create                Create new milestone for project
-  milestone:list                  
- pull-request
-  pull-request:description:check  Check if pull request has changes in expected by Automation format.
-  pull-request:list               
-  pull-request:template:show      Display pull request template required by this tool to properly parse keepachangelog format
- release
-  release:list                    List all project releases
- tag
-  tag:list                        Display all tags following SemVer convention sorted from the latest to oldest
- workflow
-  workflow:job:list               List project Github actions jobs status from the latest workflow run
+  cache:clear                        Clears all or specific caches.
+ gh
+  gh:branch:list                     List GitHub project branches
+  gh:changelog:generate              Generate change log for a release.
+  gh:changelog:generate:all          Generate change log for all tags.
+  gh:changelog:get                   Get project changelog.
+  gh:changelog:release:unreleased    Update changelog file by turning Unreleased section into the next release
+  gh:milestone:create                Create new milestone for project
+  gh:milestone:list                  
+  gh:pull-request:description:check  Check if pull request has changes in expected by Automation format.
+  gh:pull-request:list               
+  gh:pull-request:template:show      Display pull request template required by this tool to properly parse keepachangelog format
+  gh:release:list                    List all project releases
+  gh:tag:list                        Display all tags following SemVer convention sorted from the latest to oldest
+  gh:workflow:job:list               List project Github actions jobs status from the latest workflow run
+  gh:workflow:timing:list            List project Github actions workflows billable minutes usage in current billing cycle
 ```
 
-### changelog:generate
+### gh:changelog:generate
 
 ```bash
 Description:
@@ -298,14 +294,14 @@ Help:
   When no parameters are provided, this command will generate Unreleased change log. Please be careful when using --github-release-update and --github-file-update-path since those options will do changes in project repository.
 ```
 
-### changelog:generate:all
+### gh:changelog:generate:all
 
 ```bash
 Description:
   Generate change log for all tags.
 
 Usage:
-  changelog:generate:all [options] [--] <project>
+  gh:changelog:generate:all [options] [--] <project>
 
 Arguments:
   project                                                project name, for example aeon-php/calendar
@@ -340,14 +336,14 @@ Help:
   When no parameters are provided, this command will generate changelog for each commit that follows semver semantic.
 ```
 
-### changelog:release:unreleased
+### gh:changelog:release:unreleased
 
 ```bash
 Description:
   Update changelog file by turning Unreleased section into the next release
 
 Usage:
-  changelog:release:unreleased [options] [--] <project> <changelog-file-path> <release-name>
+  gh:changelog:release:unreleased [options] [--] <project> <changelog-file-path> <release-name>
 
 Arguments:
   project                                              project name, for example aeon-php/calendar
@@ -376,14 +372,14 @@ Help:
   This command only manipulates the changelog file, it does not create new releases.
 ```
 
-### changelog:get
+### gh:changelog:get
 
 ```bash
 Description:
   Get project changelog.
 
 Usage:
-  changelog:get [options] [--] <project>
+  gh:changelog:get [options] [--] <project>
 
 Arguments:
   project                                            project name, for example aeon-php/calendar
@@ -408,14 +404,14 @@ Help:
   When no parameters are provided, this command will generate Unreleased change log. Please be careful when using --github-release-update and --github-file-update-path since those options will do changes in project repository.
 ```
 
-### tag:list
+### gh:tag:list
 
 ```bash
 Description:
   Display all tags following SemVer convention sorted from the latest to oldest
 
 Usage:
-  tag:list [options] [--] <project>
+  gh:tag:list [options] [--] <project>
 
 Arguments:
   project                                            project name
@@ -437,14 +433,14 @@ Options:
   -v|vv|vvv, --verbose                               Increase the verbosity of messages: 1 for normal output, 2 for more verbose output and 3 for debug
 ```
 
-### workflow:timing:list
+### gh:workflow:timing:list
 
 ```
 Description:
   List project Github actions workflows billable minutes usage in current billing cycle
 
 Usage:
-  workflow:timing:list [options] [--] <project>
+  gh:workflow:timing:list [options] [--] <project>
 
 Arguments:
   project                                            project name
