@@ -2,7 +2,7 @@
 
 namespace Aeon\Automation\Changes;
 
-use Aeon\Automation\GitHub\Commit;
+use Aeon\Automation\Git\Commit;
 use Aeon\Automation\GitHub\PullRequest;
 use Aeon\Calendar\Gregorian\DateTime;
 

@@ -4,6 +4,15 @@ declare(strict_types=1);
 
 namespace Aeon\Automation\GitHub;
 
+use Aeon\Automation\Git\Branch;
+use Aeon\Automation\Git\Branches;
+use Aeon\Automation\Git\Commit;
+use Aeon\Automation\Git\Commits;
+use Aeon\Automation\Git\File;
+use Aeon\Automation\Git\Reference;
+use Aeon\Automation\Git\Repository;
+use Aeon\Automation\Git\Tag;
+use Aeon\Automation\Git\Tags;
 use Aeon\Automation\Project;
 use Aeon\Calendar\Gregorian\DateTime;
 use Github\Client;

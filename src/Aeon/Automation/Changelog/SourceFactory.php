@@ -6,7 +6,7 @@ namespace Aeon\Automation\Changelog;
 
 use Aeon\Automation\Changelog\Source\HTMLSource;
 use Aeon\Automation\Changelog\Source\MarkdownSource;
-use Aeon\Automation\GitHub\File;
+use Aeon\Automation\Git\File;
 
 final class SourceFactory
 {

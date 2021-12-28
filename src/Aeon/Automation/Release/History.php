@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Aeon\Automation\Release;
 
-use Aeon\Automation\GitHub\Commits;
+use Aeon\Automation\Git\Commits;
 use Aeon\Automation\GitHub\GitHub;
 use Aeon\Calendar\Gregorian\DateTime;
 

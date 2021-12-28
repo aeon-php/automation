@@ -4,10 +4,10 @@ declare(strict_types=1);
 
 namespace Aeon\Automation\Release;
 
-use Aeon\Automation\GitHub\Branch;
-use Aeon\Automation\GitHub\Commit;
+use Aeon\Automation\Git\Branch;
+use Aeon\Automation\Git\Commit;
 use Aeon\Automation\GitHub\GitHub;
-use Aeon\Automation\GitHub\Reference;
+use Aeon\Automation\Git\Reference;
 use Github\Exception\RuntimeException;
 
 final class Scope

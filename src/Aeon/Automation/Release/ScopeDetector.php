@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace Aeon\Automation\Release;
 
+use Aeon\Automation\Git\Tags;
 use Aeon\Automation\GitHub\GitHub;
-use Aeon\Automation\GitHub\Tags;
 
 final class ScopeDetector
 {

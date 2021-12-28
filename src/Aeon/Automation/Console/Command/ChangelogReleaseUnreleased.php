@@ -8,7 +8,7 @@ use Aeon\Automation\Changelog\Manipulator;
 use Aeon\Automation\Changelog\SourceFactory;
 use Aeon\Automation\Console\AbstractCommand;
 use Aeon\Automation\Console\AeonStyle;
-use Aeon\Automation\GitHub\File;
+use Aeon\Automation\Git\File;
 use Aeon\Automation\Project;
 use Aeon\Automation\Release\FormatterFactory;
 use Symfony\Component\Console\Command\Command;

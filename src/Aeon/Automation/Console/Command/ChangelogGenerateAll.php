@@ -9,7 +9,7 @@ use Aeon\Automation\Changelog\Source\EmptySource;
 use Aeon\Automation\Changelog\SourceFactory;
 use Aeon\Automation\Console\AbstractCommand;
 use Aeon\Automation\Console\AeonStyle;
-use Aeon\Automation\GitHub\File;
+use Aeon\Automation\Git\File;
 use Aeon\Automation\Project;
 use Aeon\Automation\Release\FormatterFactory;
 use Aeon\Automation\Release\Options;
