@@ -4,7 +4,14 @@ declare(strict_types=1);
 
 namespace Aeon\Automation\GitHub;
 
-use Aeon\Automation\Project;
+use Aeon\Automation\Git\Branch;
+use Aeon\Automation\Git\Branches;
+use Aeon\Automation\Git\Commit;
+use Aeon\Automation\Git\Commits;
+use Aeon\Automation\Git\File;
+use Aeon\Automation\Git\Reference;
+use Aeon\Automation\Git\Tag;
+use Aeon\Automation\Git\Tags;
 use Aeon\Calendar\Gregorian\DateTime;
 use Github\Client;
 use Github\HttpClient\Message\ResponseMediator;
@@ -13,37 +20,45 @@ use Psr\Cache\CacheItemPoolInterface;
 
 final class GitHubClient implements GitHub
 {
+    private Project $project;
+
     private Client $client;
 
     private CacheItemPoolInterface $cache;
 
-    public function __construct(Client $client, CacheItemPoolInterface $cache)
+    public function __construct(Project $project, Client $client, CacheItemPoolInterface $cache)
     {
         $this->client = $client;
         $this->cache = $cache;
+        $this->project = $project;
     }
 
-    public function branch(Project $project, string $name) : Branch
+    public function branch(string $name) : Branch
     {
-        return new Branch($this->client->repo()->branches($project->organization(), $project->name(), $name));
+        return new Branch($this->client->repo()->branches($this->project->organization(), $this->project->name(), $name));
     }
 
-    public function branches(Project $project) : Branches
+    public function currentBranch() : Branch
+    {
+        return new Branch($this->client->repo()->branches($this->project->organization(), $this->project->name(), $this->repository()->defaultBranch()));
+    }
+
+    public function branches() : Branches
     {
         return new Branches(...\array_map(
             fn (array $branchData) : Branch => new Branch($branchData),
-            $this->client->repository()->branches($project->organization(), $project->name())
+            $this->client->repository()->branches($this->project->organization(), $this->project->name())
         ));
     }
 
-    public function commitPullRequests(Project $project, Commit $commit) : PullRequests
+    public function commitPullRequests(Commit $commit) : PullRequests
     {
-        $pullRequestsCacheItem = $this->cache->getItem("github.{$project->organization()}.{$project->name()}.commit.{$commit->sha()}.pull_requests");
+        $pullRequestsCacheItem = $this->cache->getItem("github.{$this->project->organization()}.{$this->project->name()}.commit.{$commit->sha()}.pull_requests");
 
         if (!$pullRequestsCacheItem->isHit()) {
             $pullRequestsData = ResponseMediator::getContent(
                 $this->client->getHttpClient()->get(
-                    '/repos/' . \rawurlencode($project->organization()) . '/' . \rawurlencode($project->name()) . '/commits/' . \rawurlencode($commit->sha()) . '/pulls',
+                    '/repos/' . \rawurlencode($this->project->organization()) . '/' . \rawurlencode($this->project->name()) . '/commits/' . \rawurlencode($commit->sha()) . '/pulls',
                     ['Accept' => 'application/vnd.github.groot-preview+json']
                 )
             );
@@ -57,10 +72,10 @@ final class GitHubClient implements GitHub
         return new PullRequests(...\array_map(fn (array $pullRequestData) : PullRequest => new PullRequest($pullRequestData), $pullRequestsData));
     }
 
-    public function commitsCompare(Project $project, Commit $fromCommit, Commit $untilCommit, ?DateTime $changedAfter = null, ?DateTime $changedBefore = null) : Commits
+    public function commitsCompare(Commit $fromCommit, Commit $untilCommit, ?DateTime $changedAfter = null, ?DateTime $changedBefore = null) : Commits
     {
         $commitsPaginator = new ResultPager($this->client);
-        $commitsData = $commitsPaginator->fetch($this->client->repo()->commits(), 'compare', [$project->organization(), $project->name(), $untilCommit->sha(), $fromCommit->sha()]);
+        $commitsData = $commitsPaginator->fetch($this->client->repo()->commits(), 'compare', [$this->project->organization(), $this->project->name(), $untilCommit->sha(), $fromCommit->sha()]);
 
         $commitsData = $commitsData['commits'];
 
@@ -81,12 +96,12 @@ final class GitHubClient implements GitHub
         return $commits;
     }
 
-    public function commit(Project $project, string $sha) : Commit
+    public function commit(string $sha) : Commit
     {
-        return new Commit($this->client->repo()->commits()->show($project->organization(), $project->name(), $sha));
+        return new Commit($this->client->repo()->commits()->show($this->project->organization(), $this->project->name(), $sha));
     }
 
-    public function commits(Project $project, string $sha, ?DateTime $changedAfter = null, ?DateTime $changedBefore = null, ?int $limit = null) : Commits
+    public function commits(string $sha, ?DateTime $changedAfter = null, ?DateTime $changedBefore = null, ?int $limit = null) : Commits
     {
         $parameters = ['sha' => $sha];
 
@@ -99,7 +114,7 @@ final class GitHubClient implements GitHub
         }
 
         $commitsPaginator = new ResultPager($this->client);
-        $commitsData = $commitsPaginator->fetch($this->client->repo()->commits(), 'all', [$project->organization(), $project->name(), $parameters]);
+        $commitsData = $commitsPaginator->fetch($this->client->repo()->commits(), 'all', [$this->project->organization(), $this->project->name(), $parameters]);
 
         $foundAll = false;
 
@@ -134,30 +149,30 @@ final class GitHubClient implements GitHub
         return new Commits(...$commits);
     }
 
-    public function pullRequest(Project $project, int $number) : PullRequest
+    public function pullRequest(int $number) : PullRequest
     {
-        return new PullRequest($this->client->pullRequests()->show($project->organization(), $project->name(), $number));
+        return new PullRequest($this->client->pullRequests()->show($this->project->organization(), $this->project->name(), $number));
     }
 
-    public function pullRequestsClosed(Project $project, string $branch, int $limit) : PullRequests
+    public function pullRequestsClosed(string $branch, int $limit) : PullRequests
     {
-        return $this->pullRequests($project, $branch, 'closed', $limit);
+        return $this->pullRequests($branch, 'closed', $limit);
     }
 
-    public function pullRequestsOpen(Project $project, string $branch, int $limit) : PullRequests
+    public function pullRequestsOpen(string $branch, int $limit) : PullRequests
     {
-        return $this->pullRequests($project, $branch, 'open', $limit);
+        return $this->pullRequests($branch, 'open', $limit);
     }
 
-    public function pullRequests(Project $project, string $branch, string $state, int $limit) : PullRequests
+    public function pullRequests(string $branch, string $state, int $limit) : PullRequests
     {
         $pullsPaginator = new ResultPager($this->client);
         $pullsData = $pullsPaginator->fetch(
             $this->client->pullRequests(),
             'all',
             [
-                $project->organization(),
-                $project->name(),
+                $this->project->organization(),
+                $this->project->name(),
                 [
                     'state' => $state,
                     'base' => $branch,
@@ -190,12 +205,12 @@ final class GitHubClient implements GitHub
         return new PullRequests(...$pullRequests);
     }
 
-    public function referenceTag(Project $project, string $name) : Reference
+    public function referenceTag(string $name) : Reference
     {
-        $referenceCacheItem = $this->cache->getItem("github.{$project->organization()}.{$project->name()}.reference_tag.{$name}");
+        $referenceCacheItem = $this->cache->getItem("github.{$this->project->organization()}.{$this->project->name()}.reference_tag.{$name}");
 
         if (!$referenceCacheItem->isHit()) {
-            $referenceTagData = $this->client->gitData()->references()->show($project->organization(), $project->name(), 'tags/' . $name);
+            $referenceTagData = $this->client->gitData()->references()->show($this->project->organization(), $this->project->name(), 'tags/' . $name);
 
             $referenceCacheItem->set($referenceTagData);
             $this->cache->save($referenceCacheItem);
@@ -206,23 +221,23 @@ final class GitHubClient implements GitHub
         return new Reference($referenceTagData);
     }
 
-    public function referenceCommit(Project $project, Reference $reference) : Commit
+    public function referenceCommit(Reference $reference) : Commit
     {
         if ($reference->type() === 'tag') {
-            $tagData = $this->client->gitData()->tags()->show($project->organization(), $project->name(), $reference->sha());
+            $tagData = $this->client->gitData()->tags()->show($this->project->organization(), $this->project->name(), $reference->sha());
 
-            return new Commit($this->client->repo()->commits()->show($project->organization(), $project->name(), $tagData['object']['sha']));
+            return new Commit($this->client->repo()->commits()->show($this->project->organization(), $this->project->name(), $tagData['object']['sha']));
         }
 
-        return new Commit($this->client->repo()->commits()->show($project->organization(), $project->name(), $reference->sha()));
+        return new Commit($this->client->repo()->commits()->show($this->project->organization(), $this->project->name(), $reference->sha()));
     }
 
-    public function repository(Project $project) : Repository
+    public function repository() : Repository
     {
-        $repositoryCacheItem = $this->cache->getItem("github.{$project->organization()}.{$project->name()}.repository");
+        $repositoryCacheItem = $this->cache->getItem("github.{$this->project->organization()}.{$this->project->name()}.repository");
 
         if (!$repositoryCacheItem->isHit()) {
-            $repositoryData = $this->client->repositories()->show($project->organization(), $project->name());
+            $repositoryData = $this->client->repositories()->show($this->project->organization(), $this->project->name());
 
             $repositoryCacheItem->set($repositoryData);
             $this->cache->save($repositoryCacheItem);
@@ -233,10 +248,10 @@ final class GitHubClient implements GitHub
         return new Repository($repositoryData);
     }
 
-    public function milestones(Project $project) : Milestones
+    public function milestones() : Milestones
     {
         $milestonePaginator = new ResultPager($this->client);
-        $milestoneData = $milestonePaginator->fetchAll($this->client->issue()->milestones(), 'all', [$project->organization(), $project->name(), ['state' => 'all']]);
+        $milestoneData = $milestonePaginator->fetchAll($this->client->issue()->milestones(), 'all', [$this->project->organization(), $this->project->name(), ['state' => 'all']]);
 
         return new Milestones(...\array_map(
             fn (array $milestoneData) : Milestone => new Milestone($milestoneData),
@@ -244,15 +259,15 @@ final class GitHubClient implements GitHub
         ));
     }
 
-    public function createMilestone(Project $project, string $title) : void
+    public function createMilestone(string $title) : void
     {
-        $this->client->issue()->milestones()->create($project->organization(), $project->name(), ['title' => $title]);
+        $this->client->issue()->milestones()->create($this->project->organization(), $this->project->name(), ['title' => $title]);
     }
 
-    public function releases(Project $project) : Releases
+    public function releases() : Releases
     {
         $releasePaginator = new ResultPager($this->client);
-        $releasesData = $releasePaginator->fetchAll($this->client->repository()->releases(), 'all', [$project->organization(), $project->name()]);
+        $releasesData = $releasePaginator->fetchAll($this->client->repository()->releases(), 'all', [$this->project->organization(), $this->project->name()]);
 
         return new Releases(...\array_map(
             fn (array $releaseData) : Release => new Release($releaseData),
@@ -260,12 +275,12 @@ final class GitHubClient implements GitHub
         ));
     }
 
-    public function release(Project $project, int $id) : Release
+    public function release(int $id) : Release
     {
-        return new Release($this->client->repository()->releases()->show($project->organization(), $project->name(), $id));
+        return new Release($this->client->repository()->releases()->show($this->project->organization(), $this->project->name(), $id));
     }
 
-    public function updateRelease(Project $project, int $id, ?string $body = null) : Release
+    public function updateRelease(int $id, ?string $body = null) : Release
     {
         $parameters = [];
 
@@ -273,13 +288,13 @@ final class GitHubClient implements GitHub
             $parameters['body'] = $body;
         }
 
-        return new Release($this->client->repository()->releases()->edit($project->organization(), $project->name(), $id, $parameters));
+        return new Release($this->client->repository()->releases()->edit($this->project->organization(), $this->project->name(), $id, $parameters));
     }
 
-    public function tags(Project $project) : Tags
+    public function tags() : Tags
     {
         $tagsPaginator = new ResultPager($this->client);
-        $tagsData = $tagsPaginator->fetchAll($this->client->repo(), 'tags', [$project->organization(), $project->name()]);
+        $tagsData = $tagsPaginator->fetchAll($this->client->repo(), 'tags', [$this->project->organization(), $this->project->name()]);
 
         return new Tags(...\array_map(
             fn (array $tagData) : Tag => new Tag($tagData),
@@ -287,16 +302,16 @@ final class GitHubClient implements GitHub
         ));
     }
 
-    public function tagCommit(Project $project, Tag $tag) : Commit
+    public function tagCommit(Tag $tag) : Commit
     {
-        return new Commit($this->client->repo()->commits()->show($project->organization(), $project->name(), $tag->sha()));
+        return new Commit($this->client->repo()->commits()->show($this->project->organization(), $this->project->name(), $tag->sha()));
     }
 
-    public function workflows(Project $project) : Workflows
+    public function workflows() : Workflows
     {
         $workflowsData = ResponseMediator::getContent(
             $this->client->getHttpClient()->get(
-                '/repos/' . \rawurlencode($project->organization()) . '/' . \rawurlencode($project->name()) . '/actions/workflows',
+                '/repos/' . \rawurlencode($this->project->organization()) . '/' . \rawurlencode($this->project->name()) . '/actions/workflows',
                 ['Accept' => 'application/vnd.github.v3+json']
             )
         );
@@ -307,11 +322,11 @@ final class GitHubClient implements GitHub
         ));
     }
 
-    public function workflowLatestRun(Project $project, Workflow $workflow) : ?WorkflowRun
+    public function workflowLatestRun(Workflow $workflow) : ?WorkflowRun
     {
         $runsData = ResponseMediator::getContent(
             $this->client->getHttpClient()->get(
-                '/repos/' . \rawurlencode($project->organization()) . '/' . \rawurlencode($project->name()) . '/actions/workflows/' . $workflow->id() . '/runs',
+                '/repos/' . \rawurlencode($this->project->organization()) . '/' . \rawurlencode($this->project->name()) . '/actions/workflows/' . $workflow->id() . '/runs',
                 ['Accept' => 'application/vnd.github.v3+json']
             )
         );
@@ -323,11 +338,11 @@ final class GitHubClient implements GitHub
         return new WorkflowRun(\current($runsData['workflow_runs']));
     }
 
-    public function workflowRunJobs(Project $project, WorkflowRun $workflowRun) : WorkflowRunJobs
+    public function workflowRunJobs(WorkflowRun $workflowRun) : WorkflowRunJobs
     {
         $jobsData = ResponseMediator::getContent(
             $this->client->getHttpClient()->get(
-                '/repos/' . \rawurlencode($project->organization()) . '/' . \rawurlencode($project->name()) . '/actions/runs/' . $workflowRun->id() . '/jobs',
+                '/repos/' . \rawurlencode($this->project->organization()) . '/' . \rawurlencode($this->project->name()) . '/actions/runs/' . $workflowRun->id() . '/jobs',
                 ['Accept' => 'application/vnd.github.v3+json']
             )
         );
@@ -335,11 +350,11 @@ final class GitHubClient implements GitHub
         return new WorkflowRunJobs(...\array_map(fn (array $jobData) : WorkflowRunJob => new WorkflowRunJob($jobData), $jobsData['jobs']));
     }
 
-    public function workflowTiming(Project $project, Workflow $workflow) : WorkflowTiming
+    public function workflowTiming(Workflow $workflow) : WorkflowTiming
     {
         $timingData = ResponseMediator::getContent(
             $this->client->getHttpClient()->get(
-                '/repos/' . \rawurlencode($project->organization()) . '/' . \rawurlencode($project->name()) . '/actions/workflows/' . $workflow->id() . '/timing',
+                '/repos/' . \rawurlencode($this->project->organization()) . '/' . \rawurlencode($this->project->name()) . '/actions/workflows/' . $workflow->id() . '/timing',
                 ['Accept' => 'application/vnd.github.v3+json']
             )
         );
@@ -347,17 +362,17 @@ final class GitHubClient implements GitHub
         return new WorkflowTiming($timingData);
     }
 
-    public function file(Project $project, string $path, ?string $fileRef) : File
+    public function file(string $path, ?string $fileRef) : File
     {
-        return new File($this->client->repo()->contents()->show($project->organization(), $project->name(), $path, $fileRef));
+        return new File($this->client->repo()->contents()->show($this->project->organization(), $this->project->name(), $path, $fileRef));
     }
 
-    public function putFile(Project $project, string $path, string $commitMessage, string $commiterName, string $commiterEmail, string $content, ?string $fileSHA) : void
+    public function putFile(string $path, string $commitMessage, string $commiterName, string $commiterEmail, string $content, ?string $fileSHA) : void
     {
         if ($fileSHA) {
             $this->client->repo()->contents()->update(
-                $project->organization(),
-                $project->name(),
+                $this->project->organization(),
+                $this->project->name(),
                 $path,
                 $content,
                 $commitMessage,
@@ -370,8 +385,8 @@ final class GitHubClient implements GitHub
             );
         } else {
             $this->client->repo()->contents()->create(
-                $project->organization(),
-                $project->name(),
+                $this->project->organization(),
+                $this->project->name(),
                 $path,
                 $content,
                 $commitMessage,

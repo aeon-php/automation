@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace Aeon\Automation\Tests\Unit\Release;
 
-use Aeon\Automation\GitHub\Branch;
-use Aeon\Automation\GitHub\Commit;
+use Aeon\Automation\Git\Branch;
+use Aeon\Automation\Git\Commit;
 use Aeon\Automation\Release\Scope;
 use Aeon\Automation\Tests\Mother\GitHub\GitHubResponseMother;
 use PHPUnit\Framework\TestCase;
