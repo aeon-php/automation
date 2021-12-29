@@ -21,7 +21,7 @@ final class GitShell implements Git
 
     public function tags() : Tags
     {
-        throw new \RuntimeException("Not implemented yet");
+        throw new \RuntimeException('Not implemented yet');
     }
 
     public function branch(string $name) : Branch
@@ -56,22 +56,22 @@ final class GitShell implements Git
 
     public function putFile(string $path, string $commitMessage, string $commiterName, string $commiterEmail, string $content, ?string $fileSHA) : void
     {
-        throw new \RuntimeException("Not implemented yet");
+        throw new \RuntimeException('Not implemented yet');
     }
 
     public function commitsCompare(Commit $fromCommit, Commit $untilCommit, ?DateTime $changedAfter = null, ?DateTime $changedBefore = null) : Commits
     {
-        throw new \RuntimeException("Not implemented yet");
+        throw new \RuntimeException('Not implemented yet');
     }
 
     public function commits(string $sha, ?DateTime $changedAfter = null, ?DateTime $changedBefore = null, ?int $limit = null) : Commits
     {
-        throw new \RuntimeException("Not implemented yet");
+        throw new \RuntimeException('Not implemented yet');
     }
 
     public function file(string $path, ?string $fileRef) : File
     {
-        throw new \RuntimeException("Not implemented yet");
+        throw new \RuntimeException('Not implemented yet');
     }
 
     public function branches() : Branches
@@ -94,16 +94,16 @@ final class GitShell implements Git
 
     public function tagCommit(Tag $tag) : Commit
     {
-        throw new \RuntimeException("Not implemented yet");
+        throw new \RuntimeException('Not implemented yet');
     }
 
     public function referenceCommit(Reference $reference) : Commit
     {
-        throw new \RuntimeException("Not implemented yet");
+        throw new \RuntimeException('Not implemented yet');
     }
 
     public function referenceTag(string $name) : Reference
     {
-        throw new \RuntimeException("Not implemented yet");
+        throw new \RuntimeException('Not implemented yet');
     }
 }
