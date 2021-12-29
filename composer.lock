@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "6fe5a456cf9571d7d80679df4d7480be",
+    "content-hash": "e32aac94f9a9538416d4b6af55443bf9",
     "packages": [
         {
             "name": "aeon-php/calendar",
@@ -820,6 +820,76 @@
                 "source": "https://github.com/dflydev/dflydev-dot-access-data/tree/v3.0.1"
             },
             "time": "2021-08-13T13:06:58+00:00"
+        },
+        {
+            "name": "gitonomy/gitlib",
+            "version": "v1.3.2",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/gitonomy/gitlib.git",
+                "reference": "e73e439590b194b0b250b516b22a68c7116e2f21"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/gitonomy/gitlib/zipball/e73e439590b194b0b250b516b22a68c7116e2f21",
+                "reference": "e73e439590b194b0b250b516b22a68c7116e2f21",
+                "shasum": ""
+            },
+            "require": {
+                "ext-pcre": "*",
+                "php": "^5.6 || ^7.0 || ^8.0",
+                "symfony/polyfill-mbstring": "^1.7",
+                "symfony/process": "^3.4 || ^4.4 || ^5.0 || ^6.0"
+            },
+            "require-dev": {
+                "ext-fileinfo": "*",
+                "phpunit/phpunit": "^5.7.27 || ^6.5.14 || ^7.5.20 || ^8.5.20 || ^9.5.9",
+                "psr/log": "^1.0"
+            },
+            "suggest": {
+                "ext-fileinfo": "Required to determine the mimetype of a blob",
+                "psr/log": "Required to use loggers for reporting of execution"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "Gitonomy\\Git\\": "src/Gitonomy/Git/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Graham Campbell",
+                    "email": "hello@gjcampbell.co.uk"
+                },
+                {
+                    "name": "Julien Didier",
+                    "email": "genzo.wm@gmail.com"
+                },
+                {
+                    "name": "Grégoire Pineau",
+                    "email": "lyrixx@lyrixx.info"
+                },
+                {
+                    "name": "Alexandre Salomé",
+                    "email": "alexandre.salome@gmail.com"
+                }
+            ],
+            "description": "Library for accessing git",
+            "support": {
+                "issues": "https://github.com/gitonomy/gitlib/issues",
+                "source": "https://github.com/gitonomy/gitlib/tree/v1.3.2"
+            },
+            "funding": [
+                {
+                    "url": "https://tidelift.com/funding/github/packagist/gitonomy/gitlib",
+                    "type": "tidelift"
+                }
+            ],
+            "time": "2021-09-06T20:30:10+00:00"
         },
         {
             "name": "guzzlehttp/psr7",

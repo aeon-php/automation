@@ -11,6 +11,7 @@ use Aeon\Automation\Changes\Detector\DefaultDetector;
 use Aeon\Automation\Changes\Detector\HTMLChangesDetector;
 use Aeon\Automation\Changes\Detector\PrefixDetector;
 use Aeon\Automation\Changes\Detector\PrioritizedDetector;
+use Aeon\Automation\GitHub\Project;
 use Psr\Log\LoggerInterface;
 
 final class Configuration

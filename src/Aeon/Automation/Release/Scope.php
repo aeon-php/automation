@@ -4,11 +4,10 @@ declare(strict_types=1);
 
 namespace Aeon\Automation\Release;
 
-use Aeon\Automation\GitHub\Branch;
-use Aeon\Automation\GitHub\Commit;
+use Aeon\Automation\Git\Branch;
+use Aeon\Automation\Git\Commit;
+use Aeon\Automation\Git\Reference;
 use Aeon\Automation\GitHub\GitHub;
-use Aeon\Automation\GitHub\Reference;
-use Aeon\Automation\Project;
 use Github\Exception\RuntimeException;
 
 final class Scope
@@ -42,13 +41,13 @@ final class Scope
         return new self();
     }
 
-    public static function fromDefaultBranchHead(GitHub $github, Project $project) : self
+    public static function fromDefaultBranchHead(GitHub $github) : self
     {
         try {
-            $branch = $github->branch($project, $defaultBranch = $github->repository($project)->defaultBranch());
+            $branch = $github->branch($defaultBranch = $github->repository()->defaultBranch());
 
             return new self(
-                $github->commit($project, $branch->sha()),
+                $github->commit($branch->sha()),
                 null,
                 $branch
             );
@@ -57,13 +56,13 @@ final class Scope
         }
     }
 
-    public static function fromTagStart(string $name, GitHub $client, Project $project) : self
+    public static function fromTagStart(string $name, GitHub $client) : self
     {
         try {
-            $tag = $client->referenceTag($project, $name);
+            $tag = $client->referenceTag($name);
 
             return new self(
-                $client->referenceCommit($project, $tag),
+                $client->referenceCommit($tag),
                 null,
                 null,
                 $tag
@@ -73,14 +72,14 @@ final class Scope
         }
     }
 
-    public static function fromTagEnd(string $name, GitHub $client, Project $project) : self
+    public static function fromTagEnd(string $name, GitHub $client) : self
     {
         try {
-            $tag = $client->referenceTag($project, $name);
+            $tag = $client->referenceTag($name);
 
             return new self(
                 null,
-                $client->referenceCommit($project, $tag),
+                $client->referenceCommit($tag),
                 null,
                 null,
                 $tag
@@ -90,19 +89,19 @@ final class Scope
         }
     }
 
-    public static function fromCommitStart(string $SHA, GitHub $client, Project $project) : self
+    public static function fromCommitStart(string $SHA, GitHub $client) : self
     {
         try {
-            return new self($client->commit($project, $SHA));
+            return new self($client->commit($SHA));
         } catch (RuntimeException $e) {
             throw new \RuntimeException("Commit \"{$SHA}\" does not exists: " . $e->getMessage());
         }
     }
 
-    public static function fromCommitEnd(string $SHA, GitHub $client, Project $project) : self
+    public static function fromCommitEnd(string $SHA, GitHub $client) : self
     {
         try {
-            return new self(null, $client->commit($project, $SHA));
+            return new self(null, $client->commit($SHA));
         } catch (RuntimeException $e) {
             throw new \RuntimeException("Commit \"{$SHA}\" does not exists: " . $e->getMessage());
         }

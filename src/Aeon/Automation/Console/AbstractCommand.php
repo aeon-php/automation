@@ -5,7 +5,10 @@ declare(strict_types=1);
 namespace Aeon\Automation\Console;
 
 use Aeon\Automation\Configuration;
+use Aeon\Automation\Git\GitShell;
+use Aeon\Automation\Git\RepositoryLocation;
 use Aeon\Automation\GitHub\GitHubClient;
+use Aeon\Automation\GitHub\Project;
 use Aeon\Calendar\Gregorian\Calendar;
 use Aeon\Calendar\Gregorian\GregorianCalendar;
 use Github\Client;
@@ -58,9 +61,14 @@ abstract class AbstractCommand extends Command
         $this->logger = null;
     }
 
-    public function githubClient() : GitHubClient
+    public function githubClient(Project $project) : GitHubClient
     {
-        return new GitHubClient($this->github(), $this->githubCache());
+        return new GitHubClient($project, $this->github(), $this->githubCache());
+    }
+
+    public function git(RepositoryLocation $location) : GitShell
+    {
+        return new GitShell($location);
     }
 
     public function setGithub(Client $client) : void
@@ -117,13 +125,6 @@ abstract class AbstractCommand extends Command
         }
 
         return $this->githubCache;
-    }
-
-    protected function interact(InputInterface $input, OutputInterface $output) : void
-    {
-        if ($input->hasArgument('project') && $input->getArgument('project') === null && $this->configuration()->project()) {
-            $input->setArgument('project', $this->configuration()->project()->fullName());
-        }
     }
 
     protected function initialize(InputInterface $input, OutputInterface $output) : void

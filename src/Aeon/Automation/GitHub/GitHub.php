@@ -2,56 +2,36 @@
 
 namespace Aeon\Automation\GitHub;
 
-use Aeon\Automation\Project;
-use Aeon\Calendar\Gregorian\DateTime;
+use Aeon\Automation\Git\Commit;
+use Aeon\Automation\Git\Git;
 
-interface GitHub
+interface GitHub extends Git
 {
-    public function branch(Project $project, string $name) : Branch;
+    public function repository() : Repository;
 
-    public function branches(Project $project) : Branches;
+    public function commitPullRequests(Commit $commit) : PullRequests;
 
-    public function commitPullRequests(Project $project, Commit $commit) : PullRequests;
+    public function pullRequest(int $number) : PullRequest;
 
-    public function commitsCompare(Project $project, Commit $fromCommit, Commit $untilCommit, ?DateTime $changedAfter = null, ?DateTime $changedBefore = null) : Commits;
+    public function pullRequestsClosed(string $branch, int $limit) : PullRequests;
 
-    public function commits(Project $project, string $sha, ?DateTime $changedAfter = null, ?DateTime $changedBefore = null, ?int $limit = null) : Commits;
+    public function pullRequestsOpen(string $branch, int $limit) : PullRequests;
 
-    public function pullRequest(Project $project, int $number) : PullRequest;
+    public function pullRequests(string $branch, string $state, int $limit) : PullRequests;
 
-    public function pullRequestsClosed(Project $project, string $branch, int $limit) : PullRequests;
+    public function milestones() : Milestones;
 
-    public function pullRequestsOpen(Project $project, string $branch, int $limit) : PullRequests;
+    public function createMilestone(string $title) : void;
 
-    public function pullRequests(Project $project, string $branch, string $state, int $limit) : PullRequests;
+    public function releases() : Releases;
 
-    public function referenceTag(Project $project, string $name) : Reference;
+    public function release(int $id) : Release;
 
-    public function referenceCommit(Project $project, Reference $reference) : Commit;
+    public function updateRelease(int $id, ?string $body = null) : Release;
 
-    public function repository(Project $project) : Repository;
+    public function workflows() : Workflows;
 
-    public function milestones(Project $project) : Milestones;
+    public function workflowLatestRun(Workflow $workflow) : ?WorkflowRun;
 
-    public function createMilestone(Project $project, string $title) : void;
-
-    public function releases(Project $project) : Releases;
-
-    public function release(Project $project, int $id) : Release;
-
-    public function updateRelease(Project $project, int $id, ?string $body = null) : Release;
-
-    public function tags(Project $project) : Tags;
-
-    public function tagCommit(Project $project, Tag $tag) : Commit;
-
-    public function workflows(Project $project) : Workflows;
-
-    public function workflowLatestRun(Project $project, Workflow $workflow) : ?WorkflowRun;
-
-    public function workflowRunJobs(Project $project, WorkflowRun $workflowRun) : WorkflowRunJobs;
-
-    public function file(Project $project, string $path, ?string $fileRef) : File;
-
-    public function putFile(Project $project, string $path, string $commitMessage, string $commiterName, string $commiterEmail, string $content, ?string $fileSHA) : void;
+    public function workflowRunJobs(WorkflowRun $workflowRun) : WorkflowRunJobs;
 }
