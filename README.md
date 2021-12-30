@@ -232,20 +232,26 @@ Available commands:
  cache
   cache:clear                        Clears all or specific caches.
  gh
-  gh:branch:list                     List GitHub project branches
-  gh:changelog:generate              Generate change log for a release.
-  gh:changelog:generate:all          Generate change log for all tags.
-  gh:changelog:get                   Get project changelog.
-  gh:changelog:release:unreleased    Update changelog file by turning Unreleased section into the next release
-  gh:milestone:create                Create new milestone for project
-  gh:milestone:list                  
-  gh:pull-request:description:check  Check if pull request has changes in expected by Automation format.
-  gh:pull-request:list               
-  gh:pull-request:template:show      Display pull request template required by this tool to properly parse keepachangelog format
-  gh:release:list                    List all project releases
-  gh:tag:list                        Display all tags following SemVer convention sorted from the latest to oldest
-  gh:workflow:job:list               List project Github actions jobs status from the latest workflow run
-  gh:workflow:timing:list            List project Github actions workflows billable minutes usage in current billing cycle
+  gh:branch:list                     List GitHub project branches, marked branch is default one.
+  gh:changelog:generate              Generate change log for a Github project.
+  gh:changelog:generate:all          Generate GitHub project change log for all tags.
+  gh:changelog:get                   Get GitHub project changelog.
+  gh:changelog:release:unreleased    Update GitHub project changelog file by turning Unreleased section into the next release
+  gh:milestone:create                Create new GitHub project milestone
+  gh:milestone:list                  Show GitHub project milestones
+  gh:pull-request:description:check  Check if GitHub project pull request has changes in expected by Automation format.
+  gh:pull-request:list               Show GitHub project pull requests.
+  gh:pull-request:template:show      Display GitHub project pull request template required by this tool to properly parse keepachangelog format
+  gh:release:list                    List GitHub project all project releases
+  gh:tag:list                        Display GitHub project all tags following SemVer convention sorted from the latest to oldest
+  gh:workflow:job:list               List GitHub project actions jobs status from the latest workflow run
+  gh:workflow:timing:list            List GitHub project actions workflows billable minutes usage in current billing cycle
+ git
+  git:branch:list                    List git repository branches, marked branch is active one.
+  git:changelog:generate             Generate change log for a git repository.
+  git:changelog:generate:all         Generate change log from all tags of a git repository.
+  git:changelog:release:unreleased   Update Git repository changelog file by turning Unreleased section into the next release
+  git:tag:list                       Display Git repository all tags following SemVer convention sorted from the latest to oldest
 ```
 
 ### gh:changelog:generate

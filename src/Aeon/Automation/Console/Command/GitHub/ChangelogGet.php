@@ -23,7 +23,6 @@ final class ChangelogGet extends AbstractCommand
 
         $this
             ->setDescription('Get GitHub project changelog.')
-            ->setHelp('When no parameters are provided, this command will generate Unreleased change log. Please be careful when using --github-release-update and --github-file-update-path since those options will do changes in project repository.')
             ->addArgument('project', InputArgument::REQUIRED, 'project name, for example aeon-php/calendar')
             ->addOption('github-file-path', null, InputOption::VALUE_REQUIRED, 'changelog file path', 'CHANGELOG.md')
             ->addOption('github-file-ref', null, InputOption::VALUE_REQUIRED, 'The name of the commit/branch/tag from which to take file for <fg=yellow>--github-file-path=CHANGELOG.md</> option. Default: the repository’s default branch.')

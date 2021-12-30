@@ -5,17 +5,17 @@ declare(strict_types=1);
 namespace Aeon\Automation\Release;
 
 use Aeon\Automation\Changes\ChangesSource;
-use Aeon\Automation\GitHub\GitHub;
+use Aeon\Automation\Git\Git;
 
 final class HistoryTransformer
 {
-    private GitHub $github;
+    private Git $git;
 
     private Options $releaseOptions;
 
-    public function __construct(GitHub $client, Options $releaseOptions)
+    public function __construct(Git $git, Options $releaseOptions)
     {
-        $this->github = $client;
+        $this->git = $git;
         $this->releaseOptions = $releaseOptions;
     }
 
@@ -34,7 +34,7 @@ final class HistoryTransformer
             }
 
             if ($this->releaseOptions->onlyPullRequests()) {
-                $pullRequests = $this->github->commitPullRequests($commit);
+                $pullRequests = $this->git->commitPullRequests($commit);
 
                 if (!$pullRequests->count()) {
                     continue;
@@ -44,7 +44,7 @@ final class HistoryTransformer
             }
 
             if ($this->releaseOptions->allSources()) {
-                $pullRequests = $this->github->commitPullRequests($commit);
+                $pullRequests = $this->git->commitPullRequests($commit);
 
                 $source = $pullRequests->count() ? ChangesSource::fromPullRequest($pullRequests->first()) : ChangesSource::fromCommit($commit);
             }

@@ -18,6 +18,6 @@ final class RepositoryLocation
 
     public function toString() : string
     {
-        return $this->location;
+        return \realpath($this->location);
     }
 }

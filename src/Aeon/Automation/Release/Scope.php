@@ -6,8 +6,8 @@ namespace Aeon\Automation\Release;
 
 use Aeon\Automation\Git\Branch;
 use Aeon\Automation\Git\Commit;
+use Aeon\Automation\Git\Git;
 use Aeon\Automation\Git\Reference;
-use Aeon\Automation\GitHub\GitHub;
 use Github\Exception\RuntimeException;
 
 final class Scope
@@ -41,13 +41,13 @@ final class Scope
         return new self();
     }
 
-    public static function fromDefaultBranchHead(GitHub $github) : self
+    public static function fromBranchHead(Git $git, string $branchName) : self
     {
         try {
-            $branch = $github->branch($defaultBranch = $github->repository()->defaultBranch());
+            $branch = $git->branch($branchName);
 
             return new self(
-                $github->commit($branch->sha()),
+                $git->commit($branch->sha()),
                 null,
                 $branch
             );
@@ -56,7 +56,22 @@ final class Scope
         }
     }
 
-    public static function fromTagStart(string $name, GitHub $client) : self
+    public static function fromCurrentBranchHead(Git $git) : self
+    {
+        try {
+            $branch = $git->currentBranch();
+
+            return new self(
+                $git->commit($branch->sha()),
+                null,
+                $branch
+            );
+        } catch (RuntimeException $e) {
+            throw new \RuntimeException("Can't fetch SHA for default branch does not exists: " . $e->getMessage());
+        }
+    }
+
+    public static function fromTagStart(string $name, Git $client) : self
     {
         try {
             $tag = $client->referenceTag($name);
@@ -72,7 +87,7 @@ final class Scope
         }
     }
 
-    public static function fromTagEnd(string $name, GitHub $client) : self
+    public static function fromTagEnd(string $name, Git $client) : self
     {
         try {
             $tag = $client->referenceTag($name);
@@ -89,7 +104,7 @@ final class Scope
         }
     }
 
-    public static function fromCommitStart(string $SHA, GitHub $client) : self
+    public static function fromCommitStart(string $SHA, Git $client) : self
     {
         try {
             return new self($client->commit($SHA));
@@ -98,7 +113,7 @@ final class Scope
         }
     }
 
-    public static function fromCommitEnd(string $SHA, GitHub $client) : self
+    public static function fromCommitEnd(string $SHA, Git $client) : self
     {
         try {
             return new self(null, $client->commit($SHA));

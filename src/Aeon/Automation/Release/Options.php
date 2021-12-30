@@ -10,6 +10,8 @@ final class Options
 {
     private string $releaseName;
 
+    private ?string $branch;
+
     private ?string $commitStartSHA;
 
     private ?string $commitEndSHA;
@@ -34,6 +36,7 @@ final class Options
 
     public function __construct(
         string $releaseName,
+        ?string $branch = null,
         ?string $commitStartSHA = null,
         ?string $commitEndSHA = null,
         ?string $tagStart = null,
@@ -55,6 +58,14 @@ final class Options
             }
         }
 
+        if ($commitStartSHA !== null && $branch !== null) {
+            throw new \InvalidArgumentException("--commit-start and --branch can't be used together");
+        }
+
+        if ($commitEndSHA !== null && $branch !== null) {
+            throw new \InvalidArgumentException("--commit-end and --branch can't be used together");
+        }
+
         $this->releaseName = $releaseName;
         $this->commitStartSHA = $commitStartSHA;
         $this->commitEndSHA = $commitEndSHA;
@@ -67,11 +78,17 @@ final class Options
         $this->changedAfter = $changedAfter;
         $this->changedBefore = $changedBefore;
         $this->skipAuthors = $skipAuthors;
+        $this->branch = $branch;
     }
 
     public function releaseName() : string
     {
         return $this->releaseName;
+    }
+
+    public function branch() : ?string
+    {
+        return $this->branch;
     }
 
     public function commitStartSHA() : ?string

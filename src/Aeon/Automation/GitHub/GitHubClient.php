@@ -362,12 +362,12 @@ final class GitHubClient implements GitHub
         return new WorkflowTiming($timingData);
     }
 
-    public function file(string $path, ?string $fileRef) : File
+    public function file(string $path, ?string $fileRef = null) : File
     {
         return new File($this->client->repo()->contents()->show($this->project->organization(), $this->project->name(), $path, $fileRef));
     }
 
-    public function putFile(string $path, string $commitMessage, string $commiterName, string $commiterEmail, string $content, ?string $fileSHA) : void
+    public function putFile(string $path, string $commitMessage, string $commiterName, string $commiterEmail, string $content, ?string $fileSHA = null) : void
     {
         if ($fileSHA) {
             $this->client->repo()->contents()->update(
