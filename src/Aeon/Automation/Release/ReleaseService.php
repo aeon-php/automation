@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace Aeon\Automation\Release;
 
 use Aeon\Automation\Configuration;
-use Aeon\Automation\GitHub\GitHub;
+use Aeon\Automation\Git\Git;
 use Aeon\Automation\Release;
 use Aeon\Calendar\Gregorian\Calendar;
 
@@ -17,36 +17,37 @@ final class ReleaseService
 
     private Calendar $calendar;
 
-    private GitHub $github;
+    private Git $git;
 
-    public function __construct(Configuration $configuration, Options $changelogOptions, Calendar $calendar, GitHub $github)
+    public function __construct(Configuration $configuration, Options $changelogOptions, Calendar $calendar, Git $github)
     {
         $this->configuration = $configuration;
         $this->options = $changelogOptions;
-        $this->github = $github;
+        $this->git = $github;
         $this->calendar = $calendar;
     }
 
     public function fetch() : History
     {
-        $scopeDetector = new ScopeDetector($this->github, $this->options->isTagOnlyStable());
+        $scopeDetector = new ScopeDetector($this->git, $this->options->isTagOnlyStable());
 
         $scope = $scopeDetector->default(
             $scopeDetector->fromTags($this->options->tagStart(), $this->options->tagEnd())
-                ->override($scopeDetector->fromCommitSHA($this->options->commitStartSHA(), $this->options->commitEndSHA()))
+                ->override($scopeDetector->fromCommitSHA($this->options->commitStartSHA(), $this->options->commitEndSHA())),
+            $this->options->branch()
         );
 
         if ($this->options->compareReverse() && $scope->isFull()) {
             $scope = $scope->reverse();
         }
 
-        return new History($this->github, $scope, $this->options->changedAfter(), $this->options->changedBefore());
+        return new History($this->git, $scope, $this->options->changedAfter(), $this->options->changedBefore());
     }
 
     public function analyze(History $history, callable $onProgress) : Release
     {
         $transformer = new HistoryTransformer(
-            $this->github,
+            $this->git,
             $this->options
         );
 

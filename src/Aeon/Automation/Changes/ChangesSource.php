@@ -111,6 +111,11 @@ final class ChangesSource
         return $this->url;
     }
 
+    public function hasUrl() : bool
+    {
+        return $this->url !== '#';
+    }
+
     /**
      * @return string
      */

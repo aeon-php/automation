@@ -4,14 +4,9 @@ declare(strict_types=1);
 
 namespace Aeon\Automation\Git;
 
-use Aeon\Automation\GitHub\Project;
-use Aeon\Automation\GitHub\PullRequest;
-use Aeon\Automation\GitHub\PullRequests;
 use Aeon\Calendar\Gregorian\DateTime;
-use Github\Client;
-use Github\HttpClient\Message\ResponseMediator;
 
-final class Commit
+final class  Commit
 {
     private array $data;
 
@@ -74,17 +69,5 @@ final class Commit
         }
 
         return $this->data['author']['html_url'];
-    }
-
-    public function pullRequests(Client $client, Project $project) : PullRequests
-    {
-        $pullRequestsData = ResponseMediator::getContent(
-            $client->getHttpClient()->get(
-                '/repos/' . \rawurlencode($project->organization()) . '/' . \rawurlencode($project->name()) . '/commits/' . \rawurlencode($this->sha()) . '/pulls',
-                ['Accept' => 'application/vnd.github.groot-preview+json']
-            )
-        );
-
-        return new PullRequests(...\array_map(fn (array $pullRequestData) : PullRequest => new PullRequest($pullRequestData), $pullRequestsData));
     }
 }

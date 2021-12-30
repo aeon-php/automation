@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Aeon\Automation\Console\Command\GitHub;
+namespace Aeon\Automation\Console\Command\Git;
 
 use Aeon\Automation\Changelog\Manipulator;
 use Aeon\Automation\Changelog\Source\EmptySource;
@@ -10,7 +10,7 @@ use Aeon\Automation\Changelog\SourceFactory;
 use Aeon\Automation\Console\AbstractCommand;
 use Aeon\Automation\Console\AeonStyle;
 use Aeon\Automation\Git\File;
-use Aeon\Automation\GitHub\Project;
+use Aeon\Automation\Git\RepositoryLocation;
 use Aeon\Automation\Release\FormatterFactory;
 use Aeon\Automation\Release\Options;
 use Aeon\Automation\Release\ReleaseService;
@@ -23,41 +23,37 @@ use Symfony\Component\Console\Output\OutputInterface;
 
 final class ChangelogGenerateAll extends AbstractCommand
 {
-    protected static $defaultName = 'gh:changelog:generate:all';
+    protected static $defaultName = 'git:changelog:generate:all';
 
     protected function configure() : void
     {
         parent::configure();
 
         $this
-            ->setDescription('Generate GitHub project change log for all tags.')
+            ->setDescription('Generate change log from all tags of a git repository.')
             ->setHelp('When no parameters are provided, this command will generate changelog for each commit that follows semver semantic.')
-            ->addArgument('project', InputArgument::REQUIRED, 'project name, for example aeon-php/calendar')
+            ->addArgument('repository', InputArgument::OPTIONAL, 'local path to repository', '.')
             ->addOption('branch', null, InputOption::VALUE_REQUIRED, 'From this branch commit start will be taken when --tag-start option is not provided')
             ->addOption('tag-start', null, InputOption::VALUE_REQUIRED, 'Generate changelog from given tag, if not provided it starts from the earliest tag')
             ->addOption('tag-end', null, InputOption::VALUE_REQUIRED, 'Generate changelog until given tag, if not provided it ends at the last tag')
             ->addOption('tag-skip', null, InputOption::VALUE_REQUIRED | InputOption::VALUE_IS_ARRAY, 'Skip specific tags')
             ->addOption('tag-only-stable', null, InputOption::VALUE_NONE, 'Check SemVer stability of all tags and remove all unstable')
             ->addOption('skip-from', null, InputOption::VALUE_REQUIRED | InputOption::VALUE_IS_ARRAY, 'Skip changes from given author|authors')
-            ->addOption('only-commits', null, InputOption::VALUE_NONE, 'Use only commits to generate changelog')
-            ->addOption('only-pull-requests', null, InputOption::VALUE_NONE, 'Use only pull requests to generate changelog')
             ->addOption('compare-reverse', null, InputOption::VALUE_NONE, 'When comparing commits, revers the order and compare start to end, instead end to start.')
             ->addOption('format', null, InputOption::VALUE_REQUIRED, 'How to format generated changelog, available formatters: <fg=yellow>"' . \implode('"</>, <fg=yellow>"', ['markdown', 'html']) . '"</>', 'markdown')
             ->addOption('theme', null, InputOption::VALUE_REQUIRED, 'Theme of generated changelog: <fg=yellow>"' . \implode('"</>, <fg=yellow>"', ['keepachangelog', 'classic']) . '"</>', 'keepachangelog')
-            ->addOption('github-release-update', null, InputOption::VALUE_NONE, 'Update GitHub release description if you have right permissions and release exists')
-            ->addOption('github-file-update-path', null, InputOption::VALUE_REQUIRED, 'Update changelog file directly at GitHub by reading existing file content and changing related release section. For example: <fg=yellow>--github-file-update-path=CHANGELOG.md</>')
-            ->addOption('github-file-update-ref', null, InputOption::VALUE_REQUIRED, 'The name of the commit/branch/tag from which to take file for <fg=yellow>--github-file-update-path=CHANGELOG.md</> option. Default: the repository’s default branch.');
+            ->addOption('file-update-path', null, InputOption::VALUE_REQUIRED, 'Update changelog file directly at GitHub by reading existing file content and changing related release section. For example: <fg=yellow>--github-file-update-path=CHANGELOG.md</>');
     }
 
     protected function execute(InputInterface $input, OutputInterface $output) : int
     {
         $io = new AeonStyle($input, $output);
 
-        $project = new Project($input->getArgument('project'));
+        $repositoryLocation = new RepositoryLocation($input->getArgument('repository'));
 
         $io->title('Changelog - Generate - All');
 
-        $tags = $this->githubClient($project)->tags()->rsort();
+        $tags = $this->git($repositoryLocation)->tags()->rsort();
         $tagStart = $input->getOption('tag-start');
         $tagEnd = $input->getOption('tag-end');
         $tagsSkip = (array) $input->getOption('tag-skip');
@@ -101,8 +97,8 @@ final class ChangelogGenerateAll extends AbstractCommand
                     $commitEnd = null,
                     $tagName = ($tag === null ? null: $tag->name()),
                     $tagNext = null,
-                    $input->getOption('only-commits'),
-                    $input->getOption('only-pull-requests'),
+                    $onlyCommits = true,
+                    $onlyPullRequests = false,
                     $input->getOption('compare-reverse'),
                     $changedAfter = null,
                     $changedBefore = null,
@@ -113,7 +109,7 @@ final class ChangelogGenerateAll extends AbstractCommand
                     $options->tagOnlyStable();
                 }
 
-                $releaseService = new ReleaseService($this->configuration(), $options, $this->calendar(), $this->githubClient($project));
+                $releaseService = new ReleaseService($this->configuration(), $options, $this->calendar(), $this->git($repositoryLocation));
 
                 $history = $releaseService->fetch();
 
@@ -135,22 +131,6 @@ final class ChangelogGenerateAll extends AbstractCommand
 
             if (!$release->empty()) {
                 $releases = $releases->add($release);
-
-                if ($input->getOption('github-release-update') && !$release->isUnreleased()) {
-                    $githubReleases = $this->githubClient($project)->releases();
-
-                    if (!$githubReleases->exists($release->name())) {
-                        $io->error('Release ' . $release->name() . ' not found');
-
-                        return Command::FAILURE;
-                    }
-
-                    $io->note('Updating release description...');
-
-                    $this->githubClient($project)->updateRelease($githubReleases->get($release->name())->id(), $formatter->formatRelease($release));
-
-                    $io->note('Release description updated');
-                }
             } else {
                 $io->note('No changes');
             }
@@ -160,16 +140,13 @@ final class ChangelogGenerateAll extends AbstractCommand
 
         $io->write($formatter->formatReleases($releases));
 
-        $filePath = $input->getOption('github-file-update-path');
+        $filePath = $input->getOption('file-update-path');
 
         if ($filePath) {
-            $fileRef = $input->getOption('github-file-update-ref');
-
             $io->note('Changelog file: ' . $filePath);
-            $io->note('Changelog file ref: ' . ($fileRef ? $fileRef : 'N/A'));
 
             try {
-                $file = $this->githubClient($project)->file($filePath, $fileRef);
+                $file = $this->git($repositoryLocation)->file($filePath);
                 $source = (new SourceFactory())->create($input->getOption('format'), $file);
             } catch (\Exception $e) {
                 $io->note("File \"{$filePath}\" does not exists, it will be created.");
@@ -186,9 +163,9 @@ final class ChangelogGenerateAll extends AbstractCommand
             $io->note("Updating file {$filePath} content...");
 
             if ($file === null || ($file instanceof File && $file->hasDifferentContent($fileContent))) {
-                $this->githubClient($project)->putFile(
+                $this->git($repositoryLocation)->putFile(
                     $filePath,
-                    'Updated ' . \ltrim($filePath, '/'),
+                    'Updated ' . \ltrim(\basename($filePath), '/'),
                     'aeon-automation',
                     'automation-bot@aeon-php.org',
                     $fileContent,

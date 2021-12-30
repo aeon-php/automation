@@ -29,12 +29,12 @@ final class BranchList extends AbstractCommand
     {
         $io = new AeonStyle($input, $output);
 
-        $project = new RepositoryLocation($input->getArgument('repository'));
+        $location = new RepositoryLocation($input->getArgument('repository'));
 
         $io->title('Branch - List');
 
-        $branches = $this->git($project)->branches();
-        $currentBranch = $this->git($project)->currentBranch();
+        $branches = $this->git($location)->branches();
+        $currentBranch = $this->git($location)->currentBranch();
 
         foreach ($branches->all() as $branch) {
             if ($branch->isEqual($currentBranch)) {

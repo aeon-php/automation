@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Aeon\Automation\Console\Command\GitHub;
+namespace Aeon\Automation\Console\Command\Git;
 
 use Aeon\Automation\Changelog\Manipulator;
 use Aeon\Automation\Changelog\Source\EmptySource;
@@ -10,7 +10,7 @@ use Aeon\Automation\Changelog\SourceFactory;
 use Aeon\Automation\Console\AbstractCommand;
 use Aeon\Automation\Console\AeonStyle;
 use Aeon\Automation\Git\File;
-use Aeon\Automation\GitHub\Project;
+use Aeon\Automation\Git\RepositoryLocation;
 use Aeon\Automation\Release\FormatterFactory;
 use Aeon\Automation\Release\Options;
 use Aeon\Automation\Release\ReleaseService;
@@ -23,16 +23,16 @@ use Symfony\Component\Console\Output\OutputInterface;
 
 final class ChangelogGenerate extends AbstractCommand
 {
-    protected static $defaultName = 'gh:changelog:generate';
+    protected static $defaultName = 'git:changelog:generate';
 
     protected function configure() : void
     {
         parent::configure();
 
         $this
-            ->setDescription('Generate change log for a Github project.')
+            ->setDescription('Generate change log for a git repository.')
             ->setHelp('When no parameters are provided, this command will generate Unreleased change log. Please be careful when using --github-release-update and --github-file-update-path since those options will do changes in project repository.')
-            ->addArgument('project', InputArgument::REQUIRED, 'project name, for example aeon-php/calendar')
+            ->addArgument('repository', InputArgument::OPTIONAL, 'local path to repository', '.')
             ->addOption('commit-start', null, InputOption::VALUE_REQUIRED, 'Optional commit sha from which changelog is generated . When not provided, default branch latest commit is taken')
             ->addOption('commit-end', null, InputOption::VALUE_REQUIRED, 'Optional commit sha until which changelog is generated . When not provided, latest tag is taken')
             ->addOption('changed-after', null, InputOption::VALUE_REQUIRED, 'Ignore all changes after given date, relative date formats like "-1 day" are also supported')
@@ -42,22 +42,18 @@ final class ChangelogGenerate extends AbstractCommand
             ->addOption('tag-next', null, InputOption::VALUE_REQUIRED, 'List only changes until given release')
             ->addOption('tag-only-stable', null, InputOption::VALUE_NONE, 'Check SemVer stability of all tags and remove all unstable')
             ->addOption('release-name', null, InputOption::VALUE_REQUIRED, 'Name of the release when --tag option is not provided', 'Unreleased')
-            ->addOption('only-commits', null, InputOption::VALUE_NONE, 'Use only commits to generate changelog')
-            ->addOption('only-pull-requests', null, InputOption::VALUE_NONE, 'Use only pull requests to generate changelog')
             ->addOption('compare-reverse', null, InputOption::VALUE_NONE, 'When comparing commits, revers the order and compare start to end, instead end to start.')
             ->addOption('format', null, InputOption::VALUE_REQUIRED, 'How to format generated changelog, available formatters: <fg=yellow>"' . \implode('"</>, <fg=yellow>"', ['markdown', 'html']) . '"</>', 'markdown')
             ->addOption('theme', null, InputOption::VALUE_REQUIRED, 'Theme of generated changelog: <fg=yellow>"' . \implode('"</>, <fg=yellow>"', ['keepachangelog', 'classic']) . '"</>', 'keepachangelog')
             ->addOption('skip-from', null, InputOption::VALUE_REQUIRED | InputOption::VALUE_IS_ARRAY, 'Skip changes from given author|authors')
-            ->addOption('github-release-update', null, InputOption::VALUE_NONE, 'Update GitHub release description if you have right permissions and release exists')
-            ->addOption('github-file-update-path', null, InputOption::VALUE_REQUIRED, 'Update changelog file directly at GitHub by reading existing file content and changing related release section. For example: <fg=yellow>--github-file-update-path=CHANGELOG.md</>')
-            ->addOption('github-file-update-ref', null, InputOption::VALUE_REQUIRED, 'The name of the commit/branch/tag from which to take file for <fg=yellow>--github-file-update-path=CHANGELOG.md</> option. Default: the repository’s default branch.');
+            ->addOption('file-update-path', null, InputOption::VALUE_REQUIRED, 'Update changelog file directly by reading existing file content and changing related release section. For example: <fg=yellow>--file-update-path=CHANGELOG.md</>');
     }
 
     protected function execute(InputInterface $input, OutputInterface $output) : int
     {
         $io = new AeonStyle($input, $output);
 
-        $project = new Project($input->getArgument('project'));
+        $location = new RepositoryLocation($input->getArgument('repository'));
 
         $io->title('Changelog - Generate');
 
@@ -69,8 +65,8 @@ final class ChangelogGenerate extends AbstractCommand
                 $input->getOption('commit-end'),
                 $input->getOption('tag'),
                 $input->getOption('tag-next'),
-                $input->getOption('only-commits'),
-                $input->getOption('only-pull-requests'),
+                $onlyCommits = true,
+                $onlyPullRequests = false,
                 $input->getOption('compare-reverse'),
                 $input->getOption('changed-after') ? DateTime::fromString($input->getOption('changed-after')) : null,
                 $input->getOption('changed-before') ? DateTime::fromString($input->getOption('changed-before')) : null,
@@ -81,7 +77,7 @@ final class ChangelogGenerate extends AbstractCommand
                 $options->tagOnlyStable();
             }
 
-            $releaseService = new ReleaseService($this->configuration(), $options, $this->calendar(), $this->githubClient($project));
+            $releaseService = new ReleaseService($this->configuration(), $options, $this->calendar(), $this->git($location));
 
             $history = $releaseService->fetch();
         } catch (\Exception $e) {
@@ -91,7 +87,7 @@ final class ChangelogGenerate extends AbstractCommand
         }
 
         $io->note('Release: ' . $options->releaseName());
-        $io->note('Project: ' . $project->fullName());
+        $io->note('Location: ' . $location->toString());
         $io->note('Format: ' . $input->getOption('format'));
         $io->note('Theme: ' . $input->getOption('theme'));
 
@@ -153,32 +149,13 @@ final class ChangelogGenerate extends AbstractCommand
         if (!$release->empty()) {
             $io->write($formatter->formatRelease($release));
 
-            if ($input->getOption('github-release-update') && !$release->isUnreleased()) {
-                $remoteReleases = $this->githubClient($project)->releases();
-
-                if (!$remoteReleases->exists($release->name())) {
-                    $io->error('Release ' . $release->name() . ' not found');
-
-                    return Command::FAILURE;
-                }
-
-                $io->note('Updating release description...');
-
-                $this->githubClient($project)->updateRelease($remoteReleases->get($release->name())->id(), $formatter->formatRelease($release));
-
-                $io->note('Release description updated');
-            }
-
-            $filePath = $input->getOption('github-file-update-path');
+            $filePath = $input->getOption('file-update-path');
 
             if ($filePath) {
-                $fileRef = $input->getOption('github-file-update-ref');
-
                 $io->note('Changelog file: ' . $filePath);
-                $io->note('Changelog file ref: ' . ($fileRef ? $fileRef : 'N/A'));
 
                 try {
-                    $file = $this->githubClient($project)->file($filePath, $fileRef);
+                    $file = $this->git($location)->file($filePath, null);
                     $source = (new SourceFactory())->create($input->getOption('format'), $file);
                 } catch (\Exception $e) {
                     $io->note("File \"{$filePath}\" does not exists, it will be created.");
@@ -195,13 +172,12 @@ final class ChangelogGenerate extends AbstractCommand
                 $io->note("Updating file {$filePath} content...");
 
                 if ($file === null || ($file instanceof File && $file->hasDifferentContent($fileContent))) {
-                    $this->githubClient($project)->putFile(
+                    $this->git($location)->putFile(
                         $filePath,
-                        'Updated ' . \ltrim($filePath, '/'),
+                        'Updated ' . \ltrim(\basename($filePath), '/'),
                         $this->configuration()->commiterName(),
                         $this->configuration()->commiterEmail(),
                         $fileContent,
-                        $file instanceof File ? $file->sha() : null
                     );
                     $io->note("File {$filePath} content updated.");
 

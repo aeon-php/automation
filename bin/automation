@@ -66,6 +66,10 @@ use Symfony\Component\Console\Output\ConsoleOutput;
 
     // git:
     $application->add(new Git\BranchList($rootDir, $defaultConfigPaths));
+    $application->add(new Git\ChangelogGenerate($rootDir, $defaultConfigPaths));
+    $application->add(new Git\ChangelogGenerateAll($rootDir, $defaultConfigPaths));
+    $application->add(new Git\TagList($rootDir, $defaultConfigPaths));
+    $application->add(new Git\ChangelogReleaseUnreleased($rootDir, $defaultConfigPaths));
 
     $application->run($input, $output);
 })();

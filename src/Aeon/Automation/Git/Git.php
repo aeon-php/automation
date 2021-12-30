@@ -12,13 +12,15 @@ interface Git
 
     public function currentBranch() : Branch;
 
-    public function putFile(string $path, string $commitMessage, string $commiterName, string $commiterEmail, string $content, ?string $fileSHA) : void;
+    public function putFile(string $path, string $commitMessage, string $commiterName, string $commiterEmail, string $content, ?string $fileSHA = null) : void;
 
     public function commitsCompare(Commit $fromCommit, Commit $untilCommit, ?DateTime $changedAfter = null, ?DateTime $changedBefore = null) : Commits;
 
+    public function commit(string $sha) : Commit;
+
     public function commits(string $sha, ?DateTime $changedAfter = null, ?DateTime $changedBefore = null, ?int $limit = null) : Commits;
 
-    public function file(string $path, ?string $fileRef) : File;
+    public function file(string $path, ?string $fileRef = null) : File;
 
     public function branches() : Branches;
 

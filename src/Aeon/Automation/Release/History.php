@@ -5,12 +5,12 @@ declare(strict_types=1);
 namespace Aeon\Automation\Release;
 
 use Aeon\Automation\Git\Commits;
-use Aeon\Automation\GitHub\GitHub;
+use Aeon\Automation\Git\Git;
 use Aeon\Calendar\Gregorian\DateTime;
 
 final class History
 {
-    private GitHub $github;
+    private Git $git;
 
     private Scope $scope;
 
@@ -20,9 +20,9 @@ final class History
 
     private ?Commits $commits;
 
-    public function __construct(GitHub $github, Scope $scope, ?DateTime $changedAfter = null, ?DateTime $changedBefore = null)
+    public function __construct(Git $git, Scope $scope, ?DateTime $changedAfter = null, ?DateTime $changedBefore = null)
     {
-        $this->github = $github;
+        $this->git = $git;
         $this->scope = $scope;
         $this->changedAfter = $changedAfter;
         $this->changedBefore = $changedBefore;
@@ -51,9 +51,9 @@ final class History
         }
 
         if ($this->scope->commitStart() !== null && $this->scope->commitEnd() !== null) {
-            $this->commits = $this->github->commitsCompare($this->scope->commitStart(), $this->scope->commitEnd(), $this->changedAfter, $this->changedBefore)->reverse();
+            $this->commits = $this->git->commitsCompare($this->scope->commitStart(), $this->scope->commitEnd(), $this->changedAfter, $this->changedBefore)->reverse();
         } else {
-            $this->commits = $this->github->commits($this->scope->commitStart()->sha(), $this->changedAfter, $this->changedBefore);
+            $this->commits = $this->git->commits($this->scope->commitStart()->sha(), $this->changedAfter, $this->changedBefore);
         }
 
         return $this->commits;
