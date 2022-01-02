@@ -13,6 +13,24 @@ final class File
         $this->data = $data;
     }
 
+    public static function fromLocalFile(string $path)
+    {
+        $realpath = \realpath($path);
+
+        if (!\file_exists($path)) {
+            throw new \InvalidArgumentException("File {$realpath} not found.");
+        }
+
+        $content = \file_get_contents($realpath);
+
+        return new self([
+            'name' => \basename($realpath),
+            'sha' => \sha1($content),
+            'path' => $realpath,
+            'content' => \base64_encode($content),
+        ]);
+    }
+
     public function name() : string
     {
         return $this->data['name'];

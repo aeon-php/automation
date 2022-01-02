@@ -64,7 +64,7 @@ final class ChangelogGenerateAllTest extends CommandTestCase
                 [
                     'total_commits' => 1,
                     'commits' => [
-                        GitHubResponseMother::commit('Commit 1 - Unreleased', $commit1Unreleased = SHAMother::random()),
+                        GitHubResponseMother::commit('Commit 1 - Unreleased', $commit1Unreleased = 'b6589fc6ab0dc82cf12099d1c2d40ab994e8410c'),
                     ],
                 ]
             )),
@@ -73,8 +73,8 @@ final class ChangelogGenerateAllTest extends CommandTestCase
                 [
                     'total_commits' => 2,
                     'commits' => [
-                        GitHubResponseMother::commit('Commit 1 - Tag 1.2.0', $commit1Tag120 = SHAMother::random()),
-                        GitHubResponseMother::commit('Commit 2 - Tag 1.2.0', $commit2Tag120 = SHAMother::random()),
+                        GitHubResponseMother::commit('Commit 1 - Tag 1.2.0', $commit1Tag120 = '356a192b7913b04c54574d18c28d46e6395428ab'),
+                        GitHubResponseMother::commit('Commit 2 - Tag 1.2.0', $commit2Tag120 = 'da4b9237bacccdf19c0760cab7aec4a8359010b0'),
                     ],
                 ]
             )),
@@ -84,8 +84,8 @@ final class ChangelogGenerateAllTest extends CommandTestCase
                 [
                     'total_commits' => 2,
                     'commits' => [
-                        GitHubResponseMother::commit('Commit 1 - Tag 1.1.0', $commit1Tag110 = SHAMother::random()),
-                        GitHubResponseMother::commit('Commit 2 - Tag 1.1.0', $commit2Tag110 = SHAMother::random()),
+                        GitHubResponseMother::commit('Commit 1 - Tag 1.1.0', $commit1Tag110 = '77de68daecd823babbb58edb1c8e14d7106e83bb'),
+                        GitHubResponseMother::commit('Commit 2 - Tag 1.1.0', $commit2Tag110 = '1b6453892473a467d07372d45eb05abc2031647a'),
                     ],
                 ]
             )),
@@ -93,8 +93,8 @@ final class ChangelogGenerateAllTest extends CommandTestCase
             new HttpRequestStub('GET', '/repos/aeon-php/automation/commits/' . $commit2Tag110 . '/pulls', ResponseMother::jsonSuccess([])),
             new HttpRequestStub('GET', '/repos/aeon-php/automation/commits', ResponseMother::jsonSuccess(
                 [
-                    GitHubResponseMother::commit('Commit 1 - Tag 1.0.0', $commit1Tag100 = SHAMother::random()),
-                    GitHubResponseMother::commit('Commit 2 - Tag 1.0.0', $commit2Tag100 = SHAMother::random()),
+                    GitHubResponseMother::commit('Commit 1 - Tag 1.0.0', $commit1Tag100 = 'ac3478d69a3c81fa62e60f5c3696165a4e5e6ac4'),
+                    GitHubResponseMother::commit('Commit 2 - Tag 1.0.0', $commit2Tag100 = 'c1dfd96eea8cc2b62785275bca38ac261256e278'),
                 ]
             )),
             new HttpRequestStub('GET', '/repos/aeon-php/automation/commits/' . $commit1Tag100 . '/pulls', ResponseMother::jsonSuccess([])),
@@ -122,8 +122,16 @@ final class ChangelogGenerateAllTest extends CommandTestCase
 
         $commandTester->setInputs(['verbosity' => ConsoleOutput::VERBOSITY_VERY_VERBOSE]);
 
+        $localChangelogFile = \sys_get_temp_dir() . '/CHANGELOG_ALL.md';
+
         $commandTester->execute(
-            ['project' => 'aeon-php/automation', '--github-release-update' => true, '--github-file-update-path'=> 'CHANGELOG.md', '--tag-only-stable' => true],
+            [
+                'project' => 'aeon-php/automation',
+                '--github-release-update' => true,
+                '--github-file-update-path' => 'CHANGELOG.md',
+                '--tag-only-stable' => true,
+                '--file-update-path' => $localChangelogFile,
+            ],
             ['verbosity' => ConsoleOutput::VERBOSITY_VERBOSE]
         );
 
@@ -157,5 +165,11 @@ final class ChangelogGenerateAllTest extends CommandTestCase
         $this->assertStringContainsString('File CHANGELOG.md content updated.', $commandTester->getDisplay());
 
         $this->assertSame(0, $commandTester->getStatusCode());
+        $this->assertSame(
+            \file_get_contents(__DIR__ . '/Fixtures/CHANGELOG_ALL.md'),
+            \file_get_contents($localChangelogFile)
+        );
+
+        \unlink($localChangelogFile);
     }
 }
