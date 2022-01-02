@@ -71,8 +71,10 @@ final class ChangelogGenerateTest extends CommandTestCase
 
         $commandTester->setInputs(['verbosity' => ConsoleOutput::VERBOSITY_VERY_VERBOSE]);
 
+        $localChangelogFile = \sys_get_temp_dir() . '/CHANGELOG.md';
+
         $commandTester->execute(
-            ['project' => 'aeon-php/automation'],
+            ['project' => 'aeon-php/automation', '--file-update-path' => $localChangelogFile],
             ['verbosity' => ConsoleOutput::VERBOSITY_VERBOSE]
         );
 
@@ -93,6 +95,13 @@ final class ChangelogGenerateTest extends CommandTestCase
         $this->assertStringContainsString('- [#1](http://api.github.com) - **Pull Request 1 Title**', $commandTester->getDisplay());
 
         $this->assertSame(0, $commandTester->getStatusCode());
+
+        $this->assertSame(
+            \file_get_contents(__DIR__ . '/Fixtures/CHANGELOG.md'),
+            \file_get_contents($localChangelogFile)
+        );
+
+        \unlink($localChangelogFile);
     }
 
     public function test_changelog_generate_without_parameters_and_without_tags() : void

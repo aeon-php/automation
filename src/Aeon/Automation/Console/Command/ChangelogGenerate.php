@@ -49,7 +49,8 @@ final class ChangelogGenerate extends AbstractCommand
             ->addOption('skip-from', null, InputOption::VALUE_REQUIRED | InputOption::VALUE_IS_ARRAY, 'Skip changes from given author|authors')
             ->addOption('github-release-update', null, InputOption::VALUE_NONE, 'Update GitHub release description if you have right permissions and release exists')
             ->addOption('github-file-update-path', null, InputOption::VALUE_REQUIRED, 'Update changelog file directly at GitHub by reading existing file content and changing related release section. For example: <fg=yellow>--github-file-update-path=CHANGELOG.md</>')
-            ->addOption('github-file-update-ref', null, InputOption::VALUE_REQUIRED, 'The name of the commit/branch/tag from which to take file for <fg=yellow>--github-file-update-path=CHANGELOG.md</> option. Default: the repository’s default branch.');
+            ->addOption('github-file-update-ref', null, InputOption::VALUE_REQUIRED, 'The name of the commit/branch/tag from which to take file for <fg=yellow>--github-file-update-path=CHANGELOG.md</> option. Default: the repository’s default branch.')
+            ->addOption('file-update-path', null, InputOption::VALUE_REQUIRED, 'Update changelog file by reading local file content and changing related release section. For example: <fg=yellow>--file-update-path=./CHANGELOG.md</>');
     }
 
     protected function execute(InputInterface $input, OutputInterface $output) : int
@@ -167,20 +168,20 @@ final class ChangelogGenerate extends AbstractCommand
                 $io->note('Release description updated');
             }
 
-            $filePath = $input->getOption('github-file-update-path');
+            $githubFilePath = $input->getOption('github-file-update-path');
 
-            if ($filePath) {
+            if ($githubFilePath) {
                 $fileRef = $input->getOption('github-file-update-ref');
 
-                $io->note('Changelog file: ' . $filePath);
-                $io->note('Changelog file ref: ' . ($fileRef ? $fileRef : 'N/A'));
+                $io->note('Changelog GitHub file: ' . $githubFilePath);
+                $io->note('Changelog GitHub file ref: ' . ($fileRef ? $fileRef : 'N/A'));
 
                 try {
-                    $file = $this->githubClient()->file($project, $filePath, $fileRef);
-                    $source = (new SourceFactory())->create($input->getOption('format'), $file);
+                    $githubFile = $this->githubClient()->file($project, $githubFilePath, $fileRef);
+                    $source = (new SourceFactory())->create($input->getOption('format'), $githubFile);
                 } catch (\Exception $e) {
-                    $io->note("File \"{$filePath}\" does not exists, it will be created.");
-                    $file = null;
+                    $io->note("File \"{$githubFilePath}\" does not exists, it will be created.");
+                    $githubFile = null;
                     $source = new EmptySource();
                 }
 
@@ -188,21 +189,53 @@ final class ChangelogGenerate extends AbstractCommand
 
                 $changelogReleases = $manipulator->update($source, $release)->sort();
 
-                $fileContent = $formatter->formatReleases($changelogReleases);
+                $githubFileContent = $formatter->formatReleases($changelogReleases);
 
-                $io->note("Updating file {$filePath} content...");
+                $io->note("Updating file {$githubFilePath} content...");
 
-                if ($file === null || ($file instanceof File && $file->hasDifferentContent($fileContent))) {
+                if ($githubFile === null || ($githubFile instanceof File && $githubFile->hasDifferentContent($githubFileContent))) {
                     $this->githubClient()->putFile(
                         $project,
-                        $filePath,
-                        'Updated ' . \ltrim($filePath, '/'),
+                        $githubFilePath,
+                        'Updated ' . \ltrim($githubFilePath, '/'),
                         $this->configuration()->commiterName(),
                         $this->configuration()->commiterEmail(),
-                        $fileContent,
-                        $file instanceof File ? $file->sha() : null
+                        $githubFileContent,
+                        $githubFile instanceof File ? $githubFile->sha() : null
                     );
-                    $io->note("File {$filePath} content updated.");
+                    $io->note("File {$githubFilePath} content updated.");
+
+                    $this->httpCache()->clear();
+                } else {
+                    $io->note('No changes detected, skipping update.');
+                }
+            }
+
+            $localFilePath = $input->getOption('file-update-path');
+
+            if ($localFilePath) {
+                $io->note('Changelog local file: ' . $localFilePath);
+
+                try {
+                    $localFile = File::fromLocalFile($localFilePath);
+                    $source = (new SourceFactory())->create($input->getOption('format'), $localFile);
+                } catch (\Exception $e) {
+                    $io->note("File \"{$localFilePath}\" does not exists, it will be created.");
+                    $localFile = null;
+                    $source = new EmptySource();
+                }
+
+                $manipulator = new Manipulator();
+
+                $changelogReleases = $manipulator->update($source, $release)->sort();
+
+                $localFileContent = $formatter->formatReleases($changelogReleases);
+
+                $io->note("Updating file {$localFilePath} content...");
+
+                if ($localFile === null || ($localFile instanceof File && $localFile->hasDifferentContent($localFileContent))) {
+                    \file_put_contents($localFilePath, $localFileContent);
+                    $io->note("File {$localFilePath} content updated.");
 
                     $this->httpCache()->clear();
                 } else {
