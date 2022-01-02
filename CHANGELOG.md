@@ -1,4 +1,7 @@
-## [Unreleased] - 2021-12-28
+## [Unreleased] - 2022-01-02
+
+### Added
+- [#198](https://github.com/aeon-php/automation/pull/198) - **support for local release files** - [@norberttech](https://github.com/norberttech)
 
 ### Updated
 - [8d3c41](https://github.com/aeon-php/automation/commit/8d3c41f240dfb4707215f620379f1178aa4e7b99) - **dependencies** - [@norberttech](https://github.com/norberttech)
