@@ -20,6 +20,6 @@ jobs:
         uses: "docker://norberttech/md-link-linter:latest"
         with:
           entrypoint: "/composer/vendor/bin/mdlinklint"
-          args: "--exclude=vendor ."
+          args: "--exclude=vendor --exclude=tests ."
 
 
