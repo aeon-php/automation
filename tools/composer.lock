@@ -1153,16 +1153,16 @@
         },
         {
             "name": "humbug/box",
-            "version": "3.14.0",
+            "version": "3.14.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/box-project/box.git",
-                "reference": "78b88c4897973f897913c0501778fd08017039ec"
+                "reference": "efdf63bb78598dac449407d4227c161520197535"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/box-project/box/zipball/78b88c4897973f897913c0501778fd08017039ec",
-                "reference": "78b88c4897973f897913c0501778fd08017039ec",
+                "url": "https://api.github.com/repos/box-project/box/zipball/efdf63bb78598dac449407d4227c161520197535",
+                "reference": "efdf63bb78598dac449407d4227c161520197535",
                 "shasum": ""
             },
             "require": {
@@ -1170,9 +1170,9 @@
                 "composer-plugin-api": "^1.0 || ^2.0",
                 "composer/package-versions-deprecated": "^1.8",
                 "composer/semver": "^3.2",
-                "composer/xdebug-handler": "^2.0",
+                "composer/xdebug-handler": "^2.0 || ^3.0",
                 "ext-phar": "*",
-                "humbug/php-scoper": "^0.13.10 || ^0.14",
+                "humbug/php-scoper": "^0.13.10 || ^0.14 || ^0.15",
                 "justinrainbow/json-schema": "^5.2.9",
                 "nikic/iter": "^2.0",
                 "nikic/php-parser": "^4.2",
@@ -1246,7 +1246,7 @@
             ],
             "support": {
                 "issues": "https://github.com/box-project/box/issues",
-                "source": "https://github.com/box-project/box/tree/3.14.0"
+                "source": "https://github.com/box-project/box/tree/3.14.1"
             },
             "funding": [
                 {
@@ -1254,30 +1254,33 @@
                     "type": "github"
                 }
             ],
-            "time": "2021-10-29T05:31:09+00:00"
+            "time": "2022-01-03T08:12:31+00:00"
         },
         {
             "name": "humbug/php-scoper",
-            "version": "0.14.1",
+            "version": "0.15.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/humbug/php-scoper.git",
-                "reference": "023b2318224d30f7a9496cdb3a3e475b9444e6b7"
+                "reference": "98c92f2ec5e12756d59ce04dfad34f9fce6c19c3"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/humbug/php-scoper/zipball/023b2318224d30f7a9496cdb3a3e475b9444e6b7",
-                "reference": "023b2318224d30f7a9496cdb3a3e475b9444e6b7",
+                "url": "https://api.github.com/repos/humbug/php-scoper/zipball/98c92f2ec5e12756d59ce04dfad34f9fce6c19c3",
+                "reference": "98c92f2ec5e12756d59ce04dfad34f9fce6c19c3",
                 "shasum": ""
             },
             "require": {
                 "composer/package-versions-deprecated": "^1.8",
-                "jetbrains/phpstorm-stubs": "dev-master",
+                "jetbrains/phpstorm-stubs": "^2020.2",
                 "nikic/php-parser": "^4.0",
                 "php": "^7.3 || ^8.0",
                 "symfony/console": "^3.2 || ^4.0",
                 "symfony/filesystem": "^3.2 || ^4.0",
                 "symfony/finder": "^3.2 || ^4.0"
+            },
+            "replace": {
+                "humbug/php-scoper": "self.version"
             },
             "require-dev": {
                 "bamarni/composer-bin-plugin": "^1.1",
@@ -1327,7 +1330,7 @@
             "description": "Prefixes all PHP namespaces in a file or directory.",
             "support": {
                 "issues": "https://github.com/humbug/php-scoper/issues",
-                "source": "https://github.com/humbug/php-scoper/tree/0.14.1"
+                "source": "https://github.com/humbug/php-scoper/tree/0.15.0"
             },
             "funding": [
                 {
@@ -1335,30 +1338,29 @@
                     "type": "github"
                 }
             ],
-            "time": "2021-04-12T21:44:51+00:00"
+            "time": "2021-05-10T20:50:20+00:00"
         },
         {
             "name": "jetbrains/phpstorm-stubs",
-            "version": "dev-master",
+            "version": "v2020.3",
             "source": {
                 "type": "git",
                 "url": "https://github.com/JetBrains/phpstorm-stubs.git",
-                "reference": "fd29505f80dc299932425c26c201f9766fc6a4a8"
+                "reference": "daf8849db40acded37b13231a291c7536922955b"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/JetBrains/phpstorm-stubs/zipball/fd29505f80dc299932425c26c201f9766fc6a4a8",
-                "reference": "fd29505f80dc299932425c26c201f9766fc6a4a8",
+                "url": "https://api.github.com/repos/JetBrains/phpstorm-stubs/zipball/daf8849db40acded37b13231a291c7536922955b",
+                "reference": "daf8849db40acded37b13231a291c7536922955b",
                 "shasum": ""
             },
             "require-dev": {
-                "friendsofphp/php-cs-fixer": "@stable",
-                "nikic/php-parser": "@stable",
+                "friendsofphp/php-cs-fixer": "^2.16",
+                "nikic/php-parser": "dev-master",
                 "php": "^8.0",
-                "phpdocumentor/reflection-docblock": "@stable",
-                "phpunit/phpunit": "@stable"
+                "phpdocumentor/reflection-docblock": "dev-master",
+                "phpunit/phpunit": "^9"
             },
-            "default-branch": true,
             "type": "library",
             "autoload": {
                 "files": [
@@ -1382,9 +1384,9 @@
                 "type"
             ],
             "support": {
-                "source": "https://github.com/JetBrains/phpstorm-stubs/tree/master"
+                "source": "https://github.com/JetBrains/phpstorm-stubs/tree/v2020.3"
             },
-            "time": "2021-12-26T14:44:39+00:00"
+            "time": "2020-11-24T13:58:53+00:00"
         },
         {
             "name": "justinrainbow/json-schema",
@@ -3932,16 +3934,16 @@
         },
         {
             "name": "symfony/console",
-            "version": "v4.4.34",
+            "version": "v4.4.36",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/console.git",
-                "reference": "329b3a75cc6b16d435ba1b1a41df54a53382a3f0"
+                "reference": "621379b62bb19af213b569b60013200b11dd576f"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/console/zipball/329b3a75cc6b16d435ba1b1a41df54a53382a3f0",
-                "reference": "329b3a75cc6b16d435ba1b1a41df54a53382a3f0",
+                "url": "https://api.github.com/repos/symfony/console/zipball/621379b62bb19af213b569b60013200b11dd576f",
+                "reference": "621379b62bb19af213b569b60013200b11dd576f",
                 "shasum": ""
             },
             "require": {
@@ -4002,7 +4004,7 @@
             "description": "Eases the creation of beautiful and testable command line interfaces",
             "homepage": "https://symfony.com",
             "support": {
-                "source": "https://github.com/symfony/console/tree/v4.4.34"
+                "source": "https://github.com/symfony/console/tree/v4.4.36"
             },
             "funding": [
                 {
@@ -4018,7 +4020,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2021-11-04T12:23:33+00:00"
+            "time": "2021-12-15T10:33:10+00:00"
         },
         {
             "name": "symfony/deprecation-contracts",
@@ -4315,16 +4317,16 @@
         },
         {
             "name": "symfony/finder",
-            "version": "v4.4.30",
+            "version": "v4.4.36",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/finder.git",
-                "reference": "70362f1e112280d75b30087c7598b837c1b468b6"
+                "reference": "1fef05633cd61b629e963e5d8200fb6b67ecf42c"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/finder/zipball/70362f1e112280d75b30087c7598b837c1b468b6",
-                "reference": "70362f1e112280d75b30087c7598b837c1b468b6",
+                "url": "https://api.github.com/repos/symfony/finder/zipball/1fef05633cd61b629e963e5d8200fb6b67ecf42c",
+                "reference": "1fef05633cd61b629e963e5d8200fb6b67ecf42c",
                 "shasum": ""
             },
             "require": {
@@ -4357,7 +4359,7 @@
             "description": "Finds files and directories via an intuitive fluent interface",
             "homepage": "https://symfony.com",
             "support": {
-                "source": "https://github.com/symfony/finder/tree/v4.4.30"
+                "source": "https://github.com/symfony/finder/tree/v4.4.36"
             },
             "funding": [
                 {
@@ -4373,7 +4375,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2021-08-04T20:31:23+00:00"
+            "time": "2021-12-15T10:33:10+00:00"
         },
         {
             "name": "symfony/options-resolver",
@@ -4846,16 +4848,16 @@
         },
         {
             "name": "symfony/process",
-            "version": "v5.4.0",
+            "version": "v5.4.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/process.git",
-                "reference": "5be20b3830f726e019162b26223110c8f47cf274"
+                "reference": "2b3ba8722c4aaf3e88011be5e7f48710088fb5e4"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/process/zipball/5be20b3830f726e019162b26223110c8f47cf274",
-                "reference": "5be20b3830f726e019162b26223110c8f47cf274",
+                "url": "https://api.github.com/repos/symfony/process/zipball/2b3ba8722c4aaf3e88011be5e7f48710088fb5e4",
+                "reference": "2b3ba8722c4aaf3e88011be5e7f48710088fb5e4",
                 "shasum": ""
             },
             "require": {
@@ -4888,7 +4890,7 @@
             "description": "Executes commands in sub-processes",
             "homepage": "https://symfony.com",
             "support": {
-                "source": "https://github.com/symfony/process/tree/v5.4.0"
+                "source": "https://github.com/symfony/process/tree/v5.4.2"
             },
             "funding": [
                 {
@@ -4904,7 +4906,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2021-11-28T15:25:38+00:00"
+            "time": "2021-12-27T21:01:00+00:00"
         },
         {
             "name": "symfony/service-contracts",
@@ -5053,16 +5055,16 @@
         },
         {
             "name": "symfony/var-dumper",
-            "version": "v5.4.1",
+            "version": "v5.4.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/var-dumper.git",
-                "reference": "2366ac8d8abe0c077844613c1a4f0c0a9f522dcc"
+                "reference": "1b56c32c3679002b3a42384a580e16e2600f41c1"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/var-dumper/zipball/2366ac8d8abe0c077844613c1a4f0c0a9f522dcc",
-                "reference": "2366ac8d8abe0c077844613c1a4f0c0a9f522dcc",
+                "url": "https://api.github.com/repos/symfony/var-dumper/zipball/1b56c32c3679002b3a42384a580e16e2600f41c1",
+                "reference": "1b56c32c3679002b3a42384a580e16e2600f41c1",
                 "shasum": ""
             },
             "require": {
@@ -5122,7 +5124,7 @@
                 "dump"
             ],
             "support": {
-                "source": "https://github.com/symfony/var-dumper/tree/v5.4.1"
+                "source": "https://github.com/symfony/var-dumper/tree/v5.4.2"
             },
             "funding": [
                 {
@@ -5138,7 +5140,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2021-12-01T15:04:08+00:00"
+            "time": "2021-12-29T10:10:35+00:00"
         },
         {
             "name": "theseer/tokenizer",
@@ -5357,5 +5359,5 @@
     "prefer-lowest": false,
     "platform": [],
     "platform-dev": [],
-    "plugin-api-version": "2.2.0"
+    "plugin-api-version": "2.1.0"
 }
