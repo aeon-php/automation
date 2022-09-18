@@ -6,7 +6,7 @@ on:
     branches:
       - "1.x"
   schedule:
-    - cron:  '* 8 * * *'
+    - cron:  '0 8 * * *'
 
 jobs:
   tests:
@@ -35,15 +35,6 @@ jobs:
           php-version: "${{ matrix.php-version }}"
           ini-values: memory_limit=-1
 
-      - name: "Cache Phive dependencies"
-        uses: "actions/cache@v2"
-        with:
-          path: |
-            ~/.phive
-          key: "${{ runner.os }}-phive-${{ hashFiles('**/phars.xml') }}"
-          restore-keys: |
-            ${{ runner.os }}-phive-
-
       - name: "Get Composer Cache Directory"
         id: composer-cache
         run: |
@@ -54,7 +45,6 @@ jobs:
         with:
           path: |
             ${{ steps.composer-cache.outputs.dir }}
-            ~/.phive
           key: "php-${{ matrix.php-version }}-${{ matrix.dependencies }}-composer-${{ hashFiles('**/composer.lock') }}"
           restore-keys: |
             php-${{ matrix.php-version }}-${{ matrix.dependencies }}-composer-
