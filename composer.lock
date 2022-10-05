@@ -5352,16 +5352,16 @@
     "packages-dev": [
         {
             "name": "coduo/php-matcher",
-            "version": "6.0.8",
+            "version": "6.0.9",
             "source": {
                 "type": "git",
                 "url": "https://github.com/coduo/php-matcher.git",
-                "reference": "cf14356b50b91bc25230fbeac2a8e3ce5c3822d8"
+                "reference": "e782a9ee7f97bbc4f751324591ec619b5822f721"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/coduo/php-matcher/zipball/cf14356b50b91bc25230fbeac2a8e3ce5c3822d8",
-                "reference": "cf14356b50b91bc25230fbeac2a8e3ce5c3822d8",
+                "url": "https://api.github.com/repos/coduo/php-matcher/zipball/e782a9ee7f97bbc4f751324591ec619b5822f721",
+                "reference": "e782a9ee7f97bbc4f751324591ec619b5822f721",
                 "shasum": ""
             },
             "require": {
@@ -5410,9 +5410,9 @@
             ],
             "support": {
                 "issues": "https://github.com/coduo/php-matcher/issues",
-                "source": "https://github.com/coduo/php-matcher/tree/6.0.8"
+                "source": "https://github.com/coduo/php-matcher/tree/6.0.9"
             },
-            "time": "2022-03-25T06:50:36+00:00"
+            "time": "2022-10-04T08:14:53+00:00"
         },
         {
             "name": "coduo/php-to-string",
