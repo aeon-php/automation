@@ -1,4 +1,4 @@
-## [Unreleased] - 2022-10-30
+## [Unreleased] - 2022-10-31
 
 ### Updated
 - [c5ccf3](https://github.com/aeon-php/automation/commit/c5ccf367c978629d327cfe048d88b285d862a943) - **dependabot-auto-merge.yaml** - [@norberttech](https://github.com/norberttech)
