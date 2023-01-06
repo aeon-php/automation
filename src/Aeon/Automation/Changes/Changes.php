@@ -90,6 +90,7 @@ final class Changes
 
     /**
      * @psalm-param callable(Change $change) : self $callable
+     *
      * @psalm-return self
      */
     public function map(callable $callable) : self
