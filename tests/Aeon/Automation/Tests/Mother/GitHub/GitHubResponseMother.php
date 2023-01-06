@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace Aeon\Automation\Tests\Mother\GitHub;
 
+use Aeon\Calendar\Exception\InvalidArgumentException;
 use Aeon\Calendar\Gregorian\DateTime;
 use Aeon\Calendar\Gregorian\GregorianCalendar;
-use Webmozart\Assert\Assert;
 
 final class GitHubResponseMother
 {
@@ -104,8 +104,13 @@ final class GitHubResponseMother
 
     public static function workflowRunJob(string $name, string $status, string $conclusion, ?string $completedAt, ?int $id = null)
     {
-        Assert::inArray($status, ['completed', 'queued', 'in_progress']);
-        Assert::inArray($conclusion, ['success', 'failure', 'neutral', 'cancelled', 'skipped', 'timed_out', 'action_required', 'stale']);
+        if (!\in_array($status, ['completed', 'queued', 'in_progress'], true)) {
+            throw new InvalidArgumentException('Invalid status ' . $status);
+        }
+
+        if (!\in_array($conclusion, ['success', 'failure', 'neutral', 'cancelled', 'skipped', 'timed_out', 'action_required', 'stale'], true)) {
+            throw new InvalidArgumentException('Invalid conclusion ' . $conclusion);
+        }
 
         return [
             'name' => $name,

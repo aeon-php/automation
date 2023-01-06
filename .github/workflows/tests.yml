@@ -16,13 +16,8 @@ jobs:
 
     strategy:
       matrix:
-        dependencies:
-          - "locked"
-          - "lowest"
-          - "highest"
         php-version:
-          - "7.4"
-          - "8.0"
+          - "8.1"
         operating-system:
           - "ubuntu-latest"
 
@@ -58,20 +53,11 @@ jobs:
           path: |
             ${{ steps.composer-cache.outputs.dir }}
             ~/.phive
-          key: "php-${{ matrix.php-version }}-${{ matrix.dependencies }}-composer-${{ hashFiles('**/composer.lock') }}"
+          key: "php-${{ matrix.php-version }}-composer-${{ hashFiles('**/composer.lock') }}"
           restore-keys: |
-            php-${{ matrix.php-version }}-${{ matrix.dependencies }}-composer-
+            php-${{ matrix.php-version }}-composer-
 
-      - name: "Install lowest dependencies"
-        if: ${{ matrix.dependencies == 'lowest' }}
-        run: "composer update --prefer-lowest --no-interaction --no-progress --no-suggest"
-
-      - name: "Install highest dependencies"
-        if: ${{ matrix.dependencies == 'highest' }}
-        run: "composer update --no-interaction --no-progress --no-suggest"
-
-      - name: "Install locked dependencies"
-        if: ${{ matrix.dependencies == 'locked' }}
+      - name: "Install dependencies"
         run: "composer install --no-interaction --no-progress --no-suggest"
 
       - name: "Test"

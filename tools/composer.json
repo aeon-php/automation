@@ -1,6 +1,6 @@
 {
-    "name": "aeon-php/calendar-tools",
-    "description": "Aeon PHP Calendar - Tools",
+    "name": "aeon-php/automation-tools",
+    "description": "Aeon PHP Automation - Tools",
     "prefer-stable": true,
     "minimum-stability": "dev",
     "require-dev": {
