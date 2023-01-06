@@ -1,6 +1,7 @@
 ## [Unreleased] - 2023-01-06
 
 ### Updated
+- [3f719e](https://github.com/aeon-php/automation/commit/3f719ed1ada7a5b1eac4ab5fc2898c067fe1b312) - **tools dependencies** - [@norberttech](https://github.com/norberttech)
 - [6a50f5](https://github.com/aeon-php/automation/commit/6a50f5f3a5f9cf3601c76205f0fd590b0f1a5cd9) - **project dependencies** - [@norberttech](https://github.com/norberttech)
 - [c5ccf3](https://github.com/aeon-php/automation/commit/c5ccf367c978629d327cfe048d88b285d862a943) - **dependabot-auto-merge.yaml** - [@norberttech](https://github.com/norberttech)
 - [b11ac8](https://github.com/aeon-php/automation/commit/b11ac8b444e33de81b8f1c3a1c721f6c77e1633a) - **dependencies** - [@norberttech](https://github.com/norberttech)
