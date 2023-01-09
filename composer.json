@@ -33,7 +33,7 @@
         "symfony/console": "^5.2",
         "composer/semver": "^3.2",
         "symfony/dom-crawler": "^5.2",
-        "symfony/css-selector": "^5.2",
+        "symfony/css-selector": "^6.2",
         "aeon-php/calendar": "^1.0",
         "php-http/logger-plugin": "^1.2",
         "monolog/monolog": "^2.2",
