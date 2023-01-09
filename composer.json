@@ -38,7 +38,7 @@
         "php-http/logger-plugin": "^1.2",
         "monolog/monolog": "^2.2",
         "symfony/monolog-bridge": "^6.2",
-        "symfony/cache": "^5.2",
+        "symfony/cache": "^6.2",
         "ramsey/conventional-commits": "^1.1",
         "twig/twig": "^3.1",
         "league/commonmark": "^2.0"
