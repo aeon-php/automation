@@ -1,4 +1,4 @@
-## [Unreleased] - 2023-01-09
+## [Unreleased] - 2023-01-10
 
 ### Updated
 - [3f719e](https://github.com/aeon-php/automation/commit/3f719ed1ada7a5b1eac4ab5fc2898c067fe1b312) - **tools dependencies** - [@norberttech](https://github.com/norberttech)
