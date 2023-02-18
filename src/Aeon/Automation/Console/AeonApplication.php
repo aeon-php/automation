@@ -5,11 +5,12 @@ declare(strict_types=1);
 namespace Aeon\Automation\Console;
 
 use Symfony\Component\Console\Application;
+use Symfony\Component\Console\Input\InputDefinition;
 use Symfony\Component\Console\Input\InputOption;
 
 final class AeonApplication extends Application
 {
-    protected function getDefaultInputDefinition()
+    protected function getDefaultInputDefinition() : InputDefinition
     {
         $definition = parent::getDefaultInputDefinition();
 

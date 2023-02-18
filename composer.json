@@ -46,6 +46,9 @@
     "require-dev": {
         "coduo/php-matcher": "^6.0.0"
     },
+    "config": {
+        "allow-plugins": false
+    },
     "scripts": {
         "build": [
             "@test",
