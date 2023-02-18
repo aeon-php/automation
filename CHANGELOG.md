@@ -1,4 +1,7 @@
-## [Unreleased] - 2023-02-16
+## [Unreleased] - 2023-02-18
+
+### Fixed
+- [eafc30](https://github.com/aeon-php/automation/commit/eafc30603c3749c4aed1567e7d09a6c14123fc84) - **failing tests** - [@norberttech](https://github.com/norberttech)
 
 ### Updated
 - [82566d](https://github.com/aeon-php/automation/commit/82566d4330c9395fa1f9b5bf0424d53c82ffbddc) - **tests.yml** - [@norberttech](https://github.com/norberttech)
