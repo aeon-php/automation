@@ -55,7 +55,7 @@ final class Releases
     }
 
     /**
-     *  @return Release[]
+     * @return Release[]
      */
     public function all() : array
     {
