@@ -4,6 +4,7 @@
 - [eafc30](https://github.com/aeon-php/automation/commit/eafc30603c3749c4aed1567e7d09a6c14123fc84) - **failing tests** - [@norberttech](https://github.com/norberttech)
 
 ### Updated
+- [535b59](https://github.com/aeon-php/automation/commit/535b5994bc1791e0a6b636fa0979795898e79b0e) - **dependencies** - [@norberttech](https://github.com/norberttech)
 - [82566d](https://github.com/aeon-php/automation/commit/82566d4330c9395fa1f9b5bf0424d53c82ffbddc) - **tests.yml** - [@norberttech](https://github.com/norberttech)
 - [3f719e](https://github.com/aeon-php/automation/commit/3f719ed1ada7a5b1eac4ab5fc2898c067fe1b312) - **tools dependencies** - [@norberttech](https://github.com/norberttech)
 - [6a50f5](https://github.com/aeon-php/automation/commit/6a50f5f3a5f9cf3601c76205f0fd590b0f1a5cd9) - **project dependencies** - [@norberttech](https://github.com/norberttech)
