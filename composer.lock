@@ -8,16 +8,16 @@
     "packages": [
         {
             "name": "aeon-php/calendar",
-            "version": "1.0.8",
+            "version": "1.0.9",
             "source": {
                 "type": "git",
                 "url": "https://github.com/aeon-php/calendar.git",
-                "reference": "7951c3e5c49d713cd27e3345b4a137fd2fa3e68a"
+                "reference": "2cfc45a2cd28b78f1450d8155a1c62df2efe45de"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/aeon-php/calendar/zipball/7951c3e5c49d713cd27e3345b4a137fd2fa3e68a",
-                "reference": "7951c3e5c49d713cd27e3345b4a137fd2fa3e68a",
+                "url": "https://api.github.com/repos/aeon-php/calendar/zipball/2cfc45a2cd28b78f1450d8155a1c62df2efe45de",
+                "reference": "2cfc45a2cd28b78f1450d8155a1c62df2efe45de",
                 "shasum": ""
             },
             "require": {
@@ -52,9 +52,9 @@
             ],
             "support": {
                 "issues": "https://github.com/aeon-php/calendar/issues",
-                "source": "https://github.com/aeon-php/calendar/tree/1.0.8"
+                "source": "https://github.com/aeon-php/calendar/tree/1.0.9"
             },
-            "time": "2023-03-28T11:08:43+00:00"
+            "time": "2023-08-29T09:47:37+00:00"
         },
         {
             "name": "clue/stream-filter",
