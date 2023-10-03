@@ -10,5 +10,5 @@
 {% endif %}
 {% if footer == true %}
 
-{% include 'footer.html.twig' %}
+{% include 'footer.html.twig' with {contributors: release.contributors}  %}
 {% endif %}

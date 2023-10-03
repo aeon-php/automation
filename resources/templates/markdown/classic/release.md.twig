@@ -4,5 +4,5 @@
 {% endif %}
 {% if footer == true %}
 
-{% include 'footer.md.twig' %}
+{% include 'footer.md.twig' with {contributors : release.contributors} %}
 {% endif %}

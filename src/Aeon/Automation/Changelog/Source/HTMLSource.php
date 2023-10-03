@@ -70,12 +70,12 @@ final class HTMLSource implements Source
                     new Change(
                         new ChangesSource(
                             \strpos($sourceNode->text(), '#') === 0 ? ChangesSource::TYPE_PULL_REQUEST : ChangesSource::TYPE_COMMIT,
-                            \strpos($sourceNode->text(), '#') === 0 ? \substr($sourceNode->text(), 1, \strlen($sourceNode->text()) - 1) : $sourceNode->text(),
+                            \strpos($sourceNode->text(), '#') === 0 ? \substr($sourceNode->text(), 1) : $sourceNode->text(),
                             $sourceNode->attr('href'),
                             $descriptionNode->text(),
                             $descriptionNode->text(),
                             $currentDate->sub(TimeUnit::seconds($change)),
-                            \substr($userNode->text(), 1, \strlen($userNode->text()) - 1),
+                            \substr($userNode->text(), 1),
                             $userNode->attr('href')
                         ),
                         Type::fromString($changeTypeNode->nodeValue),
