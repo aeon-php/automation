@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Aeon\Automation;
 
+use Aeon\Automation\Changes\Contributor;
 use Composer\Semver\Comparator;
 
 final class Releases
@@ -60,6 +61,29 @@ final class Releases
     public function all() : array
     {
         return $this->releases;
+    }
+
+    /**
+     * @return array<Contributor>
+     */
+    public function contributors() : array
+    {
+        /** @var array<string, Contributor> $contributors */
+        $contributors = [];
+
+        foreach ($this->releases as $release) {
+            foreach ($release->contributors() as $contributor) {
+                if (!\array_key_exists($contributor->name(), $contributors)) {
+                    $contributors[$contributor->name()] = $contributor;
+                }
+            }
+        }
+
+        \uasort($contributors, static function (Contributor $authorA, Contributor $authorB) : int {
+            return \strtolower($authorA->name()) <=> \strtolower($authorB->name());
+        });
+
+        return \array_values($contributors);
     }
 
     public function remove(string $name) : self

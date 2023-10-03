@@ -2,4 +2,4 @@
 {% include 'release.html.twig' with {release: release, footer: false} %}
 
 {% endfor %}
-{% include 'footer.html.twig' %}
+{% include 'footer.html.twig' with {contributors : releases.contributors} %}

@@ -7,6 +7,7 @@ namespace Aeon\Automation;
 use Aeon\Automation\Changes\Change;
 use Aeon\Automation\Changes\Changes;
 use Aeon\Automation\Changes\ChangesSource;
+use Aeon\Automation\Changes\Contributor;
 use Aeon\Automation\Changes\Type;
 use Aeon\Calendar\Gregorian\Day;
 
@@ -168,6 +169,29 @@ final class Release
     public function security() : array
     {
         return $this->sortChanges(Type::security());
+    }
+
+    /**
+     * @return array<Contributor>
+     */
+    public function contributors() : array
+    {
+        /** @var array<string, Contributor> $contributors */
+        $contributors = [];
+
+        foreach ($this->changes as $changes) {
+            foreach ($changes->all() as $change) {
+                if (!\array_key_exists($change->source()->contributor()->name(), $contributors)) {
+                    $contributors[$change->source()->contributor()->name()] = $change->source()->contributor();
+                }
+            }
+        }
+
+        \uasort($contributors, static function (Contributor $authorA, Contributor $authorB) : int {
+            return \strtolower($authorA->name()) <=> \strtolower($authorB->name());
+        });
+
+        return \array_values($contributors);
     }
 
     public function empty() : bool

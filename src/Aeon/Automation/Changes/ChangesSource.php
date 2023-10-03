@@ -42,6 +42,19 @@ final class ChangesSource
             throw new \InvalidArgumentException('Invalid type: ' . $type);
         }
 
+        if ($user === '1') {
+            throw new \RuntimeException(\json_encode([
+                'type' => $type,
+                'id' => $id,
+                'url' => $url,
+                'title' => $title,
+                'description' => $description,
+                'date' => $date->format('Y-m-d H:i:s'),
+                'user' => $user,
+                'userUrl' => $userUrl,
+            ]));
+        }
+
         $this->type = $type;
         $this->id = $id;
         $this->url = $url;
@@ -166,5 +179,10 @@ final class ChangesSource
     {
         return $this->type === $source->type
             && $this->id === $source->id;
+    }
+
+    public function contributor() : Contributor
+    {
+        return new Contributor($this->user, $this->userUrl);
     }
 }
