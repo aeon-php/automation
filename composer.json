@@ -41,8 +41,7 @@
         "symfony/cache": "^6.2",
         "ramsey/conventional-commits": "^1.1",
         "twig/twig": "^3.1",
-        "league/commonmark": "^2.0",
-        "openai-php/client": "^0.7.3"
+        "league/commonmark": "^2.0"
     },
     "require-dev": {
         "coduo/php-matcher": "^6.0.0"
