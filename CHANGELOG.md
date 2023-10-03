@@ -1,4 +1,4 @@
-## [Unreleased] - 2023-10-03
+## [1.0.4] - 2023-10-03
 
 ### Added
 - [#429](https://github.com/aeon-php/automation/pull/429) - **contributors section to the release/releases footer** - [@norberttech](https://github.com/norberttech)
