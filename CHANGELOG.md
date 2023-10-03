@@ -1,4 +1,7 @@
-## [Unreleased] - 2023-10-02
+## [Unreleased] - 2023-10-03
+
+### Added
+- [#429](https://github.com/aeon-php/automation/pull/429) - **contributors section to the release/releases footer** - [@norberttech](https://github.com/norberttech)
 
 ### Fixed
 - [eafc30](https://github.com/aeon-php/automation/commit/eafc30603c3749c4aed1567e7d09a6c14123fc84) - **failing tests** - [@norberttech](https://github.com/norberttech)
