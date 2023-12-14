@@ -8,24 +8,23 @@
     "packages": [
         {
             "name": "aeon-php/calendar",
-            "version": "1.0.9",
+            "version": "1.0.7",
             "source": {
                 "type": "git",
                 "url": "https://github.com/aeon-php/calendar.git",
-                "reference": "2cfc45a2cd28b78f1450d8155a1c62df2efe45de"
+                "reference": "49e3167815ca6af1f4215eed0719c3d83d749571"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/aeon-php/calendar/zipball/2cfc45a2cd28b78f1450d8155a1c62df2efe45de",
-                "reference": "2cfc45a2cd28b78f1450d8155a1c62df2efe45de",
+                "url": "https://api.github.com/repos/aeon-php/calendar/zipball/49e3167815ca6af1f4215eed0719c3d83d749571",
+                "reference": "49e3167815ca6af1f4215eed0719c3d83d749571",
                 "shasum": ""
             },
             "require": {
-                "php": "~8.1.10 || ~8.2"
+                "php": "^7.4.2 || ~8.0 || ~8.1.10"
             },
             "require-dev": {
-                "ext-bcmath": "*",
-                "ext-pcov": "*"
+                "ext-bcmath": "*"
             },
             "suggest": {
                 "ext-bcmath": "Compare time units with high precision"
@@ -52,9 +51,9 @@
             ],
             "support": {
                 "issues": "https://github.com/aeon-php/calendar/issues",
-                "source": "https://github.com/aeon-php/calendar/tree/1.0.9"
+                "source": "https://github.com/aeon-php/calendar/tree/1.0.7"
             },
-            "time": "2023-08-29T09:47:37+00:00"
+            "time": "2022-09-10T13:11:14+00:00"
         },
         {
             "name": "clue/stream-filter",
@@ -5673,16 +5672,16 @@
     "packages-dev": [
         {
             "name": "coduo/php-matcher",
-            "version": "6.0.13",
+            "version": "6.0.14",
             "source": {
                 "type": "git",
                 "url": "https://github.com/coduo/php-matcher.git",
-                "reference": "6af5a64957734a9093f28271aad87e65f3654c82"
+                "reference": "d107768b2bcbd4413c9f04be60dca6bcd466f165"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/coduo/php-matcher/zipball/6af5a64957734a9093f28271aad87e65f3654c82",
-                "reference": "6af5a64957734a9093f28271aad87e65f3654c82",
+                "url": "https://api.github.com/repos/coduo/php-matcher/zipball/d107768b2bcbd4413c9f04be60dca6bcd466f165",
+                "reference": "d107768b2bcbd4413c9f04be60dca6bcd466f165",
                 "shasum": ""
             },
             "require": {
@@ -5692,16 +5691,15 @@
                 "ext-filter": "*",
                 "ext-json": "*",
                 "ext-simplexml": "*",
-                "php": "~8.1 || ~8.2"
-            },
-            "conflict": {
-                "phpunit/phpunit": "<8.0, >=11.0"
+                "php": "~8.1 || ~8.2 || ~8.3"
             },
             "require-dev": {
                 "ext-pcov": "*",
                 "openlss/lib-array2xml": "^1.0",
-                "phpunit/phpunit": "^8.5.14|^9.0|^10.0",
-                "symfony/expression-language": "^2.3|^3.0|^4.0|^5.0|^6.0"
+                "phpunit/phpunit": "^10.4",
+                "symfony/cache": "^2.3|^3.0|^4.0|^5.0|^6.0",
+                "symfony/expression-language": "^2.3|^3.0|^4.0|^5.0|^6.0",
+                "symfony/var-exporter": "^2.3|^3.0|^4.0|^5.0|^6.0"
             },
             "suggest": {
                 "openlss/lib-array2xml": "In order ot use Coduo\\PHPMatcher\\Matcher\\XmlMatcher",
@@ -5736,9 +5734,9 @@
             ],
             "support": {
                 "issues": "https://github.com/coduo/php-matcher/issues",
-                "source": "https://github.com/coduo/php-matcher/tree/6.0.13"
+                "source": "https://github.com/coduo/php-matcher/tree/6.0.14"
             },
-            "time": "2023-03-27T23:24:10+00:00"
+            "time": "2023-12-13T11:48:18+00:00"
         },
         {
             "name": "coduo/php-to-string",
