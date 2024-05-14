@@ -273,16 +273,16 @@
         },
         {
             "name": "composer/composer",
-            "version": "2.7.4",
+            "version": "2.7.6",
             "source": {
                 "type": "git",
                 "url": "https://github.com/composer/composer.git",
-                "reference": "a625e50598e12171d3f60b1149eb530690c43474"
+                "reference": "fabd995783b633829fd4280e272284b39b6ae702"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/composer/composer/zipball/a625e50598e12171d3f60b1149eb530690c43474",
-                "reference": "a625e50598e12171d3f60b1149eb530690c43474",
+                "url": "https://api.github.com/repos/composer/composer/zipball/fabd995783b633829fd4280e272284b39b6ae702",
+                "reference": "fabd995783b633829fd4280e272284b39b6ae702",
                 "shasum": ""
             },
             "require": {
@@ -367,7 +367,7 @@
                 "irc": "ircs://irc.libera.chat:6697/composer",
                 "issues": "https://github.com/composer/composer/issues",
                 "security": "https://github.com/composer/composer/security/policy",
-                "source": "https://github.com/composer/composer/tree/2.7.4"
+                "source": "https://github.com/composer/composer/tree/2.7.6"
             },
             "funding": [
                 {
@@ -383,7 +383,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2024-04-22T19:17:03+00:00"
+            "time": "2024-05-04T21:03:15+00:00"
         },
         {
             "name": "composer/metadata-minifier",
@@ -688,16 +688,16 @@
         },
         {
             "name": "composer/xdebug-handler",
-            "version": "3.0.4",
+            "version": "3.0.5",
             "source": {
                 "type": "git",
                 "url": "https://github.com/composer/xdebug-handler.git",
-                "reference": "4f988f8fdf580d53bdb2d1278fe93d1ed5462255"
+                "reference": "6c1925561632e83d60a44492e0b344cf48ab85ef"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/composer/xdebug-handler/zipball/4f988f8fdf580d53bdb2d1278fe93d1ed5462255",
-                "reference": "4f988f8fdf580d53bdb2d1278fe93d1ed5462255",
+                "url": "https://api.github.com/repos/composer/xdebug-handler/zipball/6c1925561632e83d60a44492e0b344cf48ab85ef",
+                "reference": "6c1925561632e83d60a44492e0b344cf48ab85ef",
                 "shasum": ""
             },
             "require": {
@@ -734,7 +734,7 @@
             "support": {
                 "irc": "ircs://irc.libera.chat:6697/composer",
                 "issues": "https://github.com/composer/xdebug-handler/issues",
-                "source": "https://github.com/composer/xdebug-handler/tree/3.0.4"
+                "source": "https://github.com/composer/xdebug-handler/tree/3.0.5"
             },
             "funding": [
                 {
@@ -750,7 +750,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2024-03-26T18:29:49+00:00"
+            "time": "2024-05-06T16:37:16+00:00"
         },
         {
             "name": "dflydev/dot-access-data",
@@ -2824,16 +2824,16 @@
         },
         {
             "name": "ramsey/conventional-commits",
-            "version": "1.5.0",
+            "version": "1.5.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/ramsey/conventional-commits.git",
-                "reference": "f6cb233c2e20fa4848b5aa0243ca343309db942c"
+                "reference": "b995ee3e1592757c01551b30f6e90176d7f81ec2"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/ramsey/conventional-commits/zipball/f6cb233c2e20fa4848b5aa0243ca343309db942c",
-                "reference": "f6cb233c2e20fa4848b5aa0243ca343309db942c",
+                "url": "https://api.github.com/repos/ramsey/conventional-commits/zipball/b995ee3e1592757c01551b30f6e90176d7f81ec2",
+                "reference": "b995ee3e1592757c01551b30f6e90176d7f81ec2",
                 "shasum": ""
             },
             "require": {
@@ -2843,8 +2843,8 @@
                 "jawira/case-converter": "^3.5",
                 "opis/json-schema": "^2.3",
                 "php": "^8.1",
-                "symfony/console": "^6.0",
-                "symfony/filesystem": "^6.0"
+                "symfony/console": "^6.0 || ^7.0",
+                "symfony/filesystem": "^6.0 || ^7.0"
             },
             "require-dev": {
                 "captainhook/captainhook": "^5.15",
@@ -2858,17 +2858,14 @@
                 "phpstan/phpstan": "^1.10",
                 "phpstan/phpstan-mockery": "^1.1",
                 "phpstan/phpstan-phpunit": "^1.3",
-                "phpunit/phpunit": "^9.5",
-                "psalm/plugin-mockery": "^1.1",
-                "psalm/plugin-phpunit": "^0.18.4",
+                "phpunit/phpunit": "^10.1",
                 "ramsey/coding-standard": "^2.2",
                 "ramsey/composer-repl": "^1.4",
                 "roave/security-advisories": "dev-latest",
                 "sebastianfeldmann/cli": "^3.4",
                 "sebastianfeldmann/git": "^3.8",
-                "spatie/phpunit-snapshot-assertions": "^4.2",
-                "symfony/process": "^6.0",
-                "vimeo/psalm": "^5.8"
+                "spatie/phpunit-snapshot-assertions": "^5.1",
+                "symfony/process": "^6.0 || ^7.0"
             },
             "suggest": {
                 "captainhook/captainhook": "Manage your project's Git hooks with CaptainHook, and use ramsey/conventional-commits in your commit-msg and prepare-commit-msg hooks."
@@ -2918,7 +2915,7 @@
             ],
             "support": {
                 "issues": "https://github.com/ramsey/conventional-commits/issues",
-                "source": "https://github.com/ramsey/conventional-commits/tree/1.5.0"
+                "source": "https://github.com/ramsey/conventional-commits/tree/1.5.1"
             },
             "funding": [
                 {
@@ -2926,7 +2923,7 @@
                     "type": "github"
                 }
             ],
-            "time": "2023-03-18T18:58:20+00:00"
+            "time": "2024-04-17T04:53:18+00:00"
         },
         {
             "name": "react/promise",
@@ -5196,21 +5193,22 @@
         },
         {
             "name": "symfony/service-contracts",
-            "version": "v3.4.2",
+            "version": "v3.5.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/service-contracts.git",
-                "reference": "11bbf19a0fb7b36345861e85c5768844c552906e"
+                "reference": "bd1d9e59a81d8fa4acdcea3f617c581f7475a80f"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/service-contracts/zipball/11bbf19a0fb7b36345861e85c5768844c552906e",
-                "reference": "11bbf19a0fb7b36345861e85c5768844c552906e",
+                "url": "https://api.github.com/repos/symfony/service-contracts/zipball/bd1d9e59a81d8fa4acdcea3f617c581f7475a80f",
+                "reference": "bd1d9e59a81d8fa4acdcea3f617c581f7475a80f",
                 "shasum": ""
             },
             "require": {
                 "php": ">=8.1",
-                "psr/container": "^1.1|^2.0"
+                "psr/container": "^1.1|^2.0",
+                "symfony/deprecation-contracts": "^2.5|^3"
             },
             "conflict": {
                 "ext-psr": "<1.1|>=2"
@@ -5218,7 +5216,7 @@
             "type": "library",
             "extra": {
                 "branch-alias": {
-                    "dev-main": "3.4-dev"
+                    "dev-main": "3.5-dev"
                 },
                 "thanks": {
                     "name": "symfony/contracts",
@@ -5258,7 +5256,7 @@
                 "standards"
             ],
             "support": {
-                "source": "https://github.com/symfony/service-contracts/tree/v3.4.2"
+                "source": "https://github.com/symfony/service-contracts/tree/v3.5.0"
             },
             "funding": [
                 {
@@ -5274,7 +5272,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2023-12-19T21:51:00+00:00"
+            "time": "2024-04-18T09:32:20+00:00"
         },
         {
             "name": "symfony/string",
