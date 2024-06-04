@@ -1,4 +1,4 @@
-## [Unreleased] - 2024-06-03
+## [Unreleased] - 2024-06-04
 
 ### Updated
 - [a650f2](https://github.com/aeon-php/automation/commit/a650f2ef2e814ce254afd3f7e0aeb8dc23ccf72a) - **dependencies** - [@norberttech](https://github.com/norberttech)
