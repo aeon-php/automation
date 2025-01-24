@@ -24,15 +24,16 @@ use Symfony\Component\Console\Output\ConsoleOutput;
     error_reporting(E_ALL);
     ini_set('display_errors', 'stderr');
 
-    if (is_file($autoload = getcwd() . '/vendor/autoload.php')) {
-        require $autoload;
-    } elseif (is_file($autoload = getcwd() . '/../../autoload.php')) {
-        require $autoload;
-    } elseif (is_file($autoload = __DIR__ . '/../vendor/autoload.php')) {
-        require($autoload);
-    } elseif (is_file($autoload = __DIR__ . '/../../../autoload.php')) {
-        require($autoload);
-    } else {
+    $autoload = null;
+    foreach (array(__DIR__ . '/../../autoload.php', __DIR__ . '/../vendor/autoload.php', __DIR__ . '/vendor/autoload.php') as $file) {
+        if (file_exists($file)) {
+            $autoload = $file;
+
+            break;
+        }
+    }
+
+    if (!$autoload) {
         fwrite(STDERR,
             'You must set up the project dependencies, run the following commands:' . PHP_EOL .
             'curl -s http://getcomposer.org/installer | php' . PHP_EOL .
@@ -40,6 +41,8 @@ use Symfony\Component\Console\Output\ConsoleOutput;
         );
         exit(1);
     }
+
+    require $autoload;
 
     $application = new AeonApplication('aeon-automation');
     $output = new ConsoleOutput();
