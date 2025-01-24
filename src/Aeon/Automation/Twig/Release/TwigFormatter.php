@@ -18,6 +18,8 @@ final class TwigFormatter implements Formatter
 
     private string $theme;
 
+    private bool $footer;
+
     public function __construct(string $rootDir, string $format, string $theme)
     {
         $format = \strtolower($format);
