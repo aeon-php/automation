@@ -1,5 +1,8 @@
 ## [Unreleased] - 2025-01-24
 
+### Changed
+- [a00150](https://github.com/aeon-php/automation/commit/a00150e53cb96b81a5793b1a1ddd60810ef96376) - **Improved finding autoload file** - [@norberttech](https://github.com/norberttech)
+
 ### Updated
 - [2fc21d](https://github.com/aeon-php/automation/commit/2fc21d7aa35f55f22cf63d10d9cccdcd06a079aa) - **dependencies** - [@norberttech](https://github.com/norberttech)
 - [23b7a2](https://github.com/aeon-php/automation/commit/23b7a290482bac81fc5db171c49111b123c5976c) - **dependecies** - [@norberttech](https://github.com/norberttech)
