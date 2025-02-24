@@ -1,4 +1,4 @@
-## [Unreleased] - 2025-02-20
+## [Unreleased] - 2025-02-24
 
 ### Changed
 - [b62acd](https://github.com/aeon-php/automation/commit/b62acdd2d0f64430a71a2e1801837d407637dbf7) - **Move automatin CI/CD to 8.2** - [@norberttech](https://github.com/norberttech)
