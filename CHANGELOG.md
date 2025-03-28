@@ -1,4 +1,4 @@
-## [Unreleased] - 2025-03-20
+## [Unreleased] - 2025-03-28
 
 ### Changed
 - [#557](https://github.com/aeon-php/automation/pull/557) - **Update action cache from @v2 to @v4 in Github Action workflows** - [@norberttech](https://github.com/norberttech)
